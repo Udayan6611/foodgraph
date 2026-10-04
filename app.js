@@ -157,7 +157,7 @@ function mapsUrl(name){
   return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+', Pune, Maharashtra');
 }
 
-function renderResults(list, area, cs){
+function renderResults(list, area, cs, shouldScroll=true){
   results.innerHTML=`<div class="card">
     <div class="result-head"><div><div class="result-kicker">Pune food graph · behavioral MVP</div><div class="result-title">Places that fit your profile</div></div><div class="result-meta">${area} · ${cs.length?cs.join(' · '):'exploring'}</div></div>
     <div class="notice">Your results are ranked by <b>your taste, area, budget and the behavior you've already given FoodGraph</b>. Each Useful / Not for me signal changes your future ranking.</div>
@@ -170,7 +170,7 @@ function renderResults(list, area, cs){
     <button type="button" class="back" onclick="window.scrollTo({top:0,behavior:'smooth'})">← Change my taste</button>
   </div>`;
   results.classList.remove('hidden');
-  results.scrollIntoView({behavior:'smooth',block:'start'});
+  if(shouldScroll) results.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 form.addEventListener('submit',e=>{
@@ -216,6 +216,6 @@ results.addEventListener('click',e=>{
       .map(r=>({...r,score:scoreRestaurant(r,currentCuisines,currentVibes,currentArea,currentPrice)}))
       .sort((x,y)=>y.score-x.score)
       .slice(0,5);
-    renderResults(reranked,currentArea,currentCuisines);
+    renderResults(reranked,currentArea,currentCuisines,false);\n    const updatedButton = results.querySelector('[data-action="'+action+'"][data-name="'+CSS.escape(name)+'"]');\n    if(updatedButton){ updatedButton.textContent = action==='like' ? 'Recorded ✓' : 'Recorded'; updatedButton.disabled=true; }
   }
 });
