@@ -1,5 +1,6 @@
 
 // Free serverless analytics endpoint. Leave blank until Google Apps Script is deployed.
+// Paste the SAME /exec URL that is already working in your current GitHub app.js.
 const TRACKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyJTL_UKuih_3e7Lr71s0XdV24VoNY5qhjfdfZeBA1wyJRPr8dHP_GQR3hBJRSiRz1d4w/exec';
 const REFERRAL = new URLSearchParams(window.location.search).get('ref') || '';
 const SESSION_ID = (() => {
@@ -28,7 +29,7 @@ function track(event, extra={}) {
 track('page_view', {ref: REFERRAL});
 
 const cuisines = ['Japanese','Korean','Indian','Italian','Cafés','Vegetarian','Biryani','Sushi'];
-const vibes = ['Popular with diners','Established spot','Café','Restaurant'];
+const vibes = ['Popular with diners','Established spot','Café','Restaurant','Date night','Casual','Specialty coffee'];
 
 const cuisineEl = document.getElementById('cuisines');
 const vibesEl = document.getElementById('vibes');
@@ -73,7 +74,9 @@ const restaurants = [
     "category": "Asian restaurant",
     "rating": 4.7,
     "reviews": 1194,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 4,
+    "vibes": []
   },
   {
     "name": "Ukiyo",
@@ -85,7 +88,9 @@ const restaurants = [
     "category": "Japanese restaurant",
     "rating": 4.6,
     "reviews": 297,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 4,
+    "vibes": []
   },
   {
     "name": "Ginkgo Pune",
@@ -98,7 +103,9 @@ const restaurants = [
     "category": "Japanese restaurant",
     "rating": 4.4,
     "reviews": 1013,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 3,
+    "vibes": []
   },
   {
     "name": "Iya's Korean Kitchen - Pashan",
@@ -109,7 +116,9 @@ const restaurants = [
     "category": "Korean restaurant",
     "rating": 4.1,
     "reviews": 1153,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 2,
+    "vibes": []
   },
   {
     "name": "Iya’s Korean Kitchen - Koregaon Park",
@@ -120,7 +129,9 @@ const restaurants = [
     "category": "Restaurant",
     "rating": 4.6,
     "reviews": 75,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 3,
+    "vibes": []
   },
   {
     "name": "KINI (끼니)",
@@ -131,7 +142,9 @@ const restaurants = [
     "category": "Korean restaurant",
     "rating": 4.3,
     "reviews": 627,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 3,
+    "vibes": []
   },
   {
     "name": "The Ramen Station",
@@ -143,7 +156,9 @@ const restaurants = [
     "category": "Korean restaurant",
     "rating": 4.8,
     "reviews": 990,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 2,
+    "vibes": []
   },
   {
     "name": "Sushi Tokyo",
@@ -155,7 +170,9 @@ const restaurants = [
     "category": "Japanese restaurant",
     "rating": 4.9,
     "reviews": 66,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 2,
+    "vibes": []
   },
   {
     "name": "CAFE FLYING GYPSY'S",
@@ -166,7 +183,9 @@ const restaurants = [
     "category": "Coffee shop",
     "rating": 4.5,
     "reviews": 1531,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 2,
+    "vibes": []
   },
   {
     "name": "Vohuman Cafe",
@@ -178,7 +197,9 @@ const restaurants = [
     "category": "Cafe",
     "rating": 4.3,
     "reviews": 15298,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 1,
+    "vibes": []
   },
   {
     "name": "CAFE BLACK CAT & WOLF",
@@ -189,7 +210,9 @@ const restaurants = [
     "category": "Cafe",
     "rating": 4.7,
     "reviews": 472,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 2,
+    "vibes": []
   },
   {
     "name": "Krushnakala Pure Veg Family Restaurant",
@@ -201,7 +224,9 @@ const restaurants = [
     "category": "Vegetarian restaurant",
     "rating": 4.7,
     "reviews": 1850,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 2,
+    "vibes": []
   },
   {
     "name": "World Of Veg",
@@ -213,7 +238,9 @@ const restaurants = [
     "category": "Vegetarian restaurant",
     "rating": 4.1,
     "reviews": 6341,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 2,
+    "vibes": []
   },
   {
     "name": "Santé Spa Cuisine",
@@ -224,8 +251,10 @@ const restaurants = [
     ],
     "category": "Vegetarian restaurant",
     "rating": 4.5,
-    "reviews": 3853,
-    "source": "Live Pune business result • 2026-10-03"
+    "reviews": 3839,
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 3,
+    "vibes": []
   },
   {
     "name": "Pune Biryani House",
@@ -237,7 +266,9 @@ const restaurants = [
     "category": "Restaurant",
     "rating": 4.7,
     "reviews": 369,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 1,
+    "vibes": []
   },
   {
     "name": "Degchi Biryani",
@@ -249,7 +280,9 @@ const restaurants = [
     "category": "Biryani restaurant",
     "rating": 4.6,
     "reviews": 1295,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 1,
+    "vibes": []
   },
   {
     "name": "SP's Biryani House Since 1994",
@@ -261,7 +294,9 @@ const restaurants = [
     "category": "Biryani restaurant",
     "rating": 3.9,
     "reviews": 16422,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 1,
+    "vibes": []
   },
   {
     "name": "Sorriso",
@@ -272,7 +307,9 @@ const restaurants = [
     "category": "Italian restaurant",
     "rating": 4.5,
     "reviews": 537,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 3,
+    "vibes": []
   },
   {
     "name": "Toscano Pune Koregaon Park",
@@ -283,7 +320,9 @@ const restaurants = [
     "category": "Italian restaurant",
     "rating": 4.4,
     "reviews": 2256,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 3,
+    "vibes": []
   },
   {
     "name": "Donna Cucina",
@@ -294,7 +333,691 @@ const restaurants = [
     "category": "Italian restaurant",
     "rating": 4.3,
     "reviews": 1011,
-    "source": "Live Pune business result • 2026-10-03"
+    "source": "Live Pune business result • 2026-10-03",
+    "priceTier": 3,
+    "vibes": []
+  },
+  {
+    "name": "Cafe - The Voyage",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Cafés",
+      "Italian",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": 4.7,
+    "reviews": 1303,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Dhaba Shaba Indian Veg Bistro",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Indian",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": 4.6,
+    "reviews": 4126,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "TSUKI : Asian Restaurant",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Japanese",
+      "Asian"
+    ],
+    "category": "Restaurant",
+    "rating": 4.6,
+    "reviews": 1105,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Savya Rasa",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Indian",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": 4.5,
+    "reviews": 4014,
+    "priceTier": 4,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Malaka Spice",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Indian",
+      "Asian",
+      "Japanese"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "The Flour Works",
+    "area": "Kalyani Nagar",
+    "cuisines": [
+      "Italian",
+      "Cafés"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Vaishali",
+    "area": "FC Road",
+    "cuisines": [
+      "Indian",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 1,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Shabree",
+    "area": "Deccan Gymkhana",
+    "cuisines": [
+      "Indian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Goodluck Cafe",
+    "area": "FC Road",
+    "cuisines": [
+      "Cafés",
+      "Indian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 1,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Masu",
+    "area": "Baner",
+    "cuisines": [
+      "Japanese",
+      "Asian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 4,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Toast & Tonic",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Italian",
+      "Asian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 4,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Cafe Peter",
+    "area": "Viman Nagar",
+    "cuisines": [
+      "Korean",
+      "Japanese",
+      "Cafés"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Mirchi & Mime",
+    "area": "Baner",
+    "cuisines": [
+      "Indian",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Deccan Harvest",
+    "area": "Deccan",
+    "cuisines": [
+      "Indian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Cafe Madeline",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Cafés",
+      "Italian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "The Sassy Spoon",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Italian",
+      "Cafés"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Pimlico",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Italian",
+      "Asian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 4,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Thyme & Whisk",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Indian",
+      "Asian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Chafa Cafe",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Cafés",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Matcha Brew & Bake",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Cafés",
+      "Japanese",
+      "Sushi"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Boteco - Tapas Bar & Grill",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Asian",
+      "Indian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Whispering Bamboo - Blue Diamond",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Asian",
+      "Japanese"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 4,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Independence Brewing Company",
+    "area": "Kalyani Nagar",
+    "cuisines": [
+      "Italian",
+      "Cafés"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Cafe Goa",
+    "area": "Viman Nagar",
+    "cuisines": [
+      "Indian",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Nincasa - House Of Brews",
+    "area": "Hadapsar",
+    "cuisines": [
+      "Asian",
+      "Indian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Al Di La",
+    "area": "Kalyani Nagar",
+    "cuisines": [
+      "Italian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 4,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Farro",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Italian",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": 4.6,
+    "reviews": 260,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Wah Punjab",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Indian",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": 4.7,
+    "reviews": 153,
+    "priceTier": 1,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "BIRYANI BOY OG DUM BIRYANI",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Biryani",
+      "Indian"
+    ],
+    "category": "Restaurant",
+    "rating": 4.9,
+    "reviews": 60,
+    "priceTier": 1,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Raaha Cafe",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Cafés",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Bookbar",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Cafés",
+      "Italian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "The Beans Talk Cafe",
+    "area": "Viman Nagar",
+    "cuisines": [
+      "Cafés",
+      "Italian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Pagdandi Books Chai Cafe",
+    "area": "Baner",
+    "cuisines": [
+      "Cafés",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 1,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Le Plaisir",
+    "area": "Prabhat Road",
+    "cuisines": [
+      "Italian",
+      "Cafés"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Blue Tokai Coffee Roasters",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Cafés"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Third Wave Coffee",
+    "area": "FC Road",
+    "cuisines": [
+      "Cafés"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "One O Eight Cafe",
+    "area": "Baner",
+    "cuisines": [
+      "Cafés",
+      "Italian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Butter Brews",
+    "area": "Baner",
+    "cuisines": [
+      "Cafés"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Naadbrahma Idli",
+    "area": "Lohegaon",
+    "cuisines": [
+      "Indian",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 1,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Ammachi Mess",
+    "area": "Viman Nagar",
+    "cuisines": [
+      "Indian",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "The Fisherman's Wharf",
+    "area": "Viman Nagar",
+    "cuisines": [
+      "Indian",
+      "Asian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Vardayini Pure Veg",
+    "area": "Deccan",
+    "cuisines": [
+      "Indian",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 1,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Rameshwar",
+    "area": "Viman Nagar",
+    "cuisines": [
+      "Indian",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 1,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Cafe Cruise",
+    "area": "Kalyani Nagar",
+    "cuisines": [
+      "Cafés",
+      "Vegetarian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 1,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Harley's Fine Baking",
+    "area": "Viman Nagar",
+    "cuisines": [
+      "Cafés"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Sous sol",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Cafés",
+      "Italian"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Tiger Naan",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Indian",
+      "Japanese"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 3,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Grandmama's",
+    "area": "Koregaon Park",
+    "cuisines": [
+      "Italian",
+      "Cafés"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
+  },
+  {
+    "name": "Coffee Nation",
+    "area": "Kalyani Nagar",
+    "cuisines": [
+      "Cafés"
+    ],
+    "category": "Restaurant",
+    "rating": null,
+    "reviews": 0,
+    "priceTier": 2,
+    "vibes": [],
+    "source": "Pune food guides / listings checked 2026-10-04"
   }
 ];
 
@@ -304,42 +1027,72 @@ const results=document.getElementById('results');
 function areaFit(userArea, restaurantArea){
   const a=userArea.toLowerCase();
   const b=restaurantArea.toLowerCase();
+  if (userArea === 'Other Pune') return 0.55;
   if(b.includes(a) || a.includes(b.split(' / ')[0])) return 1;
   const nearby={
-    'Viman Nagar':['Airport Road / Viman Nagar','Kharadi','Lohegaon','Wadgaon Sheri / Chandan Nagar'],
-    'Kharadi':['Kharadi','Wadgaon Sheri / Chandan Nagar','Airport Road / Viman Nagar','Lohegaon'],
+    'Viman Nagar':['Airport Road / Viman Nagar','Kharadi','Lohegaon','Wadgaon Sheri / Chandan Nagar','Kalyani Nagar'],
+    'Kharadi':['Kharadi','Wadgaon Sheri / Chandan Nagar','Airport Road / Viman Nagar','Lohegaon','Viman Nagar'],
     'Koregaon Park':['Koregaon Park','Mundhwa / Koregaon Park Annexe','Kalyani Nagar','Sangamvadi'],
-    'Kalyani Nagar':['Kalyani Nagar','Koregaon Park','Mundhwa / Koregaon Park Annexe'],
-    'Shivajinagar':['Shivajinagar','Deccan Gymkhana','Sangamvadi'],
-    'Deccan':['Deccan Gymkhana','Shivajinagar'],
-    'Kothrud':['Kothrud','Deccan Gymkhana'],
-    'Pashan':['Pashan','Kothrud'],
-    'Baner':['Baner','Shivajinagar'],
-    'Wakad':['Wakad','Baner'],
-    'Hinjewadi':['Hinjewadi','Wakad'],
+    'Kalyani Nagar':['Kalyani Nagar','Koregaon Park','Mundhwa / Koregaon Park Annexe','Viman Nagar'],
+    'Shivajinagar':['Shivajinagar','Deccan Gymkhana','Sangamvadi','FC Road'],
+    'Deccan':['Deccan Gymkhana','Shivajinagar','FC Road','Prabhat Road'],
+    'Kothrud':['Kothrud','Deccan Gymkhana','Prabhat Road'],
+    'Pashan':['Pashan','Kothrud','Baner'],
+    'Baner':['Baner','Shivajinagar','Wakad'],
+    'Wakad':['Wakad','Baner','Hinjewadi'],
+    'Hinjewadi':['Hinjewadi','Wakad','Baner'],
     'Sadashiv Peth':['Sadashiv Peth','Rasta Peth','Deccan Gymkhana'],
     'Rasta Peth':['Rasta Peth','Sadashiv Peth','Sangamvadi'],
     'Lohegaon':['Lohegaon','Viman Nagar','Kharadi'],
+    'FC Road':['FC Road','Deccan Gymkhana','Shivajinagar'],
+    'Prabhat Road':['Prabhat Road','Deccan Gymkhana','FC Road'],
+    'Hadapsar':['Hadapsar','Kalyani Nagar','Koregaon Park']
   };
-  return (nearby[userArea]||[]).includes(restaurantArea) ? 0.65 : 0.25;
+  return (nearby[userArea]||[]).includes(restaurantArea) ? 0.62 : 0.28;
 }
 
 function cuisineFit(selectedCuisine, restaurant){
-  if(!selectedCuisine.length) return 0.25;
+  if(!selectedCuisine.length) return 0.18;
   const hits = selectedCuisine.filter(c=>restaurant.cuisines.includes(c)).length;
-  return hits / selectedCuisine.length;
+  return Math.min(1, hits / Math.max(1, Math.min(selectedCuisine.length,2)));
 }
 
-function scoreRestaurant(r, cs, vs, area){
-  const c = cuisineFit(cs,r);
-  const a = areaFit(area,r.area);
-  const popularity = Math.min(1, Math.log10(r.reviews+1)/5);
-  let score = 52 + c*35 + a*8 + popularity*5;
-  if(vs.includes('Café') && r.category.toLowerCase().includes('cafe')) score += 3;
-  if(vs.includes('Restaurant') && r.category.toLowerCase().includes('restaurant')) score += 2;
-  if(vs.includes('Popular with diners') && r.reviews >= 1000) score += 2;
-  if(vs.includes('Established spot') && r.reviews >= 3000) score += 2;
-  return Math.min(98, Math.round(score));
+function budgetFit(priceValue, restaurant){
+  const userTier=Number(priceValue);
+  const diff=Math.abs(userTier-(restaurant.priceTier||2));
+  return diff===0 ? 1 : diff===1 ? 0.62 : 0.25;
+}
+
+function scoreRestaurant(r, cs, vs, area, priceValue){
+  const c=cuisineFit(cs,r);
+  const a=areaFit(area,r.area);
+  const b=budgetFit(priceValue,r);
+  const rating=(r.rating==null ? 0.62 : Math.max(0,Math.min(1,(r.rating-3.5)/1.5)));
+  const popularity=Math.min(1,Math.log10((r.reviews||0)+1)/4.5);
+  const vibe=(vs.length ? vs.reduce((sum,v)=>sum+(r.category.toLowerCase().includes(v.toLowerCase().split(' ')[0])?1:0),0)/vs.length : 0.2);
+  // Taste fit dominates; metadata is only tie-breaking signal.
+  let score=42 + c*27 + a*13 + b*8 + rating*6 + popularity*2 + vibe*2;
+  return Math.max(35,Math.min(97,Math.round(score)));
+}
+
+function mapsUrl(name){
+  return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+', Pune, Maharashtra');
+}
+
+function renderResults(list, area, cs){
+  results.innerHTML=`<div class="card">
+    <div class="result-head"><div><div class="result-kicker">Pune food graph · behavioral MVP</div><div class="result-title">Places that fit your profile</div></div><div class="result-meta">${area} · ${cs.length?cs.join(' · '):'exploring'}</div></div>
+    <div class="notice">Your results are ranked by <b>your selected taste, area and budget</b>. As people use FoodGraph, interaction data will replace these metadata-only signals.</div>
+    ${list.map((r,i)=>`<article class="restaurant" data-name="${r.name.replace(/"/g,'&quot;')}">
+      <div class="restaurant-top"><div><h3>${i+1}. ${r.name}</h3><div class="type">${r.area} · ${r.category}</div></div><div class="score"><strong>${r.score}%</strong><span>profile fit</span></div></div>
+      <div class="tags">${r.cuisines.map(t=>`<span class="tag">${t}</span>`).join('')} ${r.rating!=null?`<span class="tag">${r.rating}★ · ${Number(r.reviews).toLocaleString()} reviews</span>`:'<span class="tag">new / low-review signal</span>'}</div>
+      <div class="why"><b>Why:</b> ${cs.length ? `${r.cuisines.filter(c=>cs.includes(c)).join(', ') || 'related dining'} match your selected tastes; distance and budget also affect this rank.` : 'A starting point from the Pune dataset, weighted by area and budget.'}</div>
+      <div class="result-actions"><a href="${mapsUrl(r.name)}" target="_blank" rel="noopener" data-action="maps_click" data-name="${r.name.replace(/"/g,'&quot;')}">Open in Maps ↗</a><button type="button" data-action="like" data-name="${r.name.replace(/"/g,'&quot;')}">Useful</button><button type="button" data-action="dislike" data-name="${r.name.replace(/"/g,'&quot;')}">Not for me</button></div>
+    </article>`).join('')}
+    <button type="button" class="back" onclick="window.scrollTo({top:0,behavior:'smooth'})">← Change my taste</button>
+  </div>`;
+  results.classList.remove('hidden');
+  results.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 form.addEventListener('submit',e=>{
@@ -347,51 +1100,23 @@ form.addEventListener('submit',e=>{
   const area=document.getElementById('area').value;
   const cs=[...selected.cuisines];
   const vs=[...selected.vibes];
+  const priceValue=document.getElementById('price').value;
+  const list=restaurants.map(r=>({...r,score:scoreRestaurant(r,cs,vs,area,priceValue)})).sort((a,b)=>b.score-a.score).slice(0,5);
+  renderResults(list,area,cs);
+  const resultNames=list.map(r=>r.name).join(' | ');
+  const resultScores=list.map(r=>r.score).join(' | ');
+  track('taste_submit',{area,cuisines:cs.join('|'),vibes:vs.join('|'),budget:document.getElementById('priceText').textContent,result_names:resultNames,result_scores:resultScores});
+  track('result_view',{area,cuisines:cs.join('|'),vibes:vs.join('|'),budget:document.getElementById('priceText').textContent,result_names:resultNames,result_scores:resultScores});
+});
 
-  const list=restaurants
-    .map(r=>({...r,score:scoreRestaurant(r,cs,vs,area)}))
-    .sort((a,b)=>b.score-a.score)
-    .slice(0,5);
-
-  results.innerHTML=`<div class="card">
-    <div class="result-head">
-      <div>
-        <div class="result-kicker">Pune food graph · live dataset</div>
-        <div class="result-title">Places that fit your profile</div>
-      </div>
-      <div class="result-meta">${area} · ${cs.length?cs.join(' · '):'exploring'}</div>
-    </div>
-    <div class="notice">This is an early fit model using live restaurant metadata. It is <b>not yet</b> claiming that these restaurants were chosen by people with your taste. That becomes the product once we have verified behavior.</div>
-    ${list.map(r=>`<article class="restaurant">
-      <div class="restaurant-top">
-        <div>
-          <h3>${r.name}</h3>
-          <div class="type">${r.area} · ${r.category}</div>
-        </div>
-        <div class="score"><strong>${r.score}%</strong><span>profile fit</span></div>
-      </div>
-      <div class="tags">${r.cuisines.map(t=>`<span class="tag">${t}</span>`).join('')} <span class="tag">${r.rating}★ · ${r.reviews.toLocaleString()} reviews</span></div>
-      <div class="why"><b>Why:</b> ${cs.length ? `${r.cuisines.filter(c=>cs.includes(c)).join(', ') || 'related dining'} match your selected tastes, with area fit considered.` : 'A starting point from the current Pune dataset.'}</div>
-    </article>`).join('')}
-    <button type="button" class="back" onclick="window.scrollTo({top:0,behavior:'smooth'})">← Change my taste</button>
-  </div>`;
-  results.classList.remove('hidden');
-  results.scrollIntoView({behavior:'smooth',block:'start'});
-
-  const resultNames = list.map(r => r.name).join(' | ');
-  const resultScores = list.map(r => r.score).join(' | ');
-  track('taste_submit', {
-    area,
-    cuisines: cs.join('|'),
-    vibes: vs.join('|'),
-    budget: document.getElementById('priceText').textContent,
-    result_names: resultNames,
-    result_scores: resultScores
-  });
-  track('result_view', {
-    area,
-    cuisines: cs.join('|'),
-    result_names: resultNames,
-    result_scores: resultScores
-  });
+results.addEventListener('click',e=>{
+  const el=e.target.closest('[data-action]');
+  if(!el) return;
+  const name=el.dataset.name || '';
+  const action=el.dataset.action;
+  track(action==='maps_click'?'restaurant_click':'feedback',{restaurant_name:name,action,feedback:action});
+  if(action==='like' || action==='dislike'){
+    el.textContent=action==='like'?'Recorded ✓':'Recorded';
+    el.disabled=true;
+  }
 });
