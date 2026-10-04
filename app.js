@@ -222,6 +222,7 @@ results.addEventListener('click',e=>{
       .sort((x,y)=>y.score-x.score)
       .slice(0,5);
     renderResults(reranked,currentArea,currentCuisines,false);
-    const updatedButton = results.querySelector('[data-action="'+action+'"][data-name="'+CSS.escape(name)+'"]');\n    if(updatedButton){ updatedButton.textContent = action==='like' ? 'Recorded ✓' : 'Recorded'; updatedButton.disabled=true; }
+    const updatedButton = results.querySelector('[data-action="'+action+'"][data-name="'+CSS.escape(name)+'"]');
+    if(updatedButton){ updatedButton.textContent = action==='like' ? 'Recorded ✓' : 'Recorded'; updatedButton.disabled=true; }
   }
 });
