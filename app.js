@@ -221,6 +221,7 @@ results.addEventListener('click',e=>{
       .map(r=>({...r,score:scoreRestaurant(r,currentCuisines,currentVibes,currentArea,currentPrice)}))
       .sort((x,y)=>y.score-x.score)
       .slice(0,5);
-    renderResults(reranked,currentArea,currentCuisines,false);\n    const updatedButton = results.querySelector('[data-action="'+action+'"][data-name="'+CSS.escape(name)+'"]');\n    if(updatedButton){ updatedButton.textContent = action==='like' ? 'Recorded ✓' : 'Recorded'; updatedButton.disabled=true; }
+    renderResults(reranked,currentArea,currentCuisines,false);
+    const updatedButton = results.querySelector('[data-action="'+action+'"][data-name="'+CSS.escape(name)+'"]');\n    if(updatedButton){ updatedButton.textContent = action==='like' ? 'Recorded ✓' : 'Recorded'; updatedButton.disabled=true; }
   }
 });
