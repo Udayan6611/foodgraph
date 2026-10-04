@@ -11,9 +11,9 @@ track('page_view');
 const LEARNING_KEY = 'foodgraph_behavior_v1';
 const LEARNING = (() => {
   try {
-    return JSON.parse(localStorage.getItem(LEARNING_KEY)) || {restaurants:{}, cuisines:{}, vibes:{}};
+    return JSON.parse(localStorage.getItem(LEARNING_KEY)) || {restaurants:{}, cuisines:{}, vibes:{}, feedback:{}};
   } catch (_) {
-    return {restaurants:{}, cuisines:{}, vibes:{}};
+    return {restaurants:{}, cuisines:{}, vibes:{}, feedback:{}};
   }
 })();
 
@@ -22,7 +22,10 @@ function saveLearning(){
 }
 
 function updateLearning(name, action, restaurant){
-  const delta = action === 'like' ? 1 : action === 'dislike' ? -1 : 0;
+  const previous = LEARNING.feedback?.[name] || null;
+  const nextDelta = action === 'like' ? 1 : action === 'dislike' ? -1 : 0;
+  const previousDelta = previous === 'like' ? 1 : previous === 'dislike' ? -1 : 0;
+  const delta = nextDelta - previousDelta;
   if (!delta) return;
 
   LEARNING.restaurants[name] = (LEARNING.restaurants[name] || 0) + delta;
@@ -35,6 +38,8 @@ function updateLearning(name, action, restaurant){
     LEARNING.vibes[v] = (LEARNING.vibes[v] || 0) + delta;
   });
 
+  LEARNING.feedback = LEARNING.feedback || {};
+  LEARNING.feedback[name] = action;
   saveLearning();
 }
 
@@ -165,7 +170,7 @@ function renderResults(list, area, cs, shouldScroll=true){
       <div class="restaurant-top"><div><h3>${i+1}. ${r.name}</h3><div class="type">${r.area} · ${r.category}</div></div><div class="score"><strong>${r.score}%</strong><span>profile fit</span></div></div>
       <div class="tags">${r.cuisines.map(t=>`<span class="tag">${t}</span>`).join('')} ${r.rating!=null && r.reviews>0?`<span class="tag">${r.rating}★ · ${Number(r.reviews).toLocaleString()} reviews</span>`:r.rating!=null?`<span class="tag">${r.rating}★</span>`:'<span class="tag">new / low-review signal</span>'}</div>
       <div class="why"><b>Why:</b> ${cs.length ? `${r.cuisines.filter(c=>cs.includes(c)).join(', ') || 'related dining'} match your selected tastes; distance and budget also affect this rank.` : 'A starting point from the Pune dataset, weighted by area and budget.'}</div>
-      <div class="result-actions"><a href="${mapsUrl(r.name)}" target="_blank" rel="noopener" data-action="maps_click" data-name="${r.name.replace(/"/g,'&quot;')}">Open in Maps ↗</a><button type="button" data-action="like" data-name="${r.name.replace(/"/g,'&quot;')}">Useful</button><button type="button" data-action="dislike" data-name="${r.name.replace(/"/g,'&quot;')}">Not for me</button></div>
+      <div class="result-actions"><a href="${mapsUrl(r.name)}" target="_blank" rel="noopener" data-action="maps_click" data-name="${r.name.replace(/"/g,'&quot;')}">Open in Maps ↗</a><button type="button" data-action="like" data-name="${r.name.replace(/"/g,'&quot;')}" ${LEARNING.feedback?.[r.name]==='like'?'disabled':''}>${LEARNING.feedback?.[r.name]==='like'?'Recorded ✓':'Useful'}</button><button type="button" data-action="dislike" data-name="${r.name.replace(/"/g,'&quot;')}" ${LEARNING.feedback?.[r.name]==='dislike'?'disabled':''}>${LEARNING.feedback?.[r.name]==='dislike'?'Recorded':'Not for me'}</button></div>
     </article>`).join('')}
     <button type="button" class="back" onclick="window.scrollTo({top:0,behavior:'smooth'})">← Change my taste</button>
   </div>`;
