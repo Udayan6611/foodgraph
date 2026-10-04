@@ -6,6 +6,13 @@ const incomingRef = new URLSearchParams(window.location.search).get('ref') || ''
 const storedRef = localStorage.getItem('foodgraph_ref') || '';
 const REFERRAL = incomingRef || storedRef;
 if (incomingRef) localStorage.setItem('foodgraph_ref', incomingRef);
+const PROFILE_CONTEXT = {
+  area: localStorage.getItem('foodgraph_area') || '',
+  cuisines: localStorage.getItem('foodgraph_cuisines') || '',
+  vibes: localStorage.getItem('foodgraph_vibes') || '',
+  budget: localStorage.getItem('foodgraph_budget') || ''
+};
+
 const SESSION_ID = (() => {
   const key = 'foodgraph_session_id';
   let id = localStorage.getItem(key);
@@ -22,6 +29,10 @@ function track(event, extra={}) {
     event,
     session_id: SESSION_ID,
     ref: REFERRAL,
+    area: extra.area ?? PROFILE_CONTEXT.area,
+    cuisines: extra.cuisines ?? PROFILE_CONTEXT.cuisines,
+    vibes: extra.vibes ?? PROFILE_CONTEXT.vibes,
+    budget: extra.budget ?? PROFILE_CONTEXT.budget,
     ...extra
   });
   // Image GET avoids CORS requirements. We do not read the response.
@@ -142,7 +153,7 @@ function renderResults(list, area, cs){
     <div class="notice">Your results are ranked by <b>your selected taste, area and budget</b>. As people use FoodGraph, interaction data will replace these metadata-only signals.</div>
     ${list.map((r,i)=>`<article class="restaurant" data-name="${r.name.replace(/"/g,'&quot;')}">
       <div class="restaurant-top"><div><h3>${i+1}. ${r.name}</h3><div class="type">${r.area} · ${r.category}</div></div><div class="score"><strong>${r.score}%</strong><span>profile fit</span></div></div>
-      <div class="tags">${r.cuisines.map(t=>`<span class="tag">${t}</span>`).join('')} ${r.rating!=null?`<span class="tag">${r.rating}★ · ${Number(r.reviews).toLocaleString()} reviews</span>`:'<span class="tag">new / low-review signal</span>'}</div>
+      <div class="tags">${r.cuisines.map(t=>`<span class="tag">${t}</span>`).join('')} ${r.rating!=null && r.reviews>0?`<span class="tag">${r.rating}★ · ${Number(r.reviews).toLocaleString()} reviews</span>`:r.rating!=null?`<span class="tag">${r.rating}★</span>`:'<span class="tag">new / low-review signal</span>'}</div>
       <div class="why"><b>Why:</b> ${cs.length ? `${r.cuisines.filter(c=>cs.includes(c)).join(', ') || 'related dining'} match your selected tastes; distance and budget also affect this rank.` : 'A starting point from the Pune dataset, weighted by area and budget.'}</div>
       <div class="result-actions"><a href="${mapsUrl(r.name)}" target="_blank" rel="noopener" data-action="maps_click" data-name="${r.name.replace(/"/g,'&quot;')}">Open in Maps ↗</a><button type="button" data-action="like" data-name="${r.name.replace(/"/g,'&quot;')}">Useful</button><button type="button" data-action="dislike" data-name="${r.name.replace(/"/g,'&quot;')}">Not for me</button></div>
     </article>`).join('')}
@@ -158,11 +169,21 @@ form.addEventListener('submit',e=>{
   const cs=[...selected.cuisines];
   const vs=[...selected.vibes];
   const priceValue=document.getElementById('price').value;
+  const budgetLabel=document.getElementById('priceText').textContent;
+  PROFILE_CONTEXT.area = area;
+  PROFILE_CONTEXT.cuisines = cs.join('|');
+  PROFILE_CONTEXT.vibes = vs.join('|');
+  PROFILE_CONTEXT.budget = budgetLabel;
+  localStorage.setItem('foodgraph_area', area);
+  localStorage.setItem('foodgraph_cuisines', PROFILE_CONTEXT.cuisines);
+  localStorage.setItem('foodgraph_vibes', PROFILE_CONTEXT.vibes);
+  localStorage.setItem('foodgraph_budget', PROFILE_CONTEXT.budget);
+
   const list=restaurants.map(r=>({...r,score:scoreRestaurant(r,cs,vs,area,priceValue)})).sort((a,b)=>b.score-a.score).slice(0,5);
   renderResults(list,area,cs);
   const resultNames=list.map(r=>r.name).join(' | ');
   const resultScores=list.map(r=>r.score).join(' | ');
-  track('taste_submit',{area,cuisines:cs.join('|'),vibes:vs.join('|'),budget:document.getElementById('priceText').textContent,result_names:resultNames,result_scores:resultScores});
+  track('taste_submit',{area,cuisines:cs.join('|'),vibes:vs.join('|'),budget:budgetLabel,result_names:resultNames,result_scores:resultScores});
   track('result_view',{area,cuisines:cs.join('|'),vibes:vs.join('|'),budget:document.getElementById('priceText').textContent,result_names:resultNames,result_scores:resultScores});
 });
 
