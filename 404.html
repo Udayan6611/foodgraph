@@ -1,1 +1,27 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>FoodGraph</title></head><body><script>(function(){var p=location.pathname.replace(/\/+$/,'');var m=p.match(/\/foodgraph\/r\/([^/]+)(?:\/([^/]+))?(?:\/([^/]+))?$/i);if(m){localStorage.setItem('foodgraph_referrer_id',decodeURIComponent(m[1]));localStorage.setItem('foodgraph_source',decodeURIComponent(m[2]||'direct'));localStorage.setItem('foodgraph_campaign',decodeURIComponent(m[3]||'general'));location.replace('/foodgraph/discover/')}else{location.replace('/foodgraph/')}})();</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>FoodGraph</title>
+</head>
+<body>
+<script>
+(function(){
+  var p = location.pathname.replace(/\/+$/,'');
+  var m = p.match(/\/foodgraph\/r\/([^/]+)(?:\/([^/]+))?(?:\/([^/]+))?$/i);
+
+  if (m) {
+    localStorage.setItem('foodgraph_referrer_id', decodeURIComponent(m[1]));
+    localStorage.setItem('foodgraph_source', decodeURIComponent(m[2] || 'direct'));
+    localStorage.setItem('foodgraph_campaign', decodeURIComponent(m[3] || 'general'));
+
+    // Referral links should land on the normal FoodGraph homepage.
+    // Attribution is already stored above, so app.js can attach it to later events.
+    location.replace('/foodgraph/');
+  } else {
+    location.replace('/foodgraph/');
+  }
+})();
+</script>
+</body>
+</html>
