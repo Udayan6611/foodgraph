@@ -42,6 +42,50 @@ function track(event, extra={}) {
 
 track('page_view', {ref: REFERRAL});
 
+const LEARNING_KEY = 'foodgraph_behavior_v1';
+const LEARNING = (() => {
+  try {
+    return JSON.parse(localStorage.getItem(LEARNING_KEY)) || {restaurants:{}, cuisines:{}, vibes:{}};
+  } catch (_) {
+    return {restaurants:{}, cuisines:{}, vibes:{}};
+  }
+})();
+
+function saveLearning(){
+  localStorage.setItem(LEARNING_KEY, JSON.stringify(LEARNING));
+}
+
+function updateLearning(name, action, restaurant){
+  const delta = action === 'like' ? 1 : action === 'dislike' ? -1 : 0;
+  if (!delta) return;
+
+  LEARNING.restaurants[name] = (LEARNING.restaurants[name] || 0) + delta;
+
+  restaurant.cuisines.forEach(c => {
+    LEARNING.cuisines[c] = (LEARNING.cuisines[c] || 0) + delta;
+  });
+
+  restaurant.vibes.forEach(v => {
+    LEARNING.vibes[v] = (LEARNING.vibes[v] || 0) + delta;
+  });
+
+  saveLearning();
+}
+
+function behavioralScore(r){
+  const restaurantSignal = Math.max(-2, Math.min(2, LEARNING.restaurants[r.name] || 0));
+  const cuisineSignals = r.cuisines.map(c => LEARNING.cuisines[c] || 0);
+  const vibeSignals = r.vibes.map(v => LEARNING.vibes[v] || 0);
+  const cuisineSignal = cuisineSignals.length
+    ? cuisineSignals.reduce((x,y)=>x+y,0) / cuisineSignals.length
+    : 0;
+  const vibeSignal = vibeSignals.length
+    ? vibeSignals.reduce((x,y)=>x+y,0) / vibeSignals.length
+    : 0;
+
+  return restaurantSignal * 6 + cuisineSignal * 2.5 + vibeSignal * 1.5;
+}
+
 const cuisines = ['Japanese','Korean','Indian','Italian','Cafés','Vegetarian','Biryani','Sushi'];
 const vibes = ['Popular with diners','Established spot','Café','Restaurant','Date night','Casual','Specialty coffee'];
 
@@ -139,7 +183,7 @@ function scoreRestaurant(r, cs, vs, area, priceValue){
   const popularity=Math.min(1,Math.log10((r.reviews||0)+1)/4.5);
   const vibe=(vs.length ? vs.reduce((sum,v)=>sum+(r.vibes.some(rv=>rv.toLowerCase()===v.toLowerCase())?1:0),0)/vs.length : 0.2);
   // Taste fit dominates; metadata is only tie-breaking signal.
-  let score=42 + c*27 + a*13 + b*8 + rating*6 + popularity*2 + vibe*2;
+  let score=42 + c*27 + a*13 + b*8 + rating*6 + popularity*2 + vibe*2 + behavioralScore(r);
   return Math.max(35,Math.min(97,Math.round(score)));
 }
 
@@ -150,7 +194,7 @@ function mapsUrl(name){
 function renderResults(list, area, cs){
   results.innerHTML=`<div class="card">
     <div class="result-head"><div><div class="result-kicker">Pune food graph · behavioral MVP</div><div class="result-title">Places that fit your profile</div></div><div class="result-meta">${area} · ${cs.length?cs.join(' · '):'exploring'}</div></div>
-    <div class="notice">Your results are ranked by <b>your selected taste, area and budget</b>. As people use FoodGraph, interaction data will replace these metadata-only signals.</div>
+    <div class="notice">Your results are ranked by <b>your taste, area, budget and the behavior you've already given FoodGraph</b>. Each Useful / Not for me signal changes your future ranking.</div>
     ${list.map((r,i)=>`<article class="restaurant" data-name="${r.name.replace(/"/g,'&quot;')}">
       <div class="restaurant-top"><div><h3>${i+1}. ${r.name}</h3><div class="type">${r.area} · ${r.category}</div></div><div class="score"><strong>${r.score}%</strong><span>profile fit</span></div></div>
       <div class="tags">${r.cuisines.map(t=>`<span class="tag">${t}</span>`).join('')} ${r.rating!=null && r.reviews>0?`<span class="tag">${r.rating}★ · ${Number(r.reviews).toLocaleString()} reviews</span>`:r.rating!=null?`<span class="tag">${r.rating}★</span>`:'<span class="tag">new / low-review signal</span>'}</div>
@@ -194,7 +238,18 @@ results.addEventListener('click',e=>{
   const action=el.dataset.action;
   track(action==='maps_click'?'restaurant_click':'feedback',{restaurant_name:name,action,feedback:action});
   if(action==='like' || action==='dislike'){
+    const restaurant = restaurants.find(r => r.name === name);
+    if (restaurant) updateLearning(name, action, restaurant);
     el.textContent=action==='like'?'Recorded ✓':'Recorded';
     el.disabled=true;
+    const currentArea = document.getElementById('area')?.value || '';
+    const currentCuisines = [...selected.cuisines];
+    const currentVibes = [...selected.vibes];
+    const currentPrice = document.getElementById('price')?.value || '2';
+    const reranked = restaurants
+      .map(r=>({...r,score:scoreRestaurant(r,currentCuisines,currentVibes,currentArea,currentPrice)}))
+      .sort((x,y)=>y.score-x.score)
+      .slice(0,5);
+    renderResults(reranked,currentArea,currentCuisines);
   }
 });
