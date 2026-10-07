@@ -8,35 +8,33 @@
 .hero-lede{max-width:540px}
 .hero-actions .primary{box-shadow:0 5px 16px rgba(19,41,75,.12)}
 .window{transform:none}
-.preview-card{border-radius:10px;padding:13px 14px}
+.preview-card{border-radius:15px;padding:15px}
 .preview-tags{display:none}
-.learning-note{border-radius:8px;margin-top:14px}
+.learning-note{border-radius:13px;margin-top:14px}
 .section-label{margin-bottom:24px}
 .section-grid{gap:90px}
-.compare-card{border-radius:10px;padding:24px}
+.compare-card{border-radius:20px;padding:28px}
 .compare-card.active{box-shadow:none}
-.steps{gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.steps article{background:transparent;border:0;border-radius:0;border-right:1px solid var(--line);padding:28px 26px;min-height:205px}
-.steps article:last-child{border-right:0}
+.steps{gap:16px;margin-top:65px}
+.steps article{background:#fffdf8;border:1px solid var(--line);border-radius:20px;padding:28px;min-height:220px}
+
 .steps h3{margin:36px 0 10px}
-.signal-card{border-radius:14px}
-.signal-flow{gap:0}
-.signal-flow>div{border-radius:0;border-width:0 1px 1px 0}
-.signal-flow>div:nth-child(2n){border-right:0}
-.signal-flow>div:nth-last-child(-n+2){border-bottom:0}
+.signal-card{border-radius:28px}
+.signal-flow{gap:12px}
+.signal-flow>div{border:1px solid #30435a;border-radius:17px;padding:20px}
+
+
 .vision-grid{margin-top:45px}
 .vision-grid>div{padding:24px;min-height:155px}
 .discover-intro h1{max-width:720px}
-.discover-card{border-radius:18px;box-shadow:0 18px 45px rgba(19,41,75,.12)}
-.chip{border-radius:8px;padding:10px 14px}
-.restaurant{border-radius:10px}
-.why{border-radius:8px}
-.result-actions a,.result-actions button{border-radius:7px}
+.discover-card{border-radius:28px;box-shadow:0 18px 45px rgba(19,41,75,.12)}
+.chip{border-radius:999px;padding:10px 13px}
+.restaurant{border-radius:17px}
+.why{border-radius:11px}
+.result-actions a,.result-actions button{border-radius:9px}
 @media(max-width:600px){
   .hero-copy h1{font-size:48px}
-  .steps article{border-right:0;border-bottom:1px solid var(--line);padding:25px 0;min-height:0}
-  .steps article:last-child{border-bottom:0}
-  .signal-flow>div{border-right:0;border-bottom:1px solid #30435a}
-  .signal-flow>div:last-child{border-bottom:0}
+
+
   .discover-intro h1{font-size:46px}
 }
