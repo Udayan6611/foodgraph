@@ -125,12 +125,12 @@ function scoreRestaurant(r, cs, vs, area, priceValue){
 function mapsUrl(name){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+', Pune, Maharashtra');}
 function renderResults(list, area, cs, shouldScroll=true){
   results.innerHTML=`<div class="card">
-    <div class="result-head"><div><div class="result-kicker">Pune food graph · behavioral MVP</div><div class="result-title">Places that fit your profile</div></div><div class="result-meta">${area} · ${cs.length?cs.join(' · '):'exploring'}</div></div>
-    <div class="notice">Your results are ranked by <b>your taste, area, budget and the behavior you've already given FoodGraph</b>. Each Useful / Not for me signal changes your future ranking.</div>
+    <div class="result-head"><div><div class="result-kicker">Pune food discovery</div><div class="result-title">Places you'll like</div></div><div class="result-meta">${area} · ${cs.length?cs.join(' · '):'exploring'}</div></div>
+    <div class="notice">Your results are ranked by <b>your taste, area, budget and the choices you've already made</b>. Each Useful / Not for me signal changes what you see next.</div>
     ${list.map((r,i)=>`<article class="restaurant" data-name="${r.name.replace(/"/g,'&quot;')}">
-      <div class="restaurant-top"><div><h3>${i+1}. ${r.name}</h3><div class="type">${r.area} · ${r.category}</div></div><div class="score"><strong>${r.score}%</strong><span>profile fit</span></div></div>
+      <div class="restaurant-top"><div><h3>${i+1}. ${r.name}</h3><div class="type">${r.area} · ${r.category}</div></div><div class="score"><strong>${r.score}%</strong><span>match</span></div></div>
       <div class="tags">${r.cuisines.map(t=>`<span class="tag">${t}</span>`).join('')} ${r.rating!=null && r.reviews>0?`<span class="tag">${r.rating}★ · ${Number(r.reviews).toLocaleString()} reviews</span>`:r.rating!=null?`<span class="tag">${r.rating}★</span>`:'<span class="tag">new / low-review signal</span>'}</div>
-      <div class="why"><b>Why:</b> ${cs.length ? `${r.cuisines.filter(c=>cs.some(s=>cuisineMatches(s,[c]))).join(', ') || 'related dining'} match your selected tastes; distance and budget also affect this rank.` : 'A starting point from the Pune dataset, weighted by area and budget.'}</div>
+      <div class="why"><b>Why:</b> ${cs.length ? `${r.cuisines.filter(c=>cs.some(s=>cuisineMatches(s,[c]))).join(', ') || 'related dining'} match your selected tastes; distance and budget also affect this match.` : 'A starting point from the Pune dataset, weighted by area and budget.'}</div>
       <div class="result-actions"><a href="${mapsUrl(r.name)}" target="_blank" rel="noopener" data-action="maps_click" data-name="${r.name.replace(/"/g,'&quot;')}">Open in Maps ↗</a><button type="button" data-action="like" data-name="${r.name.replace(/"/g,'&quot;')}" ${LEARNING.feedback?.[r.name]==='like'?'disabled':''}>${LEARNING.feedback?.[r.name]==='like'?'Recorded ✓':'Useful'}</button><button type="button" data-action="dislike" data-name="${r.name.replace(/"/g,'&quot;')}" ${LEARNING.feedback?.[r.name]==='dislike'?'disabled':''}>${LEARNING.feedback?.[r.name]==='dislike'?'Recorded':'Not for me'}</button></div>
     </article>`).join('')}
     <button type="button" class="back" onclick="window.scrollTo({top:0,behavior:'smooth'})">← Change my taste</button>
