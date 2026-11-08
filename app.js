@@ -133,7 +133,7 @@ function renderResults(list, area, cs, shouldScroll=true){
       <div class="why"><b>Why:</b> ${cs.length ? `${r.cuisines.filter(c=>cs.some(s=>cuisineMatches(s,[c]))).join(', ') || 'related dining'} match your selected tastes; distance and budget also affect this match.` : 'A starting point from the Pune dataset, weighted by your area and budget.'}</div>
       <div class="result-actions"><a href="${mapsUrl(r.name)}" target="_blank" rel="noopener" data-action="maps_click" data-name="${r.name.replace(/"/g,'&quot;')}">Open in Maps ↗</a><button type="button" data-action="like" data-name="${r.name.replace(/"/g,'&quot;')}" ${LEARNING.feedback?.[r.name]==='like'?'disabled':''}>${LEARNING.feedback?.[r.name]==='like'?'Recorded ✓':'Useful'}</button><button type="button" data-action="dislike" data-name="${r.name.replace(/"/g,'&quot;')}" ${LEARNING.feedback?.[r.name]==='dislike'?'disabled':''}>${LEARNING.feedback?.[r.name]==='dislike'?'Recorded':'Not for me'}</button></div>
     </article>`).join('')}
-    <button type="button" class="back" onclick="window.scrollTo({top:0,behavior:'smooth'})">← Change my taste</button>
+    <div class="join-invite"><div><b>Want to help shape FoodGraph?</b><span>Get occasional updates as we build it in Pune.</span></div><a href="../join/">Join early access ↗</a></div><button type="button" class="back" onclick="window.scrollTo({top:0,behavior:'smooth'})">← Change my taste</button>
   </div>`;
   results.classList.remove('hidden');
   if(shouldScroll) results.scrollIntoView({behavior:'smooth',block:'start'});
