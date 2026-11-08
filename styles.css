@@ -88,3 +88,16 @@
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
 }
+
+/* Early-access signup entry points */
+.nav-actions{display:flex;align-items:center;gap:14px}
+.nav-join,.join-secondary{font-size:12px;font-weight:800;color:var(--ink)}
+.nav-join:hover,.join-secondary:hover{color:var(--coral)}
+.final-actions{display:flex;align-items:center;justify-content:center;gap:22px}
+.final-join{font-size:12px;font-weight:800;color:#fff}
+.join-invite{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:18px 0 12px;padding:18px 16px;border:1px solid #35465b;border-radius:15px;background:#17283f}
+.join-invite b,.join-invite span{display:block}
+.join-invite b{font-size:13px;color:#fff}
+.join-invite span{font-size:10px;color:#98a6b8;margin-top:5px}
+.join-invite a{flex:none;color:#ff9a7e;font-size:11px;font-weight:850}
+@media(max-width:600px){.nav-actions{gap:9px}.nav-join{font-size:10px}.final-actions{flex-direction:column;gap:15px}.join-invite{align-items:flex-start;flex-direction:column}}
