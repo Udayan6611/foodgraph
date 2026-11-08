@@ -32,6 +32,16 @@
     .join-back{font-size:11px;color:#8391a5;text-align:center;margin-top:18px}
     .join-back a{color:#ff9a7e;font-weight:800}
     .honeypot{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+
+    .success-modal{position:fixed;inset:0;z-index:1000;display:none;place-items:center;padding:22px;background:rgba(8,18,32,.68);backdrop-filter:blur(7px)}
+    .success-modal.open{display:grid}
+    .success-dialog{width:min(100%,430px);background:#fffdf8;color:#13294b;border-radius:22px;padding:34px;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,.28);position:relative}
+    .success-mark{width:54px;height:54px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;background:#e3f5ed;color:#16845f;font-size:28px;font-weight:900}
+    .success-dialog h2{font-size:27px;letter-spacing:-.04em;margin:0 0 10px}
+    .success-dialog p{font-size:14px;line-height:1.65;color:#667085;margin:0 0 24px}
+    .success-try{display:block;text-decoration:none;background:#ff6845;color:white;border-radius:12px;padding:15px 18px;font-weight:850}
+    .success-close{display:inline-block;margin-top:17px;border:0;background:transparent;color:#667085;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+    .success-dialog:focus{outline:none}
     @media(max-width:800px){.join-layout{grid-template-columns:1fr;gap:35px}.join-wrap{padding:42px 18px 70px}.join-copy h1{font-size:52px}}
   </style>
 </head>
@@ -73,6 +83,15 @@
       </section>
     </div>
   </main>
+  <div class="success-modal" id="successModal" aria-hidden="true">
+    <section class="success-dialog" role="dialog" aria-modal="true" aria-labelledby="successTitle" aria-describedby="successDescription" tabindex="-1">
+      <div class="success-mark" aria-hidden="true">✓</div>
+      <h2 id="successTitle">You’re on the list!</h2>
+      <p id="successDescription">Thanks for joining FoodGraph. While you’re here, try it out and see what matches your taste.</p>
+      <a class="success-try" href="../discover/">Try FoodGraph <span aria-hidden="true">→</span></a>
+      <button class="success-close" id="closeSuccess" type="button">Maybe later</button>
+    </section>
+  </div>
   <footer><a class="brand" href="../"><img src="../assets/foodgraph-mark.svg" alt=""><span><b>Food</b><strong>Graph</strong></span></a><span>Built in Pune.</span><a href="../">Back to FoodGraph →</a></footer>
 <script>
 (function(){
@@ -80,6 +99,10 @@
   const session=get('foodgraph_session_id')||((crypto.randomUUID&&crypto.randomUUID())||('fg-'+Date.now()));
   localStorage.setItem('foodgraph_session_id',session);
   const form=document.getElementById('signupForm'),frame=document.getElementById('signupFrame'),status=document.getElementById('status'),button=document.getElementById('submitButton');
+  const modal=document.getElementById('successModal'),dialog=modal.querySelector('.success-dialog'),closeModal=()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true');};
+  document.getElementById('closeSuccess').addEventListener('click',closeModal);
+  modal.addEventListener('click',event=>{if(event.target===modal)closeModal();});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&modal.classList.contains('open'))closeModal();});
   const nonce=(crypto.randomUUID&&crypto.randomUUID())||('fg-'+Date.now()+'-'+Math.random().toString(36).slice(2));
   document.getElementById('sessionId').value=session;
   document.getElementById('referrerId').value=get('foodgraph_referrer_id');
@@ -91,7 +114,7 @@
   function show(ok,message){
     status.textContent=message;status.className='join-status show '+(ok?'success':'error');
     button.disabled=false;button.textContent=ok?'You’re on the list ✓':'Try again';
-    if(ok){form.querySelectorAll('input,select,button').forEach(el=>{if(el.type!=='hidden')el.disabled=true;});}
+    if(ok){form.querySelectorAll('input,select,button').forEach(el=>{if(el.type!=='hidden')el.disabled=true;});modal.classList.add('open');modal.setAttribute('aria-hidden','false');dialog.focus();}
   }
   window.addEventListener('message',event=>{
     const data=event.data;
