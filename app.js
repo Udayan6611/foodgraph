@@ -62,11 +62,11 @@ const labels=['₹300–500','₹500–800','₹800–1,500','₹1,500+'];
 function updatePrice(){priceText.textContent=labels[Number(price.value)-1]}
 updatePrice();
 price.oninput=updatePrice;
-const restaurants = RESTAURANTS_V6.map(([name, area, cuisine, vibe, rating, priceTier, reviews = 0, sourceUrl = '']) => ({
+const restaurants = RESTAURANTS_V6.map(([name, area, cuisine, vibe, rating, priceTier, reviews = 0, sourceUrl = '', ratingEvidence = '']) => ({
   name, area,
   cuisines: cuisine.split(',').map(s => s.trim()),
   category: cuisine.split(',')[0].trim() + ' restaurant',
-  rating, reviews, source: 'FoodGraph Pune dataset', sourceUrl, priceTier,
+  rating, reviews, source: 'FoodGraph Pune dataset', sourceUrl, ratingEvidence, priceTier,
   vibes: vibe.split(',').map(s => s.trim())
 }));
 const form=document.getElementById('tasteForm');
@@ -76,28 +76,34 @@ function areaFit(userArea, restaurantArea){
   if (userArea === 'Other Pune') return 0.55;
   if (a === b || b.includes(a) || a.includes(b.split(' / ')[0])) return 1;
   const nearby={
-    'Viman Nagar':['Airport Road / Viman Nagar','Kharadi','Lohegaon','Wadgaon Sheri / Chandan Nagar','Kalyani Nagar'],
+    'Viman Nagar':['Airport Road / Viman Nagar','Kharadi','Lohegaon','Wadgaon Sheri','Wadgaon Sheri / Chandan Nagar','Kalyani Nagar'],
     'Kharadi':['Wadgaon Sheri','Wadgaon Sheri / Chandan Nagar','Viman Nagar','Lohegaon'],
-    'Kharadi':['Wadgaon Sheri / Chandan Nagar','Airport Road / Viman Nagar','Lohegaon','Viman Nagar'],
-    'Koregaon Park':['Mundhwa / Koregaon Park Annexe','Kalyani Nagar','Sangamvadi'],
-    'Kalyani Nagar':['Koregaon Park','Mundhwa / Koregaon Park Annexe','Viman Nagar','Kharadi'],
+    'Koregaon Park':['Mundhwa / Koregaon Park Annexe','Kalyani Nagar','Sangamvadi','Mundhwa'],
+    'Kalyani Nagar':['Koregaon Park','Mundhwa / Koregaon Park Annexe','Viman Nagar','Kharadi','Wadgaon Sheri'],
+    'Wadgaon Sheri':['Kalyani Nagar','Kharadi','Viman Nagar','Mundhwa'],
+    'Sangamvadi':['Dhole Patil Road','Camp','Koregaon Park','Shivajinagar'],
     'Shivajinagar':['Deccan Gymkhana','FC Road','Sangamvadi','Prabhat Road'],
     'Deccan Gymkhana':['Shivajinagar','FC Road','Prabhat Road','Erandwane','Sadashiv Peth'],
     'FC Road':['Deccan Gymkhana','Shivajinagar','Prabhat Road','Erandwane'],
     'Prabhat Road':['Deccan Gymkhana','FC Road','Erandwane','Kothrud'],
-    'Erandwane':['Deccan Gymkhana','Prabhat Road','Kothrud','FC Road'],
-    'Kothrud':['Deccan Gymkhana','Prabhat Road','Erandwane','Karve Nagar'],
-    'Pashan':['Aundh','Kothrud','Baner'],
+    'Erandwane':['Deccan Gymkhana','Prabhat Road','Kothrud','FC Road','Karve Nagar'],
+    'Kothrud':['Deccan Gymkhana','Prabhat Road','Erandwane','Karve Nagar','Warje','Bavdhan'],
+    'Karve Nagar':['Kothrud','Erandwane','Sinhgad Road','Warje'],
+    'Warje':['Karve Nagar','Kothrud','Sinhgad Road','Bavdhan'],
+    'Bavdhan':['Pashan','Kothrud','Aundh','Warje'],
+    'Katraj':['Sinhgad Road','Warje'],
+    'Sinhgad Road':['Katraj','Warje','Karve Nagar','Kothrud'],
+    'Pashan':['Aundh','Kothrud','Baner','Bavdhan'],
     'Aundh':['Pashan','Baner','Balewadi'],
     'Baner':['Balewadi','Aundh','Wakad','Pashan'],
     'Balewadi':['Baner','Wakad','Aundh'],
-    'Wakad':['Hinjewadi','Baner','Balewadi'],
+    'Wakad':['Hinjawadi','Baner','Balewadi'],
     'Hinjawadi':['Wakad','Baner','Balewadi'],
     'Sadashiv Peth':['Rasta Peth','Deccan Gymkhana','Tilak Road'],
     'Rasta Peth':['Sadashiv Peth','Sangamvadi','Camp','Tilak Road'],
     'Camp':['East Street','MG Road','Sangamvadi','Sadashiv Peth'],
     'Hadapsar':['Amanora','Magarpatta','Mundhwa','Kalyani Nagar'],
-    'Mundhwa':['Koregaon Park','Kalyani Nagar','Hadapsar'],
+    'Mundhwa':['Koregaon Park','Kalyani Nagar','Hadapsar','Wadgaon Sheri'],
     'Lohegaon':['Viman Nagar','Kharadi'],
     'Dhole Patil Road':['Sangamvadi','Camp','Kalyani Nagar']
   };
@@ -155,7 +161,7 @@ function renderResults(list, area, cs, shouldScroll=true){
     <div class="notice">Ranked around your choices. Fit scores are ranking aids, not a promise of quality. Price guides are indicative and may change.</div>
     ${list.map((r,i)=>`<article class="restaurant" data-name="${r.name.replace(/"/g,'&quot;')}">
       <div class="restaurant-top"><div><h3>${i+1}. ${r.name}</h3><div class="type">${r.area} · ${r.category}</div></div><div class="score"><strong>${r.score}</strong><span>fit score</span></div></div>
-      <div class="tags">${r.cuisines.map(t=>`<span class="tag">${t}</span>`).join('')} <span class="tag">${budgetLabel(r)}</span> ${r.rating!=null && r.reviews>0?`<span class="tag">${r.rating}★ · ${Number(r.reviews).toLocaleString()} reviews</span>`:r.rating!=null?`<span class="tag">${r.rating}★</span>`:'<span class="tag">Rating not available</span>'}</div>
+      <div class="tags">${r.cuisines.map(t=>`<span class="tag">${t}</span>`).join('')} <span class="tag">${budgetLabel(r)}</span> ${r.rating!=null && r.reviews>0?`<span class="tag">${r.rating}★ · ${Number(r.reviews).toLocaleString()} ${r.ratingEvidence||'public ratings'}</span>`:r.rating!=null?`<span class="tag">${r.rating}★</span>`:'<span class="tag">Rating not available</span>'}</div>
       <div class="why"><b>Why this is here:</b> ${explainMatch(r,cs,[...selected.vibes],area,document.getElementById('price').value)}</div>
       <div class="result-actions"><a href="${mapsUrl(r.name,r.area)}" target="_blank" rel="noopener" data-action="maps_click" data-name="${r.name.replace(/"/g,'&quot;')}">Open in Maps ↗</a><button type="button" data-action="like" data-name="${r.name.replace(/"/g,'&quot;')}" ${LEARNING.feedback?.[r.name]==='like'?'disabled':''}>${LEARNING.feedback?.[r.name]==='like'?'Recorded ✓':'Useful'}</button><button type="button" data-action="dislike" data-name="${r.name.replace(/"/g,'&quot;')}" ${LEARNING.feedback?.[r.name]==='dislike'?'disabled':''}>${LEARNING.feedback?.[r.name]==='dislike'?'Recorded':'Not for me'}</button></div>
     </article>`).join('')}
