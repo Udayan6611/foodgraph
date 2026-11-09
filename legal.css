@@ -1,0 +1,35 @@
+/* FoodGraph legal pages — shares the current product identity and typography. */
+.legal-body{background:var(--cream);color:var(--ink)}
+.legal-nav{border-bottom:1px solid rgba(19,41,75,.1)}
+.legal-wrap{max-width:1000px;margin:0 auto;padding:66px 24px 90px}
+.legal-heading{max-width:820px;padding:8px 0 38px}
+.legal-heading .eyebrow{margin-bottom:16px}
+.legal-heading h1{font-size:clamp(48px,7vw,76px);line-height:.94;letter-spacing:-.065em;margin:0 0 20px;color:var(--ink)}
+.legal-heading h1 em{font-family:Georgia,serif;font-weight:500;color:var(--coral)}
+.legal-lede{max-width:720px;font-size:18px;line-height:1.65;color:#526071;margin:0}
+.legal-meta{display:flex;flex-wrap:wrap;gap:9px 22px;margin-top:24px;font-size:11px;color:#667085}
+.legal-document{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:clamp(24px,5vw,52px);box-shadow:0 18px 50px rgba(19,41,75,.055)}
+.legal-document section+section{border-top:1px solid #e9e3d9;margin-top:32px;padding-top:28px}
+.legal-document h2{font-size:23px;line-height:1.2;letter-spacing:-.04em;color:var(--ink);margin:0 0 13px}
+.legal-document h3{font-size:15px;line-height:1.35;color:var(--ink);margin:24px 0 8px}
+.legal-document p,.legal-document li{font-size:14px;line-height:1.8;color:#4f5d70}
+.legal-document p{margin:0 0 13px}
+.legal-document ul{padding-left:22px;margin:8px 0 17px}
+.legal-document li+li{margin-top:5px}
+.legal-document strong{color:var(--ink)}
+.legal-document a{color:#c94d31;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;font-weight:700}
+.legal-contact{padding:16px 18px;border-left:3px solid var(--coral);background:#f7f2ea;border-radius:0 12px 12px 0}
+.legal-bottom-note{max-width:760px;margin:22px auto 0;color:#697586;font-size:11px;line-height:1.6;text-align:center}
+.legal-footer{align-items:center;border-top:1px solid #ddd8cf}
+.legal-footer-links{display:flex;gap:18px;flex-wrap:wrap;font-size:11px}
+.legal-footer-links a{font-weight:800;color:var(--ink)}
+.legal-footer-links a:hover{color:var(--coral)}
+@media(max-width:600px){
+  .legal-wrap{padding:44px 16px 64px}
+  .legal-heading h1{font-size:48px}
+  .legal-lede{font-size:16px}
+  .legal-document{border-radius:18px;padding:23px 19px}
+  .legal-document h2{font-size:21px}
+  .legal-document p,.legal-document li{font-size:13px}
+  .legal-footer-links{width:100%;justify-content:space-between}
+}
