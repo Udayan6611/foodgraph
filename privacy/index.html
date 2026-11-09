@@ -46,7 +46,7 @@
         <p>When you use the discovery experience, the website can send event information to our Google Apps Script endpoint. Depending on the action, this may include:</p>
         <ul>
           <li>Event type, such as a page view, taste submission, result view, restaurant click or feedback action.</li>
-          <li>A browser-generated identifier saved in LocalStorage. It may be reused across visits from the same browser until the stored site data is cleared.</li>
+          <li>An anonymous browser identifier that can link activity from the same browser across visits, plus a separate visit identifier for grouping actions within a tab session.</li>
           <li>The page or route you visited.</li>
           <li>Your selected area, cuisines, budget and vibes.</li>
           <li>Restaurant names and recommendation scores shown in a result list, or the restaurant you clicked or rated.</li>
@@ -55,7 +55,7 @@
         <p>We use this information to operate and evaluate the product, understand how people find FoodGraph and improve the recommendation experience. This identifier is not an account or password, but it can link event records from the same browser over time until its LocalStorage value is cleared.</p>
 
         <h3>C. Early-access signup</h3>
-        <p>If you use the early-access form, we collect the name and email address you enter, an optional area, the timestamp of the submission, and the session and referral fields carried by the form (where available). The form also records the required acknowledgement of the Terms of Use and Privacy Policy as “yes”, the version of those legal pages shown at signup, and the acknowledgement timestamp in the Signups sheet. Separately, it records whether the optional product-updates checkbox was selected.</p>
+        <p>If you use the early-access form, we collect the name and email address you enter, an optional area, the timestamp of the submission, and the anonymous browser, visit and referral fields carried by the form (where available). The form also records the required acknowledgement of the Terms of Use and Privacy Policy as “yes”, the version of those legal pages shown at signup, and the acknowledgement timestamp in the Signups sheet. Separately, it records whether the optional product-updates checkbox was selected.</p>
         <p>The product-updates checkbox is optional. Leaving it unchecked does not prevent a signup; the form records the choice as “no”. The current form code records this preference but does not itself run an automated newsletter or mailing service. We will not treat an unchecked box as permission for promotional email updates. The separate legal acknowledgement checkbox is required to submit the signup form.</p>
         <p>The signup records are stored in a separate “Signups” sheet from product events. The form includes session and referral details, so some signup activity may still be understood in its referral or session context.</p>
 
@@ -65,7 +65,7 @@
 
       <section>
         <h2>3. Browser storage</h2>
-        <p>FoodGraph uses your browser’s local storage (LocalStorage), rather than requiring an account, to remember items such as your session ID, referral attribution, selected discovery preferences and recommendation feedback. These values can remain in the browser until you clear the site’s stored data. The current MVP does not set an automatic expiry period for these values.</p>
+        <p>FoodGraph uses LocalStorage to keep an anonymous browser identifier, referral attribution, selected discovery preferences and recommendation feedback. The browser identifier helps distinguish a returning browser from a new one and remains until you clear the site's stored data. FoodGraph uses SessionStorage for a visit identifier that is reused across page navigation in the same browser tab session and normally ends when that tab session ends.</p>
         <p>You can remove this browser-stored information by clearing the site data or LocalStorage for FoodGraph in your browser settings. Doing so may reset saved preferences and feedback. Clearing browser data does not delete event or signup rows already sent to our Google Sheet; use the contact details below to request deletion of those records.</p>
       </section>
 
