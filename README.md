@@ -48,12 +48,17 @@ The current MVP uses a transparent JavaScript scoring model. It does not depend 
 foodgraph/
 ├── index.html                 # Homepage
 ├── styles.css                 # Shared visual styles
+├── legal.css                  # Shared Privacy / Terms page styles
 ├── app.js                     # Discovery, ranking, feedback and tracking
 ├── restaurants_v6.js          # Pune restaurant dataset
 ├── discover/
 │   └── index.html             # Recommendation experience
 ├── join/
 │   └── index.html             # Early-access signup
+├── privacy/
+│   └── index.html             # Privacy Policy
+├── terms/
+│   └── index.html             # Terms of Use
 ├── apps-script/
 │   ├── Code.gs                # Events and signup web-app handlers
 │   └── SETUP.md               # Existing Apps Script deployment notes
@@ -99,9 +104,14 @@ The current site is a static GitHub Pages project; there is no Vercel build or f
 - `404.html` handles referral and fallback paths.
 - Keep the existing domain and GitHub Pages configuration intact when making frontend changes.
 
-## Privacy and legal follow-up
+## Privacy and legal pages
 
-The repository currently contains no standalone Privacy Policy or Terms page. The app does collect browser-based preference/feedback signals, product events and early-access signup details. Before expanding public collection, add clear privacy and terms pages covering the data collected, purpose, retention, deletion/contact process and user choices. The signup consent checkbox alone should not be treated as a complete legal policy.
+- `/privacy/` explains browser storage, discovery preferences, product events, referral attribution, signup details, providers, retention and data requests.
+- `/terms/` explains the current discovery-only service, recommendation limitations, third-party links and acceptable use.
+- Privacy and Terms links are available from the homepage, discovery page and signup page.
+- Privacy requests and legal questions currently use the founder contact email listed on those pages.
+
+These pages describe the current MVP. Review them whenever the product starts collecting new information, introduces accounts or transactions, changes providers, or changes its retention practices. They are operational notices and should be reviewed by an Indian lawyer before materially expanding the service.
 
 ## Local development
 
