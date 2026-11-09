@@ -46,13 +46,13 @@
         <p>When you use the discovery experience, the website can send event information to our Google Apps Script endpoint. Depending on the action, this may include:</p>
         <ul>
           <li>Event type, such as a page view, taste submission, result view, restaurant click or feedback action.</li>
-          <li>A browser-generated session identifier.</li>
+          <li>A browser-generated identifier saved in LocalStorage. It may be reused across visits from the same browser until the stored site data is cleared.</li>
           <li>The page or route you visited.</li>
           <li>Your selected area, cuisines, budget and vibes.</li>
           <li>Restaurant names and recommendation scores shown in a result list, or the restaurant you clicked or rated.</li>
           <li>Referral details, including referrer ID, source and campaign, where a referral link was used.</li>
         </ul>
-        <p>We use this information to operate and evaluate the product, understand how people find FoodGraph and improve the recommendation experience. A session identifier is not an account or password, but it can help group activity from the same browser session.</p>
+        <p>We use this information to operate and evaluate the product, understand how people find FoodGraph and improve the recommendation experience. This identifier is not an account or password, but it can link event records from the same browser over time until its LocalStorage value is cleared.</p>
 
         <h3>C. Early-access signup</h3>
         <p>If you use the early-access form, we collect the name and email address you enter, an optional area, the timestamp of the submission, and the session and referral fields carried by the form (where available). The form also records whether the optional product-updates checkbox was selected.</p>
@@ -80,6 +80,12 @@
           <li>To detect basic automated or abusive form submissions and protect the service.</li>
         </ul>
         <p>We do not sell personal information. The current MVP does not use third-party advertising or cross-site ad-targeting tools.</p>
+        <h3>Your product-event tracking choice</h3>
+        <p>The discovery experience sends product-event information as you interact with it. You can turn off future discovery event requests from this browser below. This does not erase event rows already stored in Google Sheets, clear the preferences used by the recommendation experience, or change the session and referral fields submitted if you choose to complete the early-access form.</p>
+        <div class="legal-control">
+          <button class="legal-action-button" id="analyticsToggle" type="button">Disable optional product event tracking</button>
+          <p id="analyticsStatus" class="legal-control-status" role="status" aria-live="polite"></p>
+        </div>
       </section>
 
       <section>
@@ -141,5 +147,36 @@
     <span>Built in Pune.</span>
     <div class="legal-footer-links"><a href="../privacy/">Privacy</a><a href="../terms/">Terms</a><a href="../discover/">Discover</a></div>
   </footer>
+  <script>
+    (function () {
+      const key = "foodgraph_analytics_opt_out";
+      const button = document.getElementById("analyticsToggle");
+      const status = document.getElementById("analyticsStatus");
+      if (!button || !status) return;
+      function render() {
+        try {
+          const disabled = localStorage.getItem(key) === "yes";
+          button.textContent = disabled ? "Enable optional product event tracking" : "Disable optional product event tracking";
+          button.setAttribute("aria-pressed", String(disabled));
+          status.textContent = disabled
+            ? "Optional discovery event tracking is off in this browser. Your locally stored preferences still work."
+            : "Optional discovery event tracking is on in this browser. You can turn it off here at any time.";
+        } catch (_) {
+          button.disabled = true;
+          status.textContent = "This browser does not allow FoodGraph to save the tracking preference.";
+        }
+      }
+      button.addEventListener("click", function () {
+        try {
+          if (localStorage.getItem(key) === "yes") localStorage.removeItem(key);
+          else localStorage.setItem(key, "yes");
+          render();
+        } catch (_) {
+          status.textContent = "This browser does not allow FoodGraph to save the tracking preference.";
+        }
+      });
+      render();
+    })();
+  </script>
 </body>
 </html>
