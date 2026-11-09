@@ -33,3 +33,9 @@
   .legal-document p,.legal-document li{font-size:13px}
   .legal-footer-links{width:100%;justify-content:space-between}
 }
+
+.legal-control{margin:18px 0 8px;padding:18px;border:1px solid #e5ddd1;border-radius:14px;background:#f8f3eb}
+.legal-action-button{border:0;border-radius:10px;background:var(--ink);color:#fff;padding:12px 16px;font-size:12px;font-weight:800;cursor:pointer}
+.legal-action-button:hover{background:#233e62}
+.legal-action-button:focus-visible{outline:3px solid rgba(255,104,69,.45);outline-offset:3px}
+.legal-control-status{font-size:12px!important;line-height:1.55!important;margin:12px 0 0!important;color:#596577!important}
