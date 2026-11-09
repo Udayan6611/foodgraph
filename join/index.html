@@ -69,6 +69,7 @@
         <form id="signupForm" action="https://script.google.com/macros/s/AKfycbyJTL_UKuih_3e7Lr71s0XdV24VoNY5qhjfdfZeBA1wyJRPr8dHP_GQR3hBJRSiRz1d4w/exec" method="post" target="signupFrame">
           <input type="hidden" name="form_type" value="signup">
           <input type="hidden" name="session_id" id="sessionId">
+          <input type="hidden" name="visitor_id" id="visitorId">
           <input type="hidden" name="referrer_id" id="referrerId">
           <input type="hidden" name="source" id="source">
           <input type="hidden" name="campaign" id="campaign">
@@ -102,8 +103,12 @@
 <script>
 (function(){
   const get=(key,fallback='')=>localStorage.getItem(key)||fallback;
-  const session=get('foodgraph_session_id')||((crypto.randomUUID&&crypto.randomUUID())||('fg-'+Date.now()));
-  localStorage.setItem('foodgraph_session_id',session);
+  const createId=()=>((crypto.randomUUID&&crypto.randomUUID())||('fg-'+Date.now()+'-'+Math.random().toString(36).slice(2)));
+  const visitor=get('foodgraph_visitor_id')||get('foodgraph_session_id')||createId();
+  localStorage.setItem('foodgraph_visitor_id',visitor);
+  localStorage.setItem('foodgraph_session_id',visitor);
+  const session=sessionStorage.getItem('foodgraph_visit_id')||createId();
+  sessionStorage.setItem('foodgraph_visit_id',session);
   const form=document.getElementById('signupForm'),frame=document.getElementById('signupFrame'),status=document.getElementById('status'),button=document.getElementById('submitButton');
   const legalAcknowledgement=document.getElementById('legalAcknowledgement');
   function syncSubmitButton(){button.disabled=!legalAcknowledgement.checked;}
@@ -115,6 +120,7 @@
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&modal.classList.contains('open'))closeModal();});
   const nonce=(crypto.randomUUID&&crypto.randomUUID())||('fg-'+Date.now()+'-'+Math.random().toString(36).slice(2));
   document.getElementById('sessionId').value=session;
+  document.getElementById('visitorId').value=visitor;
   document.getElementById('referrerId').value=get('foodgraph_referrer_id');
   document.getElementById('source').value=get('foodgraph_source','direct');
   document.getElementById('campaign').value=get('foodgraph_campaign','general');
