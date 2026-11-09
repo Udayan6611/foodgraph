@@ -89,7 +89,7 @@ The deployed web app uses the existing endpoint already referenced in the fronte
 
 - `doGet` receives product events and appends them to the `Events` sheet.
 - `doPost` validates early-access submissions and appends them to the separate `Signups` sheet.
-- Signup submissions include name, email, optional area, consent choice and referral/session attribution.
+- Signup submissions include name, email, optional area, the optional product-updates choice, required Terms/Privacy acknowledgement and legal-page version, plus referral/session attribution.
 - Duplicate email submissions are checked before a new row is added.
 - The spreadsheet should remain private. The public website only needs access to the deployed web-app endpoint.
 
