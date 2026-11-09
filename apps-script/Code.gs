@@ -65,7 +65,9 @@ function doPost(e) {
           const legalColumn = headers.indexOf('legal_acknowledged') + 1;
           const versionColumn = headers.indexOf('legal_version') + 1;
           const acceptedAtColumn = headers.indexOf('legal_acknowledged_at') + 1;
-          sheet.getRange(rowNumber,legalColumn,1,3).setValues([['yes',LEGAL_VERSION,new Date()]]);
+          sheet.getRange(rowNumber,legalColumn).setValue('yes');
+          sheet.getRange(rowNumber,versionColumn).setValue(LEGAL_VERSION);
+          sheet.getRange(rowNumber,acceptedAtColumn).setValue(new Date());
           return signupResponse({ok:true,duplicate:true,message:'This email is already on the list.'},nonce);
         }
       }
