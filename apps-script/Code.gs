@@ -1,6 +1,7 @@
 const SPREADSHEET_ID = '1rToeNKRt_xZAlhY3oa6HouTEGQxr-GwlQWKzNTj2H98';
 const SHEET_NAME = 'Events';
 const SIGNUPS_SHEET_NAME = 'Signups';
+const LEGAL_VERSION = '2026-11-09';
 const HEADERS = [
   'timestamp','event','session_id','referrer_id','source','campaign','landing_path',
   'area','cuisines','vibes','budget','ref','result_names','result_scores',
@@ -8,7 +9,8 @@ const HEADERS = [
 ];
 const SIGNUP_HEADERS = [
   'timestamp','name','email','area','consent','session_id','referrer_id',
-  'source','campaign','landing_path'
+  'source','campaign','landing_path','legal_acknowledged','legal_version',
+  'legal_acknowledged_at'
 ];
 
 function doGet(e) {
@@ -36,6 +38,7 @@ function doPost(e) {
   try {
     if (params.form_type !== 'signup') throw new Error('Invalid form submission.');
     if (params.website) throw new Error('Invalid form submission.');
+    if (params.legal_acknowledged !== 'yes') throw new Error('Please agree to the Terms of Use and acknowledge the Privacy Policy.');
     const name = String(params.name || '').trim().replace(/\s+/g,' ').slice(0,100);
     const email = String(params.email || '').trim().toLowerCase().slice(0,254);
     const area = String(params.area || '').trim().slice(0,80);
@@ -56,7 +59,13 @@ function doPost(e) {
       const lastRow = sheet.getLastRow();
       if (lastRow > 1) {
         const existing = sheet.getRange(2,emailColumn,lastRow-1,1).getDisplayValues().flat();
-        if (existing.some(function(value){return String(value).trim().toLowerCase() === email;})) {
+        const duplicateIndex = existing.findIndex(function(value){return String(value).trim().toLowerCase() === email;});
+        if (duplicateIndex !== -1) {
+          const rowNumber = duplicateIndex + 2;
+          const legalColumn = headers.indexOf('legal_acknowledged') + 1;
+          const versionColumn = headers.indexOf('legal_version') + 1;
+          const acceptedAtColumn = headers.indexOf('legal_acknowledged_at') + 1;
+          sheet.getRange(rowNumber,legalColumn,1,3).setValues([['yes',LEGAL_VERSION,new Date()]]);
           return signupResponse({ok:true,duplicate:true,message:'This email is already on the list.'},nonce);
         }
       }
@@ -66,7 +75,10 @@ function doPost(e) {
         referrer_id:String(params.referrer_id || '').slice(0,120),
         source:String(params.source || 'direct').slice(0,80),
         campaign:String(params.campaign || 'general').slice(0,100),
-        landing_path:String(params.landing_path || '').slice(0,300)
+        landing_path:String(params.landing_path || '').slice(0,300),
+        legal_acknowledged:'yes',
+        legal_version:LEGAL_VERSION,
+        legal_acknowledged_at:new Date()
       };
       sheet.appendRow(headers.map(function(header){return values[header] !== undefined ? values[header] : '';}));
     } finally {
