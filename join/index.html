@@ -109,6 +109,22 @@
   localStorage.setItem('foodgraph_session_id',visitor);
   const session=sessionStorage.getItem('foodgraph_visit_id')||createId();
   sessionStorage.setItem('foodgraph_visit_id',session);
+  const analyticsEndpoint='https://script.google.com/macros/s/AKfycbyJTL_UKuih_3e7Lr71s0XdV24VoNY5qhjfdfZeBA1wyJRPr8dHP_GQR3hBJRSiRz1d4w/exec';
+  const trackSignupPage=eventName=>{
+    if(localStorage.getItem('foodgraph_analytics_opt_out')==='yes')return;
+    const pixel=new Image();
+    pixel.src=analyticsEndpoint+'?'+new URLSearchParams({
+      event:eventName,session_id:session,visitor_id:visitor,
+      referrer_id:get('foodgraph_referrer_id'),source:get('foodgraph_source','direct'),
+      campaign:get('foodgraph_campaign','general'),landing_path:location.pathname
+    }).toString();
+  };
+  if(!sessionStorage.getItem('foodgraph_visit_started')){
+    trackSignupPage('visit_start');
+    sessionStorage.setItem('foodgraph_visit_started','yes');
+  }
+  trackSignupPage('page_view');
+  trackSignupPage('signup_form_view');
   const form=document.getElementById('signupForm'),frame=document.getElementById('signupFrame'),status=document.getElementById('status'),button=document.getElementById('submitButton');
   const legalAcknowledgement=document.getElementById('legalAcknowledgement');
   function syncSubmitButton(){button.disabled=!legalAcknowledgement.checked;}
@@ -130,7 +146,7 @@
   function show(ok,message){
     status.textContent=message;status.className='join-status show '+(ok?'success':'error');
     button.disabled=!legalAcknowledgement.checked;button.textContent=ok?'You’re on the list ✓':'Try again';
-    if(ok){form.querySelectorAll('input,select,button').forEach(el=>{if(el.type!=='hidden')el.disabled=true;});modal.classList.add('open');modal.setAttribute('aria-hidden','false');dialog.focus();}
+    if(ok){trackSignupPage('signup_success');form.querySelectorAll('input,select,button').forEach(el=>{if(el.type!=='hidden')el.disabled=true;});modal.classList.add('open');modal.setAttribute('aria-hidden','false');dialog.focus();}
   }
   window.addEventListener('message',event=>{
     const data=event.data;
