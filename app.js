@@ -5,8 +5,31 @@ if(rr){localStorage.setItem('foodgraph_referrer_id',rr.id);localStorage.setItem(
 if(legacyRef&&!localStorage.getItem('foodgraph_referrer_id'))localStorage.setItem('foodgraph_referrer_id',legacyRef);
 const REFERRER_ID=localStorage.getItem('foodgraph_referrer_id')||'',SOURCE=localStorage.getItem('foodgraph_source')||'direct',CAMPAIGN=localStorage.getItem('foodgraph_campaign')||'general',REFERRAL=REFERRER_ID;
 const PROFILE_CONTEXT={area:localStorage.getItem('foodgraph_area')||'',cuisines:localStorage.getItem('foodgraph_cuisines')||'',vibes:localStorage.getItem('foodgraph_vibes')||'',budget:localStorage.getItem('foodgraph_budget')||''};
-const SESSION_ID=(()=>{const k='foodgraph_session_id';let id=localStorage.getItem(k);if(!id){id=crypto.randomUUID?crypto.randomUUID():'fg-'+Date.now()+'-'+Math.random().toString(36).slice(2);localStorage.setItem(k,id)}return id})();
-function track(event,extra={}){if(!TRACKING_ENDPOINT||localStorage.getItem('foodgraph_analytics_opt_out')==='yes')return;const p={event,session_id:SESSION_ID,ref:REFERRER_ID?REFERRER_ID+'|'+SOURCE+'|'+CAMPAIGN:'',referrer_id:REFERRER_ID,source:SOURCE,campaign:CAMPAIGN,landing_path:location.pathname,area:extra.area??PROFILE_CONTEXT.area,cuisines:extra.cuisines??PROFILE_CONTEXT.cuisines,vibes:extra.vibes??PROFILE_CONTEXT.vibes,budget:extra.budget??PROFILE_CONTEXT.budget,...extra};const b=new Image();b.src=TRACKING_ENDPOINT+'?'+new URLSearchParams(p).toString()}
+function createFoodGraphId(){return (crypto.randomUUID&&crypto.randomUUID())||('fg-'+Date.now()+'-'+Math.random().toString(36).slice(2))}
+const VISITOR_ID=(()=>{
+  const key='foodgraph_visitor_id';
+  let id=localStorage.getItem(key)||localStorage.getItem('foodgraph_session_id');
+  if(!id)id=createFoodGraphId();
+  localStorage.setItem(key,id);
+  // Keep the legacy key so existing referral/signup integrations remain compatible.
+  localStorage.setItem('foodgraph_session_id',id);
+  return id;
+})();
+const SESSION_ID=(()=>{
+  const key='foodgraph_visit_id';
+  let id=sessionStorage.getItem(key);
+  if(!id){id=createFoodGraphId();sessionStorage.setItem(key,id)}
+  return id;
+})();
+function track(event,extra={}){
+  if(!TRACKING_ENDPOINT||localStorage.getItem('foodgraph_analytics_opt_out')==='yes')return;
+  const p={event,session_id:SESSION_ID,visitor_id:VISITOR_ID,ref:REFERRER_ID?REFERRER_ID+'|'+SOURCE+'|'+CAMPAIGN:'',referrer_id:REFERRER_ID,source:SOURCE,campaign:CAMPAIGN,landing_path:location.pathname,area:extra.area??PROFILE_CONTEXT.area,cuisines:extra.cuisines??PROFILE_CONTEXT.cuisines,vibes:extra.vibes??PROFILE_CONTEXT.vibes,budget:extra.budget??PROFILE_CONTEXT.budget,...extra};
+  const b=new Image();b.src=TRACKING_ENDPOINT+'?'+new URLSearchParams(p).toString();
+}
+if(!sessionStorage.getItem('foodgraph_visit_started')){
+  track('visit_start');
+  sessionStorage.setItem('foodgraph_visit_started','yes');
+}
 track('page_view');
 const LEARNING_KEY = 'foodgraph_behavior_v1';
 const LEARNING = (() => {
