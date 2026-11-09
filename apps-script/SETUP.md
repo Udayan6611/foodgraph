@@ -32,3 +32,8 @@ Do not create a new deployment unless the existing deployment cannot be edited. 
 - The website does not need a new URL after updating the existing deployment.
 - After deploying the new Apps Script version, test using an email address you control. Confirm the legal acknowledgement is required, the product-updates checkbox can be left unchecked, and the Signups row records `legal_acknowledged`, `legal_version` and `legal_acknowledged_at`. Submit the same email again and confirm no duplicate row is added and the legal-acknowledgement fields are refreshed.
 - The email is stored in the private Google Sheet. Limit access to people who need it.
+
+
+### Visitor and visit identifiers
+
+The Events and Signups sheets now include a `visitor_id` column. It is an anonymous browser identifier stored in LocalStorage. The existing `session_id` field now represents a browser tab visit, stored in SessionStorage. The script appends missing headers automatically when the updated web app receives its next event or signup. Redeploy the Apps Script web app as a new version after updating `Code.gs` in GitHub.
