@@ -1267,5 +1267,38 @@ const RESTAURANTS_V6 = [
     194,
     "https://gokalki.com/for/restaurants/pune/",
     "Google reviews (goKalki report)"
+  ],
+  [
+    "Swarnaa Vegetarian",
+    "Warje",
+    "North Indian, South Indian, Vegetarian",
+    "Casual, Groups",
+    3.9,
+    1,
+    687,
+    "https://www.district.in/dining/pune/swarnaa-vegetarian-warje",
+    "District ratings"
+  ],
+  [
+    "Shree Kala - Aaba Misalwale",
+    "Rasta Peth",
+    "Maharashtrian, Vegetarian",
+    "Casual",
+    4.4,
+    null,
+    1700,
+    "https://www.swiggy.com/city/pune/shree-kala-aaba-misalwale-rasta-peth-rest41200",
+    "Swiggy ratings"
+  ],
+  [
+    "Shree Kala Snacks Centre",
+    "Rasta Peth",
+    "Maharashtrian, Vegetarian",
+    "Casual",
+    4.5,
+    null,
+    220,
+    "https://www.district.in/dining/pune/shree-kala-snacks-centre-rasta-peth",
+    "District ratings"
   ]
 ];
