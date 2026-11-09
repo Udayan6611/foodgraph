@@ -5,12 +5,12 @@ const LEGAL_VERSION = '2026-11-09';
 const HEADERS = [
   'timestamp','event','session_id','referrer_id','source','campaign','landing_path',
   'area','cuisines','vibes','budget','ref','result_names','result_scores',
-  'restaurant_name','action','feedback'
+  'restaurant_name','action','feedback','visitor_id'
 ];
 const SIGNUP_HEADERS = [
   'timestamp','name','email','area','consent','session_id','referrer_id',
   'source','campaign','landing_path','legal_acknowledged','legal_version',
-  'legal_acknowledged_at'
+  'legal_acknowledged_at','visitor_id'
 ];
 
 function doGet(e) {
@@ -74,6 +74,7 @@ function doPost(e) {
       const values = {
         timestamp:new Date(),name:name,email:email,area:area,consent:consent,
         session_id:String(params.session_id || '').slice(0,120),
+        visitor_id:String(params.visitor_id || '').slice(0,120),
         referrer_id:String(params.referrer_id || '').slice(0,120),
         source:String(params.source || 'direct').slice(0,80),
         campaign:String(params.campaign || 'general').slice(0,100),
