@@ -56,7 +56,7 @@
         <p class="eyebrow">FOODGRAPH · PUNE</p>
         <h1>Help shape what we build next.</h1>
         <p>FoodGraph is being built around a simple idea: the best place to eat is the one that fits your taste. Join the early-access list to hear when we make something new worth trying.</p>
-        <div class="join-points"><span>Occasional product updates, not a noisy mailing list</span><span>Your signup stays separate from your taste activity</span><span>No account needed to use FoodGraph</span></div>
+        <div class="join-points"><span>Product updates only when you opt in</span><span>Signup details are stored separately; basic session and referral fields are also recorded</span><span>No account needed to use FoodGraph</span></div>
       </section>
       <section class="join-card">
         <h2>Join early access</h2>
@@ -75,7 +75,7 @@
           <div class="join-field"><label for="area">Where are you based? <span style="font-weight:500;color:#8391a5">(optional)</span></label><select id="area" name="area"><option value="">Select an area</option><option>Viman Nagar</option><option>Koregaon Park</option><option>Kalyani Nagar</option><option>Baner</option><option>Balewadi</option><option>Kothrud</option><option>Hinjewadi</option><option>Other Pune</option><option>Outside Pune</option></select></div>
           <label class="join-consent"><input type="checkbox" name="consent" value="yes"><span>I'm happy to receive occasional FoodGraph product updates. I can opt out anytime.</span></label>
           <button class="join-submit" id="submitButton" type="submit">Join the list <span>→</span></button>
-          <p class="join-privacy">We use these details only to manage early access and the updates you choose to receive.</p>
+          <p class="join-privacy">Your details and choices are handled as explained in our <a href="../privacy/">Privacy Policy</a>.</p>
           <div class="join-status" id="status" role="status" aria-live="polite"></div>
         </form>
         <iframe name="signupFrame" id="signupFrame" title="Signup response" style="display:none"></iframe>
@@ -92,7 +92,7 @@
       <button class="success-close" id="closeSuccess" type="button">Maybe later</button>
     </section>
   </div>
-  <footer><a class="brand" href="../"><img src="../assets/foodgraph-mark.svg" alt=""><span><b>Food</b><strong>Graph</strong></span></a><span>Built in Pune.</span><a href="../">Back to FoodGraph →</a></footer>
+  <footer><a class="brand" href="../"><img src="../assets/foodgraph-mark.svg" alt=""><span><b>Food</b><strong>Graph</strong></span></a><span>Built in Pune.</span><a href="../">Back to FoodGraph →</a><div class="legal-footer-links"><a href="../privacy/">Privacy</a><a href="../terms/">Terms</a></div></footer>
 <script>
 (function(){
   const get=(key,fallback='')=>localStorage.getItem(key)||fallback;
