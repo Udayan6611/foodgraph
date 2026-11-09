@@ -101,3 +101,9 @@
 .join-invite span{font-size:10px;color:#98a6b8;margin-top:5px}
 .join-invite a{flex:none;color:#ff9a7e;font-size:11px;font-weight:850}
 @media(max-width:600px){.nav-actions{gap:9px}.nav-join{font-size:10px}.final-actions{flex-direction:column;gap:15px}.join-invite{align-items:flex-start;flex-direction:column}}
+
+
+/* Shared links for the Privacy and Terms pages in all site footers. */
+.legal-footer-links{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.legal-footer-links a{font-size:11px;font-weight:800;color:var(--ink)}
+.legal-footer-links a:hover{color:var(--coral)}
