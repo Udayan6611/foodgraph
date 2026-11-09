@@ -7,6 +7,7 @@ FoodGraph is a Pune-first restaurant discovery app. People choose an area, cuisi
 ## Current product
 
 - Taste-based restaurant discovery for Pune.
+- Current dataset: 147 listings across 28 Pune areas. Newer additions include public listing URLs and source-labelled rating counts; unknown prices are shown as unverified rather than guessed.
 - Recommendations use cuisine, area and nearby-area fit, budget, vibe, rating and popularity.
 - Users can open a restaurant in Google Maps and mark a recommendation **Useful** or **Not for me**.
 - Preference and feedback signals are stored in the browser and influence later recommendations.
