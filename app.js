@@ -77,8 +77,9 @@ function areaFit(userArea, restaurantArea){
   if (a === b || b.includes(a) || a.includes(b.split(' / ')[0])) return 1;
   const nearby={
     'Viman Nagar':['Airport Road / Viman Nagar','Kharadi','Lohegaon','Wadgaon Sheri / Chandan Nagar','Kalyani Nagar'],
+    'Kharadi':['Wadgaon Sheri','Wadgaon Sheri / Chandan Nagar','Viman Nagar','Lohegaon'],
     'Kharadi':['Wadgaon Sheri / Chandan Nagar','Airport Road / Viman Nagar','Lohegaon','Viman Nagar'],
-    'Koregaon Park':['Mundhwa / Koregaon Park Annexe','Kalyani Nagar','Sangamvadi','Hadapsar'],
+    'Koregaon Park':['Mundhwa / Koregaon Park Annexe','Kalyani Nagar','Sangamvadi'],
     'Kalyani Nagar':['Koregaon Park','Mundhwa / Koregaon Park Annexe','Viman Nagar','Kharadi'],
     'Shivajinagar':['Deccan Gymkhana','FC Road','Sangamvadi','Prabhat Road'],
     'Deccan Gymkhana':['Shivajinagar','FC Road','Prabhat Road','Erandwane','Sadashiv Peth'],
@@ -91,7 +92,7 @@ function areaFit(userArea, restaurantArea){
     'Baner':['Balewadi','Aundh','Wakad','Pashan'],
     'Balewadi':['Baner','Wakad','Aundh'],
     'Wakad':['Hinjewadi','Baner','Balewadi'],
-    'Hinjewadi':['Wakad','Baner','Balewadi'],
+    'Hinjawadi':['Wakad','Baner','Balewadi'],
     'Sadashiv Peth':['Rasta Peth','Deccan Gymkhana','Tilak Road'],
     'Rasta Peth':['Sadashiv Peth','Sangamvadi','Camp','Tilak Road'],
     'Camp':['East Street','MG Road','Sangamvadi','Sadashiv Peth'],
@@ -103,7 +104,7 @@ function areaFit(userArea, restaurantArea){
   return (nearby[userArea]||[]).some(area=>area.toLowerCase()===b) ? 0.62 : 0.28;
 }
 function cuisineMatches(selected, restaurantCuisines){
-  const normalize = value => value.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').trim();
+  const normalize = value => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
   const wanted = normalize(selected);
   const normalized = restaurantCuisines.map(normalize);
   if(wanted === 'cafe') return normalized.includes('cafe');
@@ -120,7 +121,7 @@ function cuisineFit(selectedCuisine, restaurant){
   return Math.min(1, hits / Math.max(1, Math.min(selectedCuisine.length,2)));
 }
 function budgetFit(priceValue, restaurant){
-  if(!Number.isInteger(Number(restaurant.priceTier))) return 0.65;
+  if(restaurant.priceTier == null || !Number.isInteger(Number(restaurant.priceTier))) return 0.65;
   const userTier=Number(priceValue), diff=Math.abs(userTier-Number(restaurant.priceTier));
   return diff===0 ? 1 : diff===1 ? 0.70 : diff===2 ? 0.35 : 0.15;
 }
