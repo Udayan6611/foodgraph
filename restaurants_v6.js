@@ -1300,5 +1300,170 @@ const RESTAURANTS_V6 = [
     220,
     "https://www.district.in/dining/pune/shree-kala-snacks-centre-rasta-peth",
     "District ratings"
+  ],
+  [
+    "Pind Balluchi - Amanora",
+    "Hadapsar",
+    "North Indian, Mughlai, Biryani, Kebab",
+    "Groups, Established",
+    4.6,
+    3,
+    6595,
+    "https://www.google.com/maps/search/?api=1&query=Pind+Balluchi+Amanora+Mall+Hadapsar+Pune",
+    "Google reviews"
+  ],
+  [
+    "Toscano - Amanora",
+    "Hadapsar",
+    "Italian, European, Pizza, Pasta, Seafood",
+    "Date night, Specialty, Established",
+    4.7,
+    3,
+    3070,
+    "https://www.district.in/dining/pune/toscano-hadapsar",
+    "District ratings"
+  ],
+  [
+    "Punjab Exotica - Amanora",
+    "Hadapsar",
+    "North Indian, Mughlai",
+    "Groups, Date night, Established",
+    4.3,
+    2,
+    2398,
+    "https://www.district.in/dining/pune/punjab-exotica-hadapsar",
+    "District ratings"
+  ],
+  [
+    "Agent Jack's - Amanora",
+    "Hadapsar",
+    "North Indian, Continental, Bar Food",
+    "Groups, Casual, Date night",
+    4.4,
+    null,
+    9160,
+    "https://www.google.com/maps/search/?api=1&query=Agent+Jacks+Amanora+Hadapsar+Pune",
+    "Google reviews"
+  ],
+  [
+    "Comida Restaurant - Magarpatta",
+    "Hadapsar",
+    "South Indian, Kerala, Vegetarian",
+    "Casual, Groups, Established",
+    4.7,
+    null,
+    125,
+    "https://www.google.com/maps/search/?api=1&query=Comida+Restaurant+Magarpatta+Hadapsar+Pune",
+    "Google reviews"
+  ],
+  [
+    "Rajwadi Gaurav Thali Veg Restaurant",
+    "Wakad",
+    "Rajasthani, Gujarati, Vegetarian",
+    "Groups, Casual, Established",
+    4.7,
+    1,
+    12347,
+    "https://www.google.com/maps/search/?api=1&query=Rajwadi+Gaurav+Thali+Wakad+Pune",
+    "Google reviews"
+  ],
+  [
+    "Copper Chimney - Wakad",
+    "Wakad",
+    "North Indian, Mughlai",
+    "Groups, Established, Date night",
+    4.7,
+    null,
+    3388,
+    "https://www.google.com/maps/search/?api=1&query=Copper+Chimney+Wakad+Pune",
+    "Google reviews"
+  ],
+  [
+    "Lost Recipes - Wakad",
+    "Wakad",
+    "North Indian, Fast Food, Street Food",
+    "Casual, Groups",
+    4.4,
+    1,
+    126,
+    "https://www.district.in/dining/pune/lost-recipes-wakad",
+    "District ratings"
+  ],
+  [
+    "Crazy Noodles - Wakad",
+    "Wakad",
+    "Chinese, Asian, Indo-Chinese",
+    "Casual, Groups",
+    4.2,
+    null,
+    244,
+    "https://www.district.in/dining/pune/crazy-noodles-wakad",
+    "District ratings"
+  ],
+  [
+    "The Graand Purohit - Wakad",
+    "Wakad",
+    "North Indian, Indian, Vegetarian",
+    "Groups, Casual, Established",
+    4.5,
+    1,
+    4594,
+    "https://www.google.com/maps/search/?api=1&query=The+Graand+Purohit+Wakad+Pune",
+    "Google reviews"
+  ],
+  [
+    "Pakwan Food Tradition Veg Restaurant",
+    "Wakad",
+    "North Indian, Vegetarian",
+    "Casual, Groups, Established",
+    4.4,
+    1,
+    7965,
+    "https://www.google.com/maps/search/?api=1&query=Pakwan+Food+Tradition+Veg+Restaurant+Wakad+Pune",
+    "Google reviews"
+  ],
+  [
+    "Ram Krishna Restaurant - Camp",
+    "Camp",
+    "Indian, North Indian, South Indian, Vegetarian",
+    "Established, Groups, Casual",
+    4.3,
+    1,
+    14696,
+    "https://www.google.com/maps/search/?api=1&query=Ram+Krishna+Restaurant+Moledina+Road+Camp+Pune",
+    "Google reviews"
+  ],
+  [
+    "Hotel Abhishek Veg - Erandwane",
+    "Erandwane",
+    "Indian, North Indian, South Indian, Chinese, Maharashtrian, Vegetarian",
+    "Casual, Groups, Established",
+    4.2,
+    null,
+    16337,
+    "https://www.google.com/maps/search/?api=1&query=Hotel+Abhishek+Veg+Erandwane+Pune",
+    "Google reviews"
+  ],
+  [
+    "Shrimant Misal Aani Barech Kahi",
+    "Pashan",
+    "Maharashtrian, Vegetarian",
+    "Casual, Groups, Established",
+    4.5,
+    null,
+    8288,
+    "https://www.google.com/maps/search/?api=1&query=Shrimant+Misal+Aani+Barech+Kahi+Pashan+Pune",
+    "Google reviews"
+  ],
+  [
+    "Runway 47 Rooftop Restaurant",
+    "Lohegaon",
+    "North Indian, Chinese, Asian, Continental",
+    "Date night, Groups, Specialty",
+    4.7,
+    null,
+    193,
+    "https://www.google.com/maps/search/?api=1&query=Runway+47+Rooftop+Restaurant+Lohegaon+Pune",
+    "Google reviews"
   ]
 ];
