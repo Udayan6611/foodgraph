@@ -88,7 +88,7 @@ The referral shortcuts and fallback page are kept because they support the exist
 
 The deployed web app uses the existing endpoint already referenced in the frontend.
 
-- `doGet` receives product events and appends them to the `Events` sheet.
+- `doGet` receives product events and appends them to the `Events` sheet, with a persistent anonymous browser ID and a per-tab visit ID for return-visit analysis.
 - `doPost` validates early-access submissions and appends them to the separate `Signups` sheet.
 - Signup submissions include name, email, optional area, the optional product-updates choice, required Terms/Privacy acknowledgement and legal-page version, plus referral/session attribution.
 - Duplicate email submissions are checked before a new row is added.
