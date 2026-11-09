@@ -840,26 +840,26 @@ const RESTAURANTS_V6 = [
     2
   ],
   [
-    "Vaishali Restaurant",
-    "Shivajinagar",
+    "Vaishali",
+    "FC Road",
     "South Indian, Maharashtrian, Cafe",
     "Cafe, Established",
-    4.2,
+    4.4,
     1,
-    2314,
+    5778,
     "https://www.district.in/dining/pune/vaishali-fc-road",
     "District ratings"
   ],
   [
-    "Surve's Pure Non Veg",
-    "Deccan Gymkhana",
+    "Surve's Pure Non-Veg",
+    "FC Road",
     "Maharashtrian, North Indian, Mughlai, Biryani",
     "Casual, Established",
-    4,
+    4.4,
     1,
-    6496,
-    "https://www.zomato.com/pune/surves-pure-non-veg-fc-road",
-    "Zomato ratings"
+    1204,
+    "https://www.district.in/dining/pune/surves-pure-non-veg-fc-road",
+    "District ratings"
   ],
   [
     "Le Plaisir",
@@ -869,8 +869,8 @@ const RESTAURANTS_V6 = [
     4.5,
     null,
     210,
-    "https://mapswemade.com/pune/fc-road/best-restaurants",
-    "Maps We Made local list"
+    "https://www.google.com/maps/search/?api=1&query=Le+Plaisir+Deccan+Gymkhana+Pune",
+    "Google reviews"
   ],
   [
     "Katakirr Misal",
@@ -880,8 +880,8 @@ const RESTAURANTS_V6 = [
     4.1,
     null,
     15562,
-    "https://mapswemade.com/pune/best-restaurants",
-    "Maps We Made local list"
+    "https://www.google.com/maps/search/?api=1&query=Katakirr+Misal+Erandwane+Pune",
+    "Google reviews"
   ],
   [
     "Gatti Chutney - Kharadi",
@@ -889,19 +889,19 @@ const RESTAURANTS_V6 = [
     "South Indian, Vegetarian",
     "Casual, Cafe",
     4.1,
-    1,
+    null,
     2165,
-    "https://www.district.in/dining/pune/gatti-chutney-kharadi",
-    "District ratings"
+    "https://www.google.com/maps/search/?api=1&query=Gatti+Chutney+Kharadi+Pune",
+    "Google reviews"
   ],
   [
-    "Wadeshwar - Deccan",
-    "Deccan Gymkhana",
+    "Wadeshwar - FC Road",
+    "FC Road",
     "South Indian, Maharashtrian, North Indian",
     "Casual, Established",
-    4,
-    1,
-    417,
+    3.7,
+    null,
+    2173,
     "https://www.district.in/dining/pune/wadeshwar-fc-road",
     "District ratings"
   ],
@@ -911,10 +911,10 @@ const RESTAURANTS_V6 = [
     "South Indian, Vegetarian",
     "Casual",
     4.2,
-    1,
+    null,
     4472,
-    "https://www.district.in/dining/pune/anna-fc-road",
-    "District ratings"
+    "https://www.google.com/maps/search/?api=1&query=Anna+FC+Road+Pune",
+    "Google reviews"
   ],
   [
     "Badshahi Lodging & Boarding",
@@ -924,8 +924,8 @@ const RESTAURANTS_V6 = [
     4.2,
     null,
     3147,
-    "https://mapswemade.com/pune/best-restaurants",
-    "Maps We Made local list"
+    "https://www.google.com/maps/search/?api=1&query=Badshahi+Lodging+Boarding+Pune",
+    "Google reviews"
   ],
   [
     "Cafe Vanah",
@@ -955,7 +955,7 @@ const RESTAURANTS_V6 = [
     "Chinese, Japanese, Asian",
     "Date night, Specialty, Groups",
     4.6,
-    4,
+    3,
     2474,
     "https://www.district.in/dining/pune/yakii-deccan-gymkhana",
     "District ratings"
@@ -1043,7 +1043,7 @@ const RESTAURANTS_V6 = [
     "Maharashtrian, North Indian",
     "Casual, Groups",
     4.2,
-    1,
+    null,
     2366,
     "https://www.district.in/dining/pune/sainath-khanaval-baner",
     "District ratings"
@@ -1056,8 +1056,8 @@ const RESTAURANTS_V6 = [
     3.9,
     null,
     4178,
-    "https://mapswemade.com/pune/fc-road/best-restaurants",
-    "Maps We Made local list"
+    "https://www.google.com/maps/search/?api=1&query=Niranjan+FC+Road+Pune",
+    "Google reviews"
   ],
   [
     "Amrapali Restaurant",
@@ -1076,7 +1076,7 @@ const RESTAURANTS_V6 = [
     "Chinese, Indo-Chinese",
     "Casual, Groups",
     null,
-    1,
+    null,
     0,
     "https://mapswemade.com/pune/fc-road/best-restaurants",
     "Maps We Made local list"
@@ -1098,10 +1098,10 @@ const RESTAURANTS_V6 = [
     "Cafe, Coffee, Pizza, Italian, North Indian, Chinese",
     "Cafe, Casual, Groups",
     4.3,
-    1,
+    null,
     574,
-    "https://thisispune.com/guides/restaurants-in-kharadi/",
-    "This Is Pune listing"
+    "https://www.google.com/maps/search/?api=1&query=Cafe+Rova+Kharadi+Pune",
+    "Google reviews"
   ],
   [
     "Yalla Yalla - Kharadi",
@@ -1111,8 +1111,8 @@ const RESTAURANTS_V6 = [
     4.8,
     null,
     222,
-    "https://thisispune.com/guides/restaurants-in-kharadi/",
-    "This Is Pune listing"
+    "https://www.google.com/maps/search/?api=1&query=Yalla+Yalla+Kharadi+Pune",
+    "Google reviews"
   ],
   [
     "Aamrai Kitchen",
@@ -1241,7 +1241,7 @@ const RESTAURANTS_V6 = [
     "Modern Indian, Indian",
     "Date night, Specialty",
     4.9,
-    4,
+    null,
     1126,
     "https://gokalki.com/for/restaurants/pune/",
     "Google reviews (goKalki report)"
