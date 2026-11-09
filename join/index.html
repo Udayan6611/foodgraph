@@ -10,8 +10,8 @@
   <style>
     .join-wrap{max-width:1080px;margin:auto;padding:68px 24px 100px;min-height:72vh}
     .join-layout{display:grid;grid-template-columns:1fr 460px;gap:70px;align-items:center}
-    .join-copy h1{font-size:clamp(48px,6vw,72px);line-height:.94;letter-spacing:-.06em;margin:0 0 22px;max-width:570px}
-    .join-copy>p:not(.eyebrow){font-size:16px;line-height:1.7;color:#667085;max-width:470px}
+    .join-copy h1{font-size:clamp(48px,6vw,72px);line-height:.98;letter-spacing:-.035em;margin:0 0 24px;max-width:620px}
+    .join-copy>p:not(.eyebrow){font-size:16px;line-height:1.7;color:#667085;max-width:470px;margin:0}
     .join-points{display:grid;gap:12px;margin-top:30px;color:#586577;font-size:12px}
     .join-points span:before{content:"↗";color:var(--coral);font-weight:900;margin-right:10px}
     .join-card{background:var(--dark);color:white;border-radius:25px;padding:30px;box-shadow:0 24px 60px rgba(19,41,75,.16)}
@@ -23,9 +23,13 @@
     .join-field input:focus,.join-field select:focus{border-color:var(--coral)}
     .join-field input::placeholder{color:#738196}
     .join-consent{display:flex;gap:9px;align-items:flex-start;font-size:10px;line-height:1.5;color:#aab6c5;margin:18px 0}
-    .join-consent input{margin-top:2px;accent-color:var(--coral)}
+    .join-consent input{flex:0 0 14px;width:14px;height:14px;margin-top:2px;accent-color:var(--coral)}
+    .join-legal-consent{padding:12px 13px;border:1px solid #34475e;border-radius:12px;background:#14243a;margin:10px 0 14px}
+    .join-legal-consent span{color:#dbe3ee;font-size:11px}
+    .join-legal-consent a{color:#ff9a7e;text-decoration:underline;text-underline-offset:2px;font-weight:800}
+    .join-legal-consent strong{color:#ffb29e;white-space:nowrap}
     .join-submit{width:100%;border:0;border-radius:12px;background:var(--coral);color:white;padding:15px;font-weight:850;cursor:pointer}
-    .join-submit:disabled{opacity:.65;cursor:wait}
+    .join-submit:disabled{opacity:.48;cursor:not-allowed}
     .join-privacy{font-size:9px;color:#8291a5;text-align:center;line-height:1.5;margin:13px 0 0}
     .join-status{display:none;margin-top:15px;padding:12px;border-radius:10px;font-size:11px;line-height:1.5}
     .join-status.show{display:block}.join-status.success{background:#173c34;color:#b9f2dd}.join-status.error{background:#492b2b;color:#ffd0c8}
@@ -73,9 +77,10 @@
           <div class="join-field"><label for="name">Your name</label><input id="name" name="name" type="text" maxlength="100" autocomplete="name" placeholder="What should we call you?" required></div>
           <div class="join-field"><label for="email">Email address</label><input id="email" name="email" type="email" maxlength="254" autocomplete="email" placeholder="you@example.com" required></div>
           <div class="join-field"><label for="area">Where are you based? <span style="font-weight:500;color:#8391a5">(optional)</span></label><select id="area" name="area"><option value="">Select an area</option><option>Viman Nagar</option><option>Koregaon Park</option><option>Kalyani Nagar</option><option>Baner</option><option>Balewadi</option><option>Kothrud</option><option>Hinjewadi</option><option>Other Pune</option><option>Outside Pune</option></select></div>
+          <label class="join-consent join-legal-consent"><input id="legalAcknowledgement" type="checkbox" name="legal_acknowledged" value="yes" required><span>I agree to the <a href="../terms/" target="_blank" rel="noopener noreferrer">Terms of Use</a> and acknowledge that I have read the <a href="../privacy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. <strong>Required.</strong></span></label>
           <label class="join-consent"><input type="checkbox" name="consent" value="yes"><span>I'm happy to receive occasional FoodGraph product updates. I can opt out anytime.</span></label>
-          <button class="join-submit" id="submitButton" type="submit">Join the list <span>→</span></button>
-          <p class="join-privacy">Your details and choices are handled as explained in our <a href="../privacy/">Privacy Policy</a>.</p>
+          <button class="join-submit" id="submitButton" type="submit" disabled>Join the list <span>→</span></button>
+          
           <div class="join-status" id="status" role="status" aria-live="polite"></div>
         </form>
         <iframe name="signupFrame" id="signupFrame" title="Signup response" style="display:none"></iframe>
@@ -99,6 +104,10 @@
   const session=get('foodgraph_session_id')||((crypto.randomUUID&&crypto.randomUUID())||('fg-'+Date.now()));
   localStorage.setItem('foodgraph_session_id',session);
   const form=document.getElementById('signupForm'),frame=document.getElementById('signupFrame'),status=document.getElementById('status'),button=document.getElementById('submitButton');
+  const legalAcknowledgement=document.getElementById('legalAcknowledgement');
+  function syncSubmitButton(){button.disabled=!legalAcknowledgement.checked;}
+  legalAcknowledgement.addEventListener('change',syncSubmitButton);
+  syncSubmitButton();
   const modal=document.getElementById('successModal'),dialog=modal.querySelector('.success-dialog'),closeModal=()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true');};
   document.getElementById('closeSuccess').addEventListener('click',closeModal);
   modal.addEventListener('click',event=>{if(event.target===modal)closeModal();});
@@ -113,7 +122,7 @@
   let submitted=false;
   function show(ok,message){
     status.textContent=message;status.className='join-status show '+(ok?'success':'error');
-    button.disabled=false;button.textContent=ok?'You’re on the list ✓':'Try again';
+    button.disabled=!legalAcknowledgement.checked;button.textContent=ok?'You’re on the list ✓':'Try again';
     if(ok){form.querySelectorAll('input,select,button').forEach(el=>{if(el.type!=='hidden')el.disabled=true;});modal.classList.add('open');modal.setAttribute('aria-hidden','false');dialog.focus();}
   }
   window.addEventListener('message',event=>{
@@ -121,7 +130,13 @@
     if(!data||data.type!=='foodgraph-signup-result'||data.nonce!==nonce||!submitted)return;
     show(!!data.ok,data.ok?'Thanks for joining. We’ll be in touch when there’s something worth sharing.':(data.message||'We couldn’t save your signup. Please try again.'));
   });
-  form.addEventListener('submit',()=>{
+  form.addEventListener('submit',(event)=>{
+    if(!legalAcknowledgement.checked){
+      event.preventDefault();
+      syncSubmitButton();
+      legalAcknowledgement.focus();
+      return;
+    }
     submitted=true;button.disabled=true;button.textContent='Adding you…';
     status.textContent='Submitting your details…';status.className='join-status show';
   });
