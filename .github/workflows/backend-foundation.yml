@@ -40,6 +40,7 @@ jobs:
         with:
           version: latest
       - name: Start local Supabase stack
+        id: local-supabase
         run: supabase start -x realtime,storage-api,imgproxy,kong,mailpit,postgrest,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
       - name: Apply migrations to disposable local database
         run: supabase db reset
