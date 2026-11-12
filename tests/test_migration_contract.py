@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MIGRATION = ROOT / "supabase" / "migrations" / "20261112090000_initial_foodgraph_schema.sql"
+MIGRATION = ROOT / "supabase" / "migrations" / "20261112165935_initial_foodgraph_schema.sql"
 
 
 class MigrationContractTests(unittest.TestCase):
@@ -59,6 +59,22 @@ class MigrationContractTests(unittest.TestCase):
         self.assertIn("insert into public.user_profiles (user_id)", self.sql)
         self.assertIn("insert into public.user_privacy_settings (user_id)", self.sql)
         self.assertIn("using (status='active')", self.sql)
+
+
+    def test_canonical_domain_fields_are_present(self):
+        canonical = (ROOT / "supabase" / "migrations" / "20261112172000_complete_canonical_schema_fields.sql").read_text(encoding="utf-8")
+        for token in ["profile_version", "feature_vector", "quality_state", "user_a_id", "user_b_id",
+                      "similarity_score", "eligible_for_discovery", "other_location_id", "time_precision",
+                      "visit_source", "verification_status", "feedback_type", "score_components",
+                      "evidence_summary", "visit_session_id", "consent_state", "editorial_collections_city_status_idx"]:
+            with self.subTest(token=token):
+                self.assertIn(token, canonical)
+
+    def test_scoped_client_and_service_role_grants(self):
+        grants = (ROOT / "supabase" / "migrations" / "20261112173000_grant_scoped_api_privileges.sql").read_text(encoding="utf-8").lower()
+        self.assertIn("grant select, insert, update, delete on", grants)
+        self.assertIn("grant all privileges on all tables in schema public to service_role", grants)
+        self.assertNotIn("grant all privileges on all tables in schema public to anon", grants)
 
     def test_no_destructive_statements(self):
         self.assertNotRegex(self.sql, r"\bdrop\s+(table|schema|database)\b")
