@@ -125,3 +125,32 @@
 ## Approval boundary
 
 Explicit founder approval is required before changing: product identity/four pillars; production UI/behavior and main deployment; referral attribution; Apps Script endpoint/access and spreadsheet structure; privacy defaults and consent boundaries; collection of sensitive/high-risk data; or any paid service/non-zero recurring commitment.
+
+
+### D-017 — Supabase project is the selected PostgreSQL host
+- **Date:** 12 Nov 2026
+- **Status:** Preserve
+- **Decision:** Use the user-created Supabase Free project in Mumbai (ref `nylpnvdnbqxhwlxjmboz`) as the intended backend target.
+- **Reason:** The user has completed project creation and selected the Free plan.
+- **Consequence:** Do not assume the database is empty, linked to GitHub, or reachable until its schema and migration history are inspected. No paid resources or billing upgrades.
+
+### D-018 — Private-by-default RLS is the initial access boundary
+- **Date:** 12 Nov 2026
+- **Status:** Preserve
+- **Decision:** Enable RLS across application tables; expose only curated catalogue reads and published editorial content. Personal data is owner-only in the first migration.
+- **Reason:** Sharing/follow/block/circle semantics require tested authorization and cannot be safely approximated with broad policies.
+- **Consequence:** Connections/circles sharing, public profiles, evidence access and moderation remain disabled until dedicated block-aware policies are implemented and tested.
+
+### D-019 — Catalogue import preserves legacy data and provenance
+- **Date:** 12 Nov 2026
+- **Status:** Preserve
+- **Decision:** Import using deterministic IDs, retain raw source rows and hashes, preserve available URLs/labels, and leave missing provenance unknown.
+- **Reason:** Existing prototype rows have heterogeneous shapes and some have no source URL or evidence label.
+- **Consequence:** Never infer INR prices from legacy price tiers, invent provider place IDs, or merge similar restaurant names without review. Re-import must be idempotent.
+
+### D-020 — Hosted database changes require explicit staged verification
+- **Date:** 12 Nov 2026
+- **Status:** Preserve
+- **Decision:** Develop/test locally, inspect remote schema/history, preview changes, then obtain explicit approval before applying the first hosted migration.
+- **Reason:** Project creation does not prove schema emptiness or deployment integration.
+- **Consequence:** No remote push, reset, seed, or data import occurs as part of branch creation or CI.
