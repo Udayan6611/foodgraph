@@ -12,7 +12,7 @@ class MigrationContractTests(unittest.TestCase):
         cls.sql = MIGRATION.read_text(encoding="utf-8").lower()
 
     def test_migration_is_atomic(self):
-        self.assertRegex(self.sql, r"(?m)^begin;\\s")
+        self.assertRegex(self.sql, r"(?m)^begin;\s")
         self.assertTrue(self.sql.rstrip().endswith("commit;"))
 
     def test_all_canonical_domain_tables_exist(self):
