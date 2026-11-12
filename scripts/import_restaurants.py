@@ -30,7 +30,7 @@ def stable_id(kind: str, value: str) -> str:
 
 def identity_text(value: str) -> str:
     value = unicodedata.normalize("NFKC", value).casefold().strip()
-    return re.sub(r"\\s+", " ", value)
+    return re.sub(r"\s+", " ", value)
 
 
 def slugify(value: str) -> str:
