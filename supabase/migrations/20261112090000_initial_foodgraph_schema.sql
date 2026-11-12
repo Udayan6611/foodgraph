@@ -513,7 +513,7 @@ begin
   foreach t in array array[
     'user_consents','user_preferences','taste_interactions','restaurant_comparisons',
     'restaurant_visits','taste_profile_snapshots','user_similarity_snapshots',
-    'food_lists','recommendation_runs'
+    'recommendation_runs'
   ] loop
     execute format('create policy owner_select on public.%I for select to authenticated using (user_id=auth.uid())',t);
     execute format('create policy owner_insert on public.%I for insert to authenticated with check (user_id=auth.uid())',t);
@@ -523,6 +523,11 @@ begin
     end if;
   end loop;
 end $$;
+
+create policy food_lists_owner_select on public.food_lists for select to authenticated using (owner_user_id=auth.uid());
+create policy food_lists_owner_insert on public.food_lists for insert to authenticated with check (owner_user_id=auth.uid());
+create policy food_lists_owner_update on public.food_lists for update to authenticated using (owner_user_id=auth.uid()) with check (owner_user_id=auth.uid());
+create policy food_lists_owner_delete on public.food_lists for delete to authenticated using (owner_user_id=auth.uid());
 
 create policy taste_circles_owner_select on public.taste_circles for select to authenticated using (owner_user_id=auth.uid());
 create policy taste_circles_owner_insert on public.taste_circles for insert to authenticated with check (owner_user_id=auth.uid());
