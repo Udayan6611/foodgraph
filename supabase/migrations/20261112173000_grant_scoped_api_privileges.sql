@@ -8,6 +8,11 @@ alter default privileges for role postgres in schema public
   revoke all privileges on tables from public, anon, authenticated;
 alter default privileges for role postgres in schema public
   grant all privileges on tables to service_role;
+-- Re-grant public read access only to curated catalogue entities after the deny-by-default revoke.
+grant select on public.cities, public.areas, public.restaurants, public.restaurant_locations,
+  public.cuisines, public.restaurant_location_cuisines, public.dishes, public.location_dishes
+to anon, authenticated;
+
 grant select on public.editorial_collections, public.editorial_collection_items to anon, authenticated;
 grant select on public.users to authenticated;
 grant select, insert, update on public.user_profiles, public.user_privacy_settings to authenticated;

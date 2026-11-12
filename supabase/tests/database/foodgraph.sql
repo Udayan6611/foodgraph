@@ -1,5 +1,5 @@
 begin;
-select plan(28);
+select plan(29);
 
 select has_table('cities');
 select has_table('restaurants');
@@ -114,5 +114,13 @@ select ok(has_table_privilege('service_role','public.catalogue_import_rows','INS
   'trusted backend service may insert catalogue import ledger rows');
 select ok(not has_table_privilege('anon','public.product_analytics_events','INSERT'),
   'anonymous clients cannot insert restricted analytics events');
+
+select ok(
+  has_table_privilege('anon','public.restaurants','SELECT')
+  and has_table_privilege('authenticated','public.restaurant_locations','SELECT')
+  and not has_table_privilege('anon','public.catalogue_claims','SELECT')
+  and not has_table_privilege('anon','public.restaurants','INSERT'),
+  'curated catalogue is public-read while evidence/provenance internals remain private'
+);
 select * from finish();
 rollback;
