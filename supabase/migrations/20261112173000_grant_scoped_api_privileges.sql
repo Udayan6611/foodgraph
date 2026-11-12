@@ -1,5 +1,13 @@
 -- Least-privilege SQL grants complement the RLS row predicates.
 begin;
+
+-- Supabase's local and hosted default ACLs are not identical. Start from deny-by-default
+-- for client roles across every application table, then grant only documented operations.
+revoke all privileges on all tables in schema public from public, anon, authenticated;
+alter default privileges for role postgres in schema public
+  revoke all privileges on tables from public, anon, authenticated;
+alter default privileges for role postgres in schema public
+  grant all privileges on tables to service_role;
 grant select on public.editorial_collections, public.editorial_collection_items to anon, authenticated;
 grant select on public.users to authenticated;
 grant select, insert, update on public.user_profiles, public.user_privacy_settings to authenticated;
