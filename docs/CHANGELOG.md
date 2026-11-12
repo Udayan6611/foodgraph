@@ -46,3 +46,5 @@ The PDF also records prior manual signup tests and a founder-reported Apps Scrip
 
 - **Importer refinement:** Unattributed six-column rows now create an explicitly unknown-source catalogue source and rating/legacy-tier claims; raw rows and hashes remain preserved. Duplicate name+area candidates use occurrence-aware IDs rather than being collapsed. Integration tests assert claim idempotency and transaction rollback.
 - **CI correction:** Initial pgTAP calls selected an ambiguous overload of `has_table`; calls were changed to the single-argument form. A new isolated CI run is pending/in progress; do not claim the complete suite passes until the latest branch-head run succeeds.
+
+- **Database tests expanded:** pgTAP now exercises actual PostgreSQL uniqueness/check constraints and catalogue visibility/RLS; the local CI stack excludes nonessential services to reduce startup overhead. Latest branch-head CI has passed the Python unit/contract step; full database/import integration remains in progress.
