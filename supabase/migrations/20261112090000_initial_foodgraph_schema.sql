@@ -166,6 +166,10 @@ as $$
 begin
   insert into public.users (id, auth_subject) values (new.id, new.id::text)
   on conflict (id) do nothing;
+  insert into public.user_profiles (user_id) values (new.id)
+  on conflict (user_id) do nothing;
+  insert into public.user_privacy_settings (user_id) values (new.id)
+  on conflict (user_id) do nothing;
   return new;
 end;
 $$;
@@ -492,7 +496,7 @@ grant select on public.cities,public.areas,public.restaurants,public.restaurant_
 create policy catalogue_cities_read on public.cities for select to anon,authenticated using (status='active');
 create policy catalogue_areas_read on public.areas for select to anon,authenticated using (status='active');
 create policy catalogue_restaurants_read on public.restaurants for select to anon,authenticated using (status='active');
-create policy catalogue_locations_read on public.restaurant_locations for select to anon,authenticated using (status in ('active','unverified'));
+create policy catalogue_locations_read on public.restaurant_locations for select to anon,authenticated using (status='active');
 create policy catalogue_cuisines_read on public.cuisines for select to anon,authenticated using (true);
 create policy catalogue_location_cuisines_read on public.restaurant_location_cuisines for select to anon,authenticated using (true);
 create policy catalogue_dishes_read on public.dishes for select to anon,authenticated using (status='active');
