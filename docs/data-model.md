@@ -26,7 +26,7 @@ It describes the system we intend to build. It does not mean these tables, accou
 
 The core relationships are:
 
-\`\`\`mermaid
+```mermaid
 erDiagram
   USER ||--|| USER_PROFILE : has
   USER ||--o{ USER_PREFERENCE : records
@@ -34,6 +34,7 @@ erDiagram
   USER ||--o{ RESTAURANT_VISIT : reports
   USER ||--o{ FOOD_LIST : owns
   USER ||--o{ USER_FOLLOW : follows
+  USER ||--o{ USER_BLOCK : blocks
   USER ||--o{ USER_CONSENT : grants
 
   CITY ||--o{ AREA : contains
@@ -62,7 +63,7 @@ erDiagram
   RECOMMENDATION_RUN ||--o{ RECOMMENDATION_ITEM : contains
   RESTAURANT_LOCATION ||--o{ RECOMMENDATION_ITEM : recommends
   RECOMMENDATION_ITEM ||--o{ RECOMMENDATION_FEEDBACK : receives
-\`\`\`
+```
 
 The diagram is conceptual. The table definitions below are authoritative where the diagram omits fields or implementation constraints.
 
@@ -719,7 +720,7 @@ Evidence quality should not be reduced to a single universal verified boolean. S
 
 ## 7. Recommendation data flow
 
-\`\`\`text
+```text
 Explicit preferences ────────────┐
 Taste interactions ──────────────┤
 Accepted visit records ──────────┤
@@ -746,7 +747,7 @@ Evidence confidence / recency ──┘
                     Recommendation feedback
                                  ▼
              New interaction or visit record
-\`\`\`
+```
 
 Hard constraints (for example, a user-marked dietary exclusion) are applied before soft ranking. A strong social signal cannot override a hard constraint.
 
@@ -843,10 +844,10 @@ The current app must keep working while the canonical model is introduced. No ex
 
 The current dataset uses rows shaped approximately like:
 
-\`\`\`text
+```text
 [name, area, cuisine, vibe, rating, priceTier,
  reviews?, sourceUrl?, ratingEvidence?]
-\`\`\`
+```
 
 There are 162 current Pune entries across 28 areas. A one-time import should:
 
