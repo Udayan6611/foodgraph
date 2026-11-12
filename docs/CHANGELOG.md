@@ -7,7 +7,7 @@ This log records changes supported by repository commits or directly verified ch
 - **Branch:** `docs/project-continuity-2026-11-12`, created from audited `main` HEAD `bdccf8bf6147ffe22a20974fd9b86af2b0432e93`.
 - **Scope:** Documentation only. No application code, Apps Script, catalogue, GitHub Pages configuration, CNAME or production branch was modified.
 - **Added:** `docs/WORKING_STATE.md`, `docs/DECISIONS.md`, `docs/CHANGELOG.md`.
-- **README update:** Pending in this initialization sequence; permanent links and continuity protocol will be added on this documentation branch.
+- **Updated:** `README.md` with links to the four supporting documents and the permanent continuity/update protocol. README update commit: `4fe0e15e1eca51b19e13a3667a7e8be46611612c`.
 - **Retained:** Existing `docs/data-model.md` (46 KB canonical logical schema). It already documents entity boundaries, privacy, evidence, analytics separation, migration mapping and build order; it was not duplicated or rewritten.
 - **Verification at audit start:** `main` HEAD `bdccf8bf6147ffe22a20974fd9b86af2b0432e93`; repository tree inspected; branch search returned only `main`; targeted redesign branch search returned none.
 - **CI:** Latest observed Pages run #112 succeeded on parent commit `8adb9e40db3ae15e8a089ebe30682611db3402bf`. No Actions run was returned for exact audited HEAD `bdccf8b...`; exact-head CI is not claimed as passing.
