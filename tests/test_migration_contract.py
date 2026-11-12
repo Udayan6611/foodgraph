@@ -55,6 +55,11 @@ class MigrationContractTests(unittest.TestCase):
         self.assertIn("restaurant_locations_external_place_uidx", self.sql)
         self.assertIn("email_normalized text not null unique", self.sql)
 
+    def test_auth_bootstrap_and_unreviewed_catalogue_are_private(self):
+        self.assertIn("insert into public.user_profiles (user_id)", self.sql)
+        self.assertIn("insert into public.user_privacy_settings (user_id)", self.sql)
+        self.assertIn("using (status='active')", self.sql)
+
     def test_no_destructive_statements(self):
         self.assertNotRegex(self.sql, r"\bdrop\s+(table|schema|database)\b")
         self.assertNotIn("truncate ", self.sql)
