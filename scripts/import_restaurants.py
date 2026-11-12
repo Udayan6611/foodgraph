@@ -162,7 +162,6 @@ def apply_import(records: list[dict], database_url: str) -> dict:
                            values (%s,%s,%s) on conflict do nothing""",
                         (r["location_id"], cuisine["id"], idx == 0),
                     )
-                source_id = None
                 if r["source_url"]:
                     source_id = stable_id("source", r["source_url"])
                     cur.execute(
@@ -171,20 +170,29 @@ def apply_import(records: list[dict], database_url: str) -> dict:
                            on conflict (source_url) do update set source_name=excluded.source_name""",
                         (source_id, source_type(r["source_url"]), r["evidence_label"] or "Unlabelled source", r["source_url"]),
                     )
-                    if r["rating"] is not None:
-                        claim_id = stable_id("claim", f"{r['location_id']}|rating|{source_id}|{r['digest']}")
-                        cur.execute(
-                            """insert into public.catalogue_claims(id,restaurant_location_id,field_key,field_value,source_id)
-                               values (%s,%s,'rating',%s,%s) on conflict (id) do nothing""",
-                            (claim_id, r["location_id"], Jsonb({"value": r["rating"], "review_count": r["review_count"]}), source_id),
-                        )
-                    if r["price_tier"] is not None:
-                        claim_id = stable_id("claim", f"{r['location_id']}|legacy_price_tier|{source_id}|{r['digest']}")
-                        cur.execute(
-                            """insert into public.catalogue_claims(id,restaurant_location_id,field_key,field_value,source_id)
-                               values (%s,%s,'legacy_price_tier',%s,%s) on conflict (id) do nothing""",
-                            (claim_id, r["location_id"], Jsonb({"tier": r["price_tier"], "meaning": "legacy prototype tier; not an INR price"}), source_id),
-                        )
+                else:
+                    # Keep a provenance record without pretending the original publisher is known.
+                    source_id = stable_id("source", "unattributed-legacy-dataset:" + SOURCE_FILE)
+                    cur.execute(
+                        """insert into public.catalogue_sources(id,source_type,source_name,source_url)
+                           values (%s,'other','Legacy prototype dataset (source not recorded)',null)
+                           on conflict (id) do nothing""",
+                        (source_id,),
+                    )
+                if r["rating"] is not None:
+                    claim_id = stable_id("claim", f"{r['location_id']}|rating|{source_id}|{r['digest']}")
+                    cur.execute(
+                        """insert into public.catalogue_claims(id,restaurant_location_id,field_key,field_value,source_id)
+                           values (%s,%s,'rating',%s,%s) on conflict (id) do nothing""",
+                        (claim_id, r["location_id"], Jsonb({"value": r["rating"], "review_count": r["review_count"]}), source_id),
+                    )
+                if r["price_tier"] is not None:
+                    claim_id = stable_id("claim", f"{r['location_id']}|legacy_price_tier|{source_id}|{r['digest']}")
+                    cur.execute(
+                        """insert into public.catalogue_claims(id,restaurant_location_id,field_key,field_value,source_id)
+                           values (%s,%s,'legacy_price_tier',%s,%s) on conflict (id) do nothing""",
+                        (claim_id, r["location_id"], Jsonb({"tier": r["price_tier"], "meaning": "legacy prototype tier; not an INR price"}), source_id),
+                    )
                 cur.execute(
                     """insert into public.catalogue_import_rows
                        (id,source_file,source_row_number,content_sha256,raw_row,restaurant_location_id,import_status)
