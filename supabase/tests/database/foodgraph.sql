@@ -24,28 +24,28 @@ values ('00000000-0000-4000-8000-000000000003','00000000-0000-4000-8000-00000000
 insert into public.early_access_signups(name,email_normalized,legal_acknowledged,legal_version,legal_acknowledged_at)
 values ('pgTAP','pgtap@example.invalid',true,'test',now());
 select throws_ok(
-  $insert into public.early_access_signups(name,email_normalized,legal_acknowledged,legal_version,legal_acknowledged_at)
-    values ('pgTAP duplicate','pgtap@example.invalid',true,'test',now())$,
+  $q$insert into public.early_access_signups(name,email_normalized,legal_acknowledged,legal_version,legal_acknowledged_at)
+    values ('pgTAP duplicate','pgtap@example.invalid',true,'test',now())$q$,
   '23505', null, 'duplicate signup email is rejected'
 );
 
 insert into public.catalogue_import_rows(id,source_file,source_row_number,content_sha256,raw_row,import_status)
 values ('00000000-0000-4000-8000-000000000005','pgtap-duplicate-test',1,'abc','{}','imported');
 select throws_ok(
-  $insert into public.catalogue_import_rows(id,source_file,source_row_number,content_sha256,raw_row,import_status)
-    values ('00000000-0000-4000-8000-000000000006','pgtap-duplicate-test',1,'def','{}','imported')$,
+  $q$insert into public.catalogue_import_rows(id,source_file,source_row_number,content_sha256,raw_row,import_status)
+    values ('00000000-0000-4000-8000-000000000006','pgtap-duplicate-test',1,'def','{}','imported')$q$,
   '23505', null, 'duplicate source row is rejected by the import ledger'
 );
 
 select throws_ok(
-  $insert into public.restaurant_locations(id,restaurant_id,city_id,location_name,latitude)
-    values ('00000000-0000-4000-8000-000000000004','00000000-0000-4000-8000-000000000002','00000000-0000-4000-8000-000000000001','invalid latitude',91)$,
+  $q$insert into public.restaurant_locations(id,restaurant_id,city_id,location_name,latitude)
+    values ('00000000-0000-4000-8000-000000000004','00000000-0000-4000-8000-000000000002','00000000-0000-4000-8000-000000000001','invalid latitude',91)$q$,
   '23514', null, 'latitude outside geographic bounds is rejected'
 );
 
 select throws_ok(
-  $insert into public.restaurant_locations(id,restaurant_id,city_id,location_name,maps_provider,maps_place_id)
-    values ('00000000-0000-4000-8000-000000000007','00000000-0000-4000-8000-000000000002','00000000-0000-4000-8000-000000000001','duplicate provider place','google','pgtap-place')$,
+  $q$insert into public.restaurant_locations(id,restaurant_id,city_id,location_name,maps_provider,maps_place_id)
+    values ('00000000-0000-4000-8000-000000000007','00000000-0000-4000-8000-000000000002','00000000-0000-4000-8000-000000000001','duplicate provider place','google','pgtap-place')$q$,
   '23505', null, 'duplicate external place ID is rejected'
 );
 
