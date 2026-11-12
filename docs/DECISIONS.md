@@ -78,12 +78,12 @@
 - **Reason:** The current surface is useful for validation and production must not be disrupted.
 - **Consequence:** Isolate backend/data-model work; no replacement frontend or production migration without approval.
 
-### D-011 — Supabase Free is the leading candidate, not a completed selection
-- **Date:** Historical discussion; last recorded 12 Nov 2026
-- **Status:** Proposed / provider decision pending
-- **Decision:** Evaluate Supabase Free for PostgreSQL, authentication and later storage. Microsoft for Startups/Azure remains an alternative only after eligibility, payment-card exposure, credit expiry and billing risk are understood.
+### D-011 — Supabase Free evaluation (superseded)
+- **Date:** Historical discussion; superseded on 12 Nov 2026
+- **Status:** Superseded by D-017
+- **Decision:** Supabase Free was initially evaluated as a candidate; the user subsequently selected and created the Mumbai Free project recorded in D-017.
 - **Reason:** Operating budget target is ₹0. Free tiers and startup credits have limits and do not guarantee future zero cost.
-- **Consequence:** Do not provision paid services or enter billing commitments without explicit approval.
+- **Consequence:** Continue to avoid paid services or upgrades without explicit approval.
 
 ### D-012 — Isolate risky work; protect production main
 - **Date:** Historical; reaffirmed 12 Nov 2026
@@ -129,10 +129,10 @@ Explicit founder approval is required before changing: product identity/four pil
 
 ### D-017 — Supabase project is the selected PostgreSQL host
 - **Date:** 12 Nov 2026
-- **Status:** Preserve
-- **Decision:** Use the user-created Supabase Free project in Mumbai (ref `nylpnvdnbqxhwlxjmboz`) as the intended backend target.
-- **Reason:** The user has completed project creation and selected the Free plan.
-- **Consequence:** Do not assume the database is empty, linked to GitHub, or reachable until its schema and migration history are inspected. No paid resources or billing upgrades.
+- **Status:** Preserve / implemented
+- **Decision:** Use the user-created Supabase Free project in Mumbai (ref `nylpnvdnbqxhwlxjmboz`) as FoodGraph's PostgreSQL host.
+- **Reason:** The user selected the Free plan and the connected project was verified before migrations.
+- **Consequence:** Keep costs at ₹0, do not upgrade or add paid services without approval, and never assume GitHub integration is required.
 
 ### D-018 — Private-by-default RLS is the initial access boundary
 - **Date:** 12 Nov 2026
@@ -153,4 +153,33 @@ Explicit founder approval is required before changing: product identity/four pil
 - **Status:** Preserve
 - **Decision:** Develop/test locally, inspect remote schema/history, preview changes, then obtain explicit approval before applying the first hosted migration.
 - **Reason:** Project creation does not prove schema emptiness or deployment integration.
-- **Consequence:** No remote push, reset, seed, or data import occurs as part of branch creation or CI.
+- **Consequence:** The initial four migrations and Pune catalogue load were applied only after the project was verified empty and the user approved the staged work. CI remains local-only. Future remote changes still require staged review and explicit approval.
+
+
+### D-021 — Computed taste and recommendation artifacts are server-written
+- **Date:** 12 Nov 2026
+- **Status:** Preserve
+- **Decision:** Taste profile snapshots, similarity snapshots and recommendation runs/items are read-only to client roles. Trusted backend services write computed outputs.
+- **Reason:** These are versioned projections/evaluation records, not user-authored preferences or raw evidence.
+- **Consequence:** Authenticated owners can read only their own permitted outputs. Never expose the service-role key to a browser or mobile app.
+
+### D-022 — RLS predicates use init-plan form for Auth identity
+- **Date:** 12 Nov 2026
+- **Status:** Preserve
+- **Decision:** Use `(select auth.uid())` rather than direct `auth.uid()` in row predicates.
+- **Reason:** Supabase's performance advisor reported per-row re-evaluation for direct calls.
+- **Consequence:** Keep the wrapper in owner and nested-ownership predicates.
+
+### D-023 — Client SQL grants follow deny-by-default
+- **Date:** 12 Nov 2026
+- **Status:** Preserve
+- **Decision:** Revoke inherited table privileges from `PUBLIC`, `anon` and `authenticated` before restoring only explicit catalogue/editorial reads and owner operations. Server-only tables remain inaccessible to client roles.
+- **Reason:** Local and hosted Supabase default ACLs differed; relying on implicit grants could expose private tables or make CI inconsistent.
+- **Consequence:** Every future table migration must consciously define grants and RLS. Do not use broad client grants to silence an API permission error.
+
+### D-024 — Imported catalogue candidates are not automatically public
+- **Date:** 12 Nov 2026
+- **Status:** Preserve
+- **Decision:** Import restaurant records as `needs_review`, locations as `unverified` and source claims as `unreviewed`.
+- **Reason:** Existing prototype records have variable source quality and incomplete provenance.
+- **Consequence:** Public RLS exposes only active curated records. Editorial review and source QA must precede activation.

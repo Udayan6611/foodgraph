@@ -366,10 +366,11 @@ The canonical entities, relationships, fields, provenance rules, privacy boundar
 | Browser state | LocalStorage and SessionStorage |
 | Event and signup endpoint | Google Apps Script |
 | Early operational storage | Private Google Sheets |
+| Backend database | Supabase Free, hosted schema and Pune catalogue loaded; no frontend integration |
 | Map hand-off | Google Maps search links |
 | Build tooling | No package installation or build step |
 
-There is currently no application server, account system, canonical user database, social graph store or server-side recommendation service.
+There is still no application server, live account flow, social graph service or server-side recommendation service connected to the website. Supabase PostgreSQL now contains the canonical schema and imported catalogue, but no existing frontend route calls it; the `users` table remains empty.
 
 The existing visitor ID is a persistent anonymous browser identifier; the visit/session ID is stored per tab. They are useful for basic product analytics but are not verified identity. Do not use them as a substitute for a user account or as proof of dining behaviour.
 
@@ -497,7 +498,12 @@ Before modifying or redeploying Apps Script, read apps-script/SETUP.md. Do not d
 
 ## Backend foundation
 
-The isolated `backend/supabase-foundation` branch contains the initial Supabase PostgreSQL migration, private-by-default RLS, a deterministic legacy catalogue importer and disposable-database tests. This is prepared engineering work only: it is not merged to `main` and has not been applied to the hosted Supabase project. See [Supabase backend setup and safety](docs/SUPABASE_BACKEND.md).
+The isolated `backend/supabase-foundation` branch now contains the four-migration Supabase PostgreSQL foundation, private-by-default RLS, scoped API grants, a deterministic Pune catalogue importer and disposable-database tests. The four migrations are applied to the verified Supabase Free project; the 162-row catalogue is loaded with provenance retained and all restaurant/location candidates remain unreviewed/unverified. The branch is not merged to `main` and the static website is not connected to this backend yet. See [Supabase backend setup and safety](docs/SUPABASE_BACKEND.md).
+
+
+## Live backend boundary
+
+Supabase PostgreSQL is provisioned and seeded, but the current static website does not call it. The schema is not a shipped account or recommendation experience. All imported restaurant candidates remain unverified until reviewed and explicitly activated.
 
 ## Permanent project documentation
 

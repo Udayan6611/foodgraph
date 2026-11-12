@@ -48,3 +48,17 @@ The PDF also records prior manual signup tests and a founder-reported Apps Scrip
 - **CI correction:** Initial pgTAP calls selected an ambiguous overload of `has_table`; calls were changed to the single-argument form. A new isolated CI run is pending/in progress; do not claim the complete suite passes until the latest branch-head run succeeds.
 
 - **Database tests expanded:** pgTAP now exercises actual PostgreSQL uniqueness/check constraints and catalogue visibility/RLS; the local CI stack excludes nonessential services to reduce startup overhead. Latest branch-head CI has passed the Python unit/contract step; full database/import integration remains in progress.
+
+
+## 12 November 2026 — Hosted Supabase migrations, permissions and catalogue initialization
+
+- **Project verified:** `foodgraph-prod`, ref `nylpnvdnbqxhwlxjmboz`, region Mumbai (`ap-south-1`), PostgreSQL 17.11, Supabase Free. Before migration, the public application schema had 0 tables and 0 migration records; `pgcrypto` was already installed.
+- **Applied migrations:** `20261112165935_initial_foodgraph_schema`, `20261112171452_harden_rls_policy_performance`, `20261112174902_complete_canonical_schema_fields`, `20261112174905_grant_scoped_api_privileges`.
+- **Hosted schema:** 39 application tables, all 39 RLS-enabled.
+- **Hosted catalogue:** 1 Pune city; 28 areas; 162 restaurant candidates; 162 locations; 47 cuisines; 443 location-cuisine links; 57 sources (56 distinct URLs and 1 unattributed legacy source); 286 unreviewed claims (155 rating + 131 legacy price-tier claims); 162 imported source-row ledger entries.
+- **Review state:** all restaurants are `needs_review`; all locations are `unverified`; all catalogue claims remain `unreviewed`. Anonymous queries can see the city/area/cuisine taxonomy but currently see 0 restaurants and 0 locations. No user accounts or visits were seeded.
+- **Import execution:** hosted seed ran as one atomic SQL transaction through the connected Supabase database interface using the committed importer's deterministic UUIDv5 identity, source, claim, digest and ledger rules. The Python importer itself remains the maintained command-line tool; CI tested its repeat-run idempotency and transaction rollback on a disposable PostgreSQL database.
+- **Permissions:** explicit deny-by-default table grants, with curated catalogue and published editorial reads restored; private owner operations are RLS-scoped; computed taste/similarity/recommendation records are client-read-only; analytics, signup, evidence, provenance and import internals are service-only. The existing auto-RLS event trigger remains enabled but is no longer callable as a client RPC.
+- **CI:** [run #43273068820](https://github.com/Udayan6611/foodgraph/actions/runs/43273068820) passed all 14 steps on exact branch HEAD `17a4c7aa3f6151005b786f2f253914865f3f42c7`, including Python tests, all four migrations, 29 pgTAP assertions, importer idempotency and rollback.
+- **Advisors:** 10 informational RLS-enabled/no-policy findings for intentionally service-only tables; no warning-level security findings. Performance advisor reports 45 unindexed foreign keys and 13 unused indexes (informational/follow-up); health advisor has no findings.
+- **Production preservation:** `main` remains at `bdccf8bf6147ffe22a20974fd9b86af2b0432e93`; backend work is not merged. No website, Pages, CNAME, Apps Script or Google Sheets files were modified.

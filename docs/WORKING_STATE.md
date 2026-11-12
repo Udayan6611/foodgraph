@@ -11,7 +11,7 @@
 
 FoodGraph is a Pune-first behavioural food discovery network in the building and validation stage. The public GitHub Pages website, early-access signup and browser-based discovery prototype exist. The four-pillar vision is documented. The canonical logical data model exists in `docs/data-model.md`.
 
-The repository now has an isolated first backend foundation on `backend/supabase-foundation`: one versioned PostgreSQL migration, Supabase CLI config, deterministic catalogue importer, unit/pgTAP/integration tests and a CI workflow. These files are committed but are not merged to `main` and have not been applied to the hosted Supabase project. No frontend integration, production auth flow, server-side taste graph or behavioural recommendation service is shipped.
+The repository has an isolated backend foundation on `backend/supabase-foundation`. Its four PostgreSQL migrations are applied to the verified Supabase Free project and the 162-row Pune catalogue is loaded with provenance. The branch is not merged to `main`; the website and Apps Script remain unchanged. No frontend integration, live account flow, social graph service or behavioural recommendation engine is shipped.
 
 The current app is a static HTML/CSS/vanilla-JavaScript website with browser-side rules-based restaurant ranking. It uses a Pune catalogue, browser storage and a Google Apps Script web app connected to Google Sheets for product events and early-access signups.
 
@@ -57,18 +57,21 @@ FoodGraph is a behavioural food discovery network, not a restaurant directory, r
 
 Beli is a reference for taste identity, FavHiker for connecting people through overlapping diaries, and BLR Cuts for editorial discovery. Borrow principles, not copy products. The current prototype is an entry point, not the product definition.
 
-## Backend foundation (isolated branch; not deployed)
+## Supabase backend foundation (isolated branch; hosted schema initialized)
 
-- Branch: `backend/supabase-foundation`, created from documentation branch HEAD `a36083851923fcbb91e0d512dfaf88e9cd5e14fa`; `main` remains untouched.
-- Latest verified branch commit at this documentation update is recorded in the GitHub branch ref; do not infer hosted deployment from a Git commit.
-- Added `supabase/config.toml` and migration `20261112090000_initial_foodgraph_schema.sql`. The migration creates 39 domain/ledger tables spanning identity, geography/catalogue/provenance, preferences/interactions, visits/evidence, social, lists/editorial, taste snapshots, recommendations, analytics/signup and import ledger.
-- Supabase Auth remains the credential provider; a trigger creates the product-side `users` row. No password is stored in FoodGraph tables.
-- RLS is enabled on all application tables. Public read policies are limited to selected catalogue entities and published editorial collections. User records are owner-only/private by default. Consent history is append-only for client access. Analytics, signup, evidence and import-ledger tables have no client policies and are reserved for trusted service-role operations.
-- Sharing to connections/circles, block-aware visibility, public profile visibility, moderation, account deletion orchestration and storage buckets remain disabled/deferred pending policy review.
-- Importer: `scripts/import_restaurants.py`, dry-run by default, deterministic UUIDv5 keys, parameterized inserts and one transaction. It retains each raw JS row and hash in `catalogue_import_rows`; no external IDs, missing source dates, prices or addresses are invented.
-- Audited dataset: 162 rows, 28 areas; 105 rows have six columns and 57 have nine; 57 have source URL/evidence label; no duplicate normalized name+area key was found. Existing dataset is unchanged.
-- Tests: Python importer and migration contract tests; pgTAP schema/RLS and real database constraint/duplicate checks (signup email, import-row key, geographic bounds, external place ID); CI integration tests for repeated import, field-claim idempotency and transaction rollback. Latest branch-head CI run is in progress; Python unit/contract tests have passed, full database/import suite remains unverified.
-- The migration and importer have not been executed against the hosted database. No hosted schema, migration history or data has been read or changed.
+- Backend branch: `backend/supabase-foundation`, current verified HEAD `17a4c7aa3f6151005b786f2f253914865f3f42c7`. Production `main` remains at `bdccf8bf6147ffe22a20974fd9b86af2b0432e93`; no merge or force-push occurred.
+- Four timestamped migrations are committed and applied to the verified Supabase Free project `foodgraph-prod` (ref `nylpnvdnbqxhwlxjmboz`, Mumbai, PostgreSQL 17.11): initial schema, RLS hardening, canonical field completion and scoped API privileges.
+- Hosted schema: 39 application tables, all 39 RLS-enabled. The migration history reports all four versions. Existing `pgcrypto` was already installed before the first migration.
+- Hosted catalogue: 1 Pune city, 28 areas, 162 restaurant candidates/locations, 47 cuisines, 443 location-cuisine links, 57 sources (56 URLs + 1 unattributed legacy source), 286 unreviewed claims (155 ratings + 131 legacy price tiers), and 162 import-ledger rows.
+- All imported restaurants remain `needs_review`; all locations remain `unverified`; all claims remain `unreviewed`. Anonymous checks confirmed zero restaurants/locations visible until review. No users or visits were created.
+- Access model: public read grants cover curated catalogue and published editorial tables only; row policies gate restaurant/location activation. Owner data is private and owner-scoped. Computed taste/similarity/recommendation artifacts are read-only to clients. Claims, evidence, raw import records, analytics and signup leads remain service-only.
+- Grant hardening begins by revoking inherited table privileges for `PUBLIC`, `anon` and `authenticated`, then grants only the approved operations. The pre-existing `public.rls_auto_enable()` event trigger remains enabled, but its RPC EXECUTE privilege is revoked from client roles.
+- Supabase security advisor now has only 10 informational RLS-enabled/no-policy findings for intentionally service-only tables. Performance advisor reports 45 unindexed foreign keys and 13 unused indexes (informational; review later against actual query paths). Health advisor reports no findings.
+- Dataset source audit: 162 rows, 28 areas; 105 six-column rows and 57 nine-column rows; 57 rows have URL/evidence metadata; no duplicate normalized name+area keys. One source URL repeats, so the source table stores 56 distinct URLs plus one unattributed legacy source.
+- Importer: `scripts/import_restaurants.py` remains dry-run by default, uses deterministic UUIDv5 identities, parameterized writes and one transaction. Hosted seed was executed as one atomic SQL block via the connected Supabase database interface using the same deterministic identity/provenance/upsert semantics on the exact tracked rows. The Python `--apply` command was not used against the hosted database. Its idempotency and rollback behavior passed in CI.
+- CI run [#43273068820](https://github.com/Udayan6611/foodgraph/actions/runs/43273068820) passed on the exact branch HEAD. This validates the disposable local stack, all four migrations, 29 pgTAP checks, Python contracts and importer repeatability/rollback. CI has no hosted database credentials.
+- The website, Pages deployment, CNAME, Apps Script endpoint and Google Sheets were not changed. The backend branch is not merged. No Supabase GitHub integration is assumed or required.
+- Not shipped: website-to-Supabase integration, account UI/session flow, user-generated diary/visit experience, social sharing, block-aware feeds, storage/evidence workflow, editorial tooling, server-side taste profiles or recommendation engine.
 
 ## Architecture
 
@@ -76,7 +79,7 @@ Beli is a reference for taste identity, FavHiker for connecting people through o
 
 **Target, not implemented:** PostgreSQL-compatible relational model in `docs/data-model.md`; provider-backed authentication; private profiles/preferences/interactions/visits/evidence; lists/editorial collections; auditable recommendation records; explicit consent and Row Level Security; explainable, evidence-aware recommendations with cold-start behavior.
 
-Supabase Free is the historical leading candidate, not a verified provider selection or provisioned service. Microsoft for Startups/Azure remained an alternative subject to eligibility, card/billing risk and a genuinely ₹0 plan. No paid resources without explicit approval.
+Supabase Free is the selected and currently used PostgreSQL host for the backend foundation. No paid resources or plan upgrades have been introduced. Re-check plan limits and costs before adding services.
 
 ## CI and deployment
 
@@ -94,24 +97,23 @@ The PDF's statement that FoodGraph had not publicly launched as a full product a
 
 ## Blockers and unresolved questions
 
-- Supabase Free project was user-reported as created and healthy (project ref `nylpnvdnbqxhwlxjmboz`, Mumbai). This is not independently verified from an account connection.
-- Remote schema and migration history have not been inspected; hosted project remains untouched.
-- No Supabase CLI login/link or account-level GitHub integration has been verified from this session.
-- No account/authentication, RLS policy implementation, server-side taste profile, shared social graph or behavioural recommendation service.
-- Catalogue duplicate resolution, branch-vs-brand mapping, freshness and quality checks need specification.
-- Exact-HEAD CI and current custom-domain health were not independently verified.
+- No frontend integration, application server or user sign-in/account experience has been connected to the hosted database.
+- Social sharing, block-aware access, public profiles, evidence storage, moderation, deletion orchestration and recommendation computation remain deferred.
+- Catalogue entries need brand/branch resolution, source review, freshness checks and an editorial activation process before becoming public.
+- Performance advisor reports 45 unindexed foreign keys and 13 unused indexes; review indexes against intended query patterns before scale.
+- Current custom-domain health and deployed Apps Script version/fresh signup round trip were not re-tested in this backend session.
 - Current deployed Apps Script version and a fresh signup round trip were not independently checked.
 - Product validation evidence is qualitative and partly founder-held; do not invent transcripts, findings or current traction.
 
 ## Immediate next engineering task
 
-**Prepare the first isolated, versioned PostgreSQL migration and deterministic Pune catalogue import plan from the canonical model.**
+**Build the first backend application boundary without touching the live website.**
 
-1. Review `docs/data-model.md` sections 9–13 and define the first migration boundary.
-2. Confirm provider choice. Supabase Free is the no-cost candidate, not an approved paid commitment; do not attach production.
-3. Define stable source IDs and deterministic mapping from catalogue rows to restaurants, locations, areas and cuisines. Preserve provenance and quarantine unresolved rows.
-4. Implement migrations/import tooling in an isolated branch only. Do not change production frontend, Apps Script endpoint or `main`.
-5. Test on disposable local/test PostgreSQL or an explicitly approved free test project. Verify idempotency, row counts, constraints and rollback before any production connection.
+1. Define and test read-only catalogue query endpoints for city/area/cuisine/restaurant discovery using the now-hosted schema and existing RLS.
+2. Design the Auth sign-up/session flow and test profile bootstrap on a disposable account before enabling any real user onboarding.
+3. Add account-owned preferences/interactions/visits only after the UI and consent copy are ready; keep diary and visits private by default.
+4. Keep social sharing, blocks/circles and similarity matching disabled until their block-aware policies and consent semantics are implemented and tested.
+5. Prototype frontend integration on a separate preview/branch; do not change production Pages, Apps Script, CNAME or `main` without approval.
 
 ## Must not change without explicit approval
 
@@ -132,8 +134,9 @@ At each new session: read this file, then relevant sections of `README.md`, `doc
 
 ## Supabase project access and deployment boundary
 
-- User supplied project ref `nylpnvdnbqxhwlxjmboz`, URL `https://nylpnvdnbqxhwlxjmboz.supabase.co`, region Mumbai, Free plan and Healthy dashboard status.
-- The Supabase ChatGPT app is installed, but project authorization/database actions are not yet exposed to this session. No remote read/write or CLI session is available here; no project secrets have been requested or stored.
-- Repository does not rely on Supabase GitHub integration. Its connection status could not be inspected; do not assume it is connected.
-- Preferred path is local Supabase CLI: `supabase login`, `supabase link --project-ref nylpnvdnbqxhwlxjmboz`, `supabase migration list --remote`, then `supabase db push --dry-run --remote`. Only a separately approved `supabase db push --remote` applies changes.
-- Never run remote reset, seed or destructive rollback commands against this project. See `docs/SUPABASE_BACKEND.md`.
+- Verified connected project: `foodgraph-prod`, ref `nylpnvdnbqxhwlxjmboz`, URL `https://nylpnvdnbqxhwlxjmboz.supabase.co`, Mumbai (`ap-south-1`), PostgreSQL 17.11, Supabase Free.
+- Four migrations are recorded on the hosted database: `20261112165935`, `20261112171452`, `20261112174902`, `20261112174905`.
+- The schema and catalogue seed were applied through the connected Supabase database interface. No database password or service-role key was shared in chat or committed.
+- Repository does not depend on Supabase GitHub integration. It was not assumed to be connected; migrations were applied directly and CI remains isolated/local-only.
+- Do not rerun/reapply the four current migration files manually. Use additive migrations for future changes, verify locally/CI first, and get explicit approval before later production schema changes or data imports.
+- Never run remote reset, remote seed or destructive rollback commands against this project. See `docs/SUPABASE_BACKEND.md`.
