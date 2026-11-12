@@ -42,3 +42,7 @@ The PDF also records prior manual signup tests and a founder-reported Apps Scrip
 - **Safety:** Importer defaults to dry-run. Remote database was not inspected or modified. No app/frontend, Apps Script, Pages or CNAME files changed.
 - **CI:** Initial workflow runs failed in the Python contract-test step (incorrect assertions for SQL comments and inline unique constraints; cleanup also attempted to stop a CLI that had not been installed). These were corrected. A new run was observed in progress; final conclusion must be verified before this entry is updated to passing.
 - **Hosted Supabase:** No CLI link, account authorization, GitHub integration or remote migration was verified. User-reported project status is not treated as database verification.
+
+
+- **Importer refinement:** Unattributed six-column rows now create an explicitly unknown-source catalogue source and rating/legacy-tier claims; raw rows and hashes remain preserved. Duplicate name+area candidates use occurrence-aware IDs rather than being collapsed. Integration tests assert claim idempotency and transaction rollback.
+- **CI correction:** Initial pgTAP calls selected an ambiguous overload of `has_table`; calls were changed to the single-argument form. A new isolated CI run is pending/in progress; do not claim the complete suite passes until the latest branch-head run succeeds.
