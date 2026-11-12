@@ -495,6 +495,15 @@ Before modifying or redeploying Apps Script, read apps-script/SETUP.md. Do not d
 
 ---
 
+## Permanent project documentation
+
+- [Canonical data model](docs/data-model.md): logical PostgreSQL-compatible domain model, privacy boundaries, evidence rules and migration sequence.
+- [Working state](docs/WORKING_STATE.md): latest verified repository, implementation, CI/deployment state, blockers and next task. Read this first when resuming work.
+- [Decisions](docs/DECISIONS.md): durable product, architecture, privacy and operating decisions with rationale.
+- [Changelog](docs/CHANGELOG.md): repository changes and verification evidence; historical claims are distinguished from current verification.
+
+Update `WORKING_STATE.md`, `DECISIONS.md` and `CHANGELOG.md` after every meaningful engineering session. Update this README and `data-model.md` when the actual product or architecture changes.
+
 ## Working rules for future changes
 
 - This README is the canonical source of truth for FoodGraph's vision, current status and architecture direction.
