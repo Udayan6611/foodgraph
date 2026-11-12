@@ -200,7 +200,7 @@ def apply_import(records: list[dict], database_url: str) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source", type=Path, default=Path(__file__).resolve().parents[2] / SOURCE_FILE)
+    parser.add_argument("--source", type=Path, default=Path(__file__).resolve().parents[1] / SOURCE_FILE)
     parser.add_argument("--apply", action="store_true", help="Write to the database; otherwise perform a dry run")
     parser.add_argument("--report-json", type=Path, help="Optional path for a machine-readable report")
     args = parser.parse_args()
