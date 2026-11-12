@@ -1,5 +1,5 @@
 begin;
-select plan(21);
+select plan(24);
 
 select has_table('cities');
 select has_table('restaurants');
@@ -74,5 +74,36 @@ select ok(
   'interaction idempotency index exists'
 );
 
+
+select ok(
+  (select count(*) = 23 from information_schema.columns
+   where table_schema='public' and (table_name,column_name) in (
+     ('restaurant_comparisons','other_location_id'),
+     ('restaurant_visits','time_precision'),('restaurant_visits','visit_source'),
+     ('restaurant_visits','verification_status'),('visit_dishes','location_dish_id'),
+     ('visit_dishes','sentiment'),('visit_evidence','status'),
+     ('taste_profile_snapshots','profile_version'),('taste_profile_snapshots','feature_vector'),
+     ('taste_profile_snapshots','quality_state'),('user_similarity_snapshots','user_a_id'),
+     ('user_similarity_snapshots','user_b_id'),('user_similarity_snapshots','similarity_score'),
+     ('user_similarity_snapshots','eligible_for_discovery'),('recommendation_runs','candidate_count'),
+     ('recommendation_items','score_components'),('recommendation_feedback','feedback_type'),
+     ('product_analytics_events','visit_session_id'),('product_analytics_events','consent_state'),
+     ('editorial_collections','city_id'),('editorial_collection_items','recommendation_type'),
+     ('food_list_items','added_at'),('user_blocks','reason_code')
+   )),
+  'canonical model fields are present'
+);
+select ok(
+  has_table_privilege('authenticated','public.user_preferences','INSERT')
+  and not has_table_privilege('anon','public.user_preferences','SELECT')
+  and not has_table_privilege('authenticated','public.taste_profile_snapshots','INSERT'),
+  'client grants follow ownership and computed-data boundaries'
+);
+select ok(
+  has_table_privilege('anon','public.editorial_collections','SELECT')
+  and has_table_privilege('service_role','public.catalogue_import_rows','INSERT')
+  and not has_table_privilege('anon','public.product_analytics_events','INSERT'),
+  'published editorial reads and trusted service-only grants are correct'
+);
 select * from finish();
 rollback;
