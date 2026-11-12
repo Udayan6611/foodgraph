@@ -26,6 +26,10 @@ select ok(
   'visits have an owner-only read policy'
 );
 select ok(
+  position('unverified' in coalesce((select qual from pg_policies where schemaname='public' and tablename='restaurant_locations' and policyname='catalogue_locations_read'),'')) = 0,
+  'unreviewed catalogue locations are not public'
+);
+select ok(
   not exists(select 1 from pg_policies where schemaname='public' and tablename='product_analytics_events'),
   'analytics has no client policy'
 );
