@@ -513,7 +513,7 @@ begin
   foreach t in array array[
     'user_consents','user_preferences','taste_interactions','restaurant_comparisons',
     'restaurant_visits','taste_profile_snapshots','user_similarity_snapshots',
-    'food_lists','taste_circles','recommendation_runs'
+    'food_lists','recommendation_runs'
   ] loop
     execute format('create policy owner_select on public.%I for select to authenticated using (user_id=auth.uid())',t);
     execute format('create policy owner_insert on public.%I for insert to authenticated with check (user_id=auth.uid())',t);
@@ -521,6 +521,11 @@ begin
     execute format('create policy owner_delete on public.%I for delete to authenticated using (user_id=auth.uid())',t);
   end loop;
 end $$;
+
+create policy taste_circles_owner_select on public.taste_circles for select to authenticated using (owner_user_id=auth.uid());
+create policy taste_circles_owner_insert on public.taste_circles for insert to authenticated with check (owner_user_id=auth.uid());
+create policy taste_circles_owner_update on public.taste_circles for update to authenticated using (owner_user_id=auth.uid()) with check (owner_user_id=auth.uid());
+create policy taste_circles_owner_delete on public.taste_circles for delete to authenticated using (owner_user_id=auth.uid());
 
 create policy circle_members_owner_select on public.taste_circle_members for select to authenticated
   using (user_id=auth.uid() or exists(select 1 from public.taste_circles c where c.id=circle_id and c.owner_user_id=auth.uid()));
