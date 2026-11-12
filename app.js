@@ -1,9 +1,9 @@
 const TRACKING_ENDPOINT='https://script.google.com/macros/s/AKfycbyJTL_UKuih_3e7Lr71s0XdV24VoNY5qhjfdfZeBA1wyJRPr8dHP_GQR3hBJRSiRz1d4w/exec';
-function readReferralRoute(){const p=window.location.pathname.replace(/\/+$/,'');const m=p.match(/\/foodgraph\/r\/([^/]+)(?:\/([^/]+))?(?:\/([^/]+))?$/i);return m?{id:decodeURIComponent(m[1]),source:decodeURIComponent(m[2]||'direct'),campaign:decodeURIComponent(m[3]||'general')}:null}
+function readReferralRoute(){const p=window.location.pathname.replace(/\/+$/,'');const m=p.match(/^\/(?:foodgraph\/)?r\/([^/]+)(?:\/([^/]+))?(?:\/([^/]+))?$/i);return m?{id:decodeURIComponent(m[1]),source:decodeURIComponent(m[2]||'direct'),campaign:decodeURIComponent(m[3]||'general')}:null}
 const rr=readReferralRoute(),params=new URLSearchParams(location.search),legacyRef=params.get('ref')||'';
 if(rr){localStorage.setItem('foodgraph_referrer_id',rr.id);localStorage.setItem('foodgraph_source',rr.source);localStorage.setItem('foodgraph_campaign',rr.campaign)}
 if(legacyRef&&!localStorage.getItem('foodgraph_referrer_id'))localStorage.setItem('foodgraph_referrer_id',legacyRef);
-const REFERRER_ID=localStorage.getItem('foodgraph_referrer_id')||'',SOURCE=localStorage.getItem('foodgraph_source')||'direct',CAMPAIGN=localStorage.getItem('foodgraph_campaign')||'general',REFERRAL=REFERRER_ID;
+const REFERRER_ID=localStorage.getItem('foodgraph_referrer_id')||'',SOURCE=localStorage.getItem('foodgraph_source')||'direct',CAMPAIGN=localStorage.getItem('foodgraph_campaign')||'general';
 const PROFILE_CONTEXT={area:localStorage.getItem('foodgraph_area')||'',cuisines:localStorage.getItem('foodgraph_cuisines')||'',vibes:localStorage.getItem('foodgraph_vibes')||'',budget:localStorage.getItem('foodgraph_budget')||''};
 function createFoodGraphId(){return (crypto.randomUUID&&crypto.randomUUID())||('fg-'+Date.now()+'-'+Math.random().toString(36).slice(2))}
 const VISITOR_ID=(()=>{

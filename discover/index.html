@@ -5,4 +5,4 @@
   reveal.forEach((el,i)=>{el.dataset.reveal="";el.style.setProperty("--reveal-delay",(Math.min(i,8)*45)+"ms")});
   if("IntersectionObserver" in window){const io=new IntersectionObserver((entries)=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("is-visible");io.unobserve(e.target)}}),{threshold:.08,rootMargin:"0px 0px -6% 0px"});reveal.forEach(el=>io.observe(el))}else reveal.forEach(el=>el.classList.add("is-visible"));
 })();
-</script><script src="../restaurants_v6.js?v=20261109g"></script><script src="../app.js?v=20261109f"></script></body></html>
+</script><script src="../restaurants_v6.js?v=20261109g"></script><script src="../app.js?v=20261112a"></script></body></html>
