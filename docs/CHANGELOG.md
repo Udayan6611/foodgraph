@@ -32,3 +32,13 @@ This log records changes supported by repository commits or directly verified ch
 The recovery PDF describes a React redesign experiment, a temporary Vercel preview and subsequent rollback. The current audited repository contains no React/Vite redesign app and no redesign branch. These are historical events, not current implementation.
 
 The PDF also records prior manual signup tests and a founder-reported Apps Script deployment. The current source contains legal-consent validation and signup/event handlers, but the currently deployed Apps Script version and a fresh production round trip were not re-verified in this initialization.
+
+
+## 12 November 2026 — Isolated Supabase backend foundation
+
+- **Branch:** `backend/supabase-foundation`, created from `docs/project-continuity-2026-11-12` at `a36083851923fcbb91e0d512dfaf88e9cd5e14fa`; not merged to `main`.
+- **Added:** `supabase/config.toml`; initial canonical PostgreSQL migration; deterministic `scripts/import_restaurants.py`; Python contract/import/integration tests; pgTAP schema/RLS tests; backend CI workflow; `requirements-dev.txt`; `docs/SUPABASE_BACKEND.md`.
+- **Catalogue audit:** 162 rows / 28 areas; row shapes are 105 × 6 columns and 57 × 9 columns; 57 rows carry URL/evidence metadata; no duplicate normalized name+area keys.
+- **Safety:** Importer defaults to dry-run. Remote database was not inspected or modified. No app/frontend, Apps Script, Pages or CNAME files changed.
+- **CI:** Initial workflow runs failed in the Python contract-test step (incorrect assertions for SQL comments and inline unique constraints; cleanup also attempted to stop a CLI that had not been installed). These were corrected. A new run was observed in progress; final conclusion must be verified before this entry is updated to passing.
+- **Hosted Supabase:** No CLI link, account authorization, GitHub integration or remote migration was verified. User-reported project status is not treated as database verification.
