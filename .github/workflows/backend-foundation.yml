@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run importer and migration contract tests
+      - name: Run fast unit and migration contract tests
         run: |
           python -m unittest discover -s tests -v
           python scripts/import_restaurants.py
@@ -33,8 +33,17 @@ jobs:
         run: supabase start
       - name: Apply migrations to disposable local database
         run: supabase db reset
-      - name: Run PostgreSQL policy and schema tests
+      - name: Run PostgreSQL schema and RLS tests
         run: supabase test db
+      - name: Install importer database driver
+        run: pip install -r requirements-dev.txt
+      - name: Verify repeatable catalogue import
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+        run: |
+          python scripts/import_restaurants.py --apply
+          python scripts/import_restaurants.py --apply
+          python -m unittest tests.test_database_integration -v
       - name: Stop local stack
         if: always()
         run: supabase stop
