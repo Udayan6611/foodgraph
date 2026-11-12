@@ -517,8 +517,10 @@ begin
   ] loop
     execute format('create policy owner_select on public.%I for select to authenticated using (user_id=auth.uid())',t);
     execute format('create policy owner_insert on public.%I for insert to authenticated with check (user_id=auth.uid())',t);
-    execute format('create policy owner_update on public.%I for update to authenticated using (user_id=auth.uid()) with check (user_id=auth.uid())',t);
-    execute format('create policy owner_delete on public.%I for delete to authenticated using (user_id=auth.uid())',t);
+    if t <> 'user_consents' then
+      execute format('create policy owner_update on public.%I for update to authenticated using (user_id=auth.uid()) with check (user_id=auth.uid())',t);
+      execute format('create policy owner_delete on public.%I for delete to authenticated using (user_id=auth.uid())',t);
+    end if;
   end loop;
 end $$;
 
@@ -552,7 +554,12 @@ create policy food_list_items_owner_delete on public.food_list_items for delete 
 create policy recommendation_items_owner_select on public.recommendation_items for select to authenticated
   using (exists(select 1 from public.recommendation_runs r where r.id=recommendation_run_id and r.user_id=auth.uid()));
 create policy recommendation_feedback_owner_select on public.recommendation_feedback for select to authenticated using (user_id=auth.uid());
-create policy recommendation_feedback_owner_insert on public.recommendation_feedback for insert to authenticated with check (user_id=auth.uid());
+create policy recommendation_feedback_owner_insert on public.recommendation_feedback for insert to authenticated
+  with check (user_id=auth.uid() and exists(
+    select 1 from public.recommendation_items i
+    join public.recommendation_runs r on r.id=i.recommendation_run_id
+    where i.id=recommendation_item_id and r.user_id=auth.uid()
+  ));
 create policy editorial_published_read on public.editorial_collections for select to anon,authenticated using (status='published');
 create policy editorial_items_published_read on public.editorial_collection_items for select to anon,authenticated
   using (exists(select 1 from public.editorial_collections c where c.id=collection_id and c.status='published'));
