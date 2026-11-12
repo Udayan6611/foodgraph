@@ -17,6 +17,10 @@ on:
       - "tests/**"
       - ".github/workflows/backend-foundation.yml"
 
+concurrency:
+  group: backend-foundation-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
