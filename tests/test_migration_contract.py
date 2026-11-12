@@ -12,7 +12,7 @@ class MigrationContractTests(unittest.TestCase):
         cls.sql = MIGRATION.read_text(encoding="utf-8").lower()
 
     def test_migration_is_atomic(self):
-        self.assertTrue(self.sql.lstrip().startswith("begin;"))
+        self.assertRegex(self.sql, r"(?m)^begin;\\s")
         self.assertTrue(self.sql.rstrip().endswith("commit;"))
 
     def test_all_canonical_domain_tables_exist(self):
@@ -53,7 +53,7 @@ class MigrationContractTests(unittest.TestCase):
         self.assertIn("check (first_location_id <> second_location_id)", self.sql)
         self.assertIn("one_primary_cuisine_per_location_uidx", self.sql)
         self.assertIn("restaurant_locations_external_place_uidx", self.sql)
-        self.assertIn("unique (email_normalized)", self.sql)
+        self.assertIn("email_normalized text not null unique", self.sql)
 
     def test_no_destructive_statements(self):
         self.assertNotRegex(self.sql, r"\bdrop\s+(table|schema|database)\b")
