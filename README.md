@@ -495,6 +495,10 @@ Before modifying or redeploying Apps Script, read apps-script/SETUP.md. Do not d
 
 ---
 
+## Backend foundation
+
+The isolated `backend/supabase-foundation` branch contains the initial Supabase PostgreSQL migration, private-by-default RLS, a deterministic legacy catalogue importer and disposable-database tests. This is prepared engineering work only: it is not merged to `main` and has not been applied to the hosted Supabase project. See [Supabase backend setup and safety](docs/SUPABASE_BACKEND.md).
+
 ## Permanent project documentation
 
 - [Canonical data model](docs/data-model.md): logical PostgreSQL-compatible domain model, privacy boundaries, evidence rules and migration sequence.
