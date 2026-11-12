@@ -59,7 +59,7 @@ Beli is a reference for taste identity, FavHiker for connecting people through o
 
 ## Supabase backend foundation (isolated branch; hosted schema initialized)
 
-- Backend branch: `backend/supabase-foundation`, current verified HEAD `17a4c7aa3f6151005b786f2f253914865f3f42c7`. Production `main` remains at `bdccf8bf6147ffe22a20974fd9b86af2b0432e93`; no merge or force-push occurred.
+- Backend branch: `backend/supabase-foundation`. Latest code/migration commit validated by green CI: `17a4c7aa3f6151005b786f2f253914865f3f42c7`; the current branch also has a later documentation-only continuity commit. Production `main` remains at `bdccf8bf6147ffe22a20974fd9b86af2b0432e93`; no merge or force-push occurred.
 - Four timestamped migrations are committed and applied to the verified Supabase Free project `foodgraph-prod` (ref `nylpnvdnbqxhwlxjmboz`, Mumbai, PostgreSQL 17.11): initial schema, RLS hardening, canonical field completion and scoped API privileges.
 - Hosted schema: 39 application tables, all 39 RLS-enabled. The migration history reports all four versions. Existing `pgcrypto` was already installed before the first migration.
 - Hosted catalogue: 1 Pune city, 28 areas, 162 restaurant candidates/locations, 47 cuisines, 443 location-cuisine links, 57 sources (56 URLs + 1 unattributed legacy source), 286 unreviewed claims (155 ratings + 131 legacy price tiers), and 162 import-ledger rows.
