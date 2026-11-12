@@ -21,6 +21,15 @@ class DatabaseImportIntegrationTests(unittest.TestCase):
                 cur.execute("select count(distinct restaurant_location_id) from public.catalogue_import_rows where source_file=%s", (module.SOURCE_FILE,))
                 self.assertEqual(cur.fetchone()[0], 162)
 
+    def test_unattributed_claims_and_legacy_price_tiers_are_preserved_once(self):
+        import psycopg
+        with psycopg.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute("select count(*) from public.catalogue_claims")
+                self.assertEqual(cur.fetchone()[0], 286)
+                cur.execute("select count(*) from public.catalogue_sources where source_name='Legacy prototype dataset (source not recorded)' and source_url is null")
+                self.assertEqual(cur.fetchone()[0], 1)
+
     def test_failed_batch_rolls_back_all_prior_writes(self):
         import psycopg
         rows = module.parse_catalogue((ROOT / module.SOURCE_FILE).read_text(encoding="utf-8"))
