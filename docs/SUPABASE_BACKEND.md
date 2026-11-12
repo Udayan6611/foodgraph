@@ -56,6 +56,6 @@ If the project is confirmed empty and the preview is exactly as expected, apply 
 ## Current limitations
 
 - No remote schema or migration history has yet been inspected from this environment.
-- No Supabase account connector or CLI session is available in this ChatGPT session.
+- The Supabase ChatGPT app is installed, but project authorization/database actions are not yet exposed to this session; no remote read or write has occurred. No CLI session is available here.
 - The hosted database has not been modified and no secrets have been requested.
 - The initial importer intentionally models each name+area as its own restaurant/location candidate until brand/branch resolution is reviewed.
