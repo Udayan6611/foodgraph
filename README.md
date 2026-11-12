@@ -333,6 +333,8 @@ FoodGraph can coexist with Google Maps, Zomato, restaurant websites and social p
 
 ## Current technical architecture
 
+The canonical entities, relationships, fields, provenance rules, privacy boundaries and migration map are specified in the [FoodGraph Data Model](docs/data-model.md). This document is the implementation reference for the long-term behavioural food graph; it does not describe features as shipped unless they are explicitly marked as current.
+
 ### What runs today
 
     GitHub Pages
@@ -410,6 +412,8 @@ The current Apps Script and Sheets setup is adequate for early event collection 
     foodgraph/
     ├── 404.html                    # Referral capture and fallback routing
     ├── CNAME                       # GitHub Pages custom domain
+    ├── docs/
+    │   └── data-model.md            # Canonical logical schema and migration reference
     ├── README.md                   # Canonical product vision and technical overview
     ├── app.js                      # Discover ranking, browser feedback and event tracking
     ├── index.html                  # Marketing homepage and homepage events
