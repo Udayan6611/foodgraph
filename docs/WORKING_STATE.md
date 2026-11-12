@@ -133,7 +133,7 @@ At each new session: read this file, then relevant sections of `README.md`, `doc
 ## Supabase project access and deployment boundary
 
 - User supplied project ref `nylpnvdnbqxhwlxjmboz`, URL `https://nylpnvdnbqxhwlxjmboz.supabase.co`, region Mumbai, Free plan and Healthy dashboard status.
-- No Supabase connector/CLI execution environment is available in this ChatGPT session. No project secrets have been requested or stored.
+- The Supabase ChatGPT app is installed, but project authorization/database actions are not yet exposed to this session. No remote read/write or CLI session is available here; no project secrets have been requested or stored.
 - Repository does not rely on Supabase GitHub integration. Its connection status could not be inspected; do not assume it is connected.
 - Preferred path is local Supabase CLI: `supabase login`, `supabase link --project-ref nylpnvdnbqxhwlxjmboz`, `supabase migration list --remote`, then `supabase db push --dry-run --remote`. Only a separately approved `supabase db push --remote` applies changes.
 - Never run remote reset, seed or destructive rollback commands against this project. See `docs/SUPABASE_BACKEND.md`.
