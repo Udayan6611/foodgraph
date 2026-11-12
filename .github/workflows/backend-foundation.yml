@@ -1,0 +1,40 @@
+name: Backend foundation checks
+
+on:
+  push:
+    branches: [backend/supabase-foundation]
+  pull_request:
+    branches: [main]
+    paths:
+      - "supabase/**"
+      - "scripts/import_restaurants.py"
+      - "tests/**"
+      - ".github/workflows/backend-foundation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run importer and migration contract tests
+        run: |
+          python -m unittest discover -s tests -v
+          python scripts/import_restaurants.py
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Start local Supabase stack
+        run: supabase start
+      - name: Apply migrations to disposable local database
+        run: supabase db reset
+      - name: Run PostgreSQL policy and schema tests
+        run: supabase test db
+      - name: Stop local stack
+        if: always()
+        run: supabase stop
