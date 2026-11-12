@@ -132,7 +132,7 @@ Unique constraint: auth_subject. Account deletion must trigger the deletion work
 | profile_visibility | TEXT | private, connections, public; default private |
 | created_at / updated_at | TIMESTAMPTZ | Audit timestamps |
 
-Email and authentication-provider details should not be included in the public profile record.
+Email and authentication-provider details should not be included in the public profile record. Prefer keeping credentials and verified email with the authentication provider. If FoodGraph later needs its own contact store, use a separate private table with strict access and a defined retention purpose; never expose it through profile APIs.
 
 #### user_privacy_settings
 
@@ -191,7 +191,19 @@ A new grant or withdrawal creates a new record. Do not overwrite history. A cons
 | centroid_lat / centroid_lng | NUMERIC, nullable | Approximate area centroid, not a user's location |
 | status | TEXT | active, inactive |
 
-Nearby-area relationships should eventually be explicit and reviewable (for example, a separate area_adjacencies table with a distance or relationship label). Do not infer exact travel time from a static adjacency list.
+Nearby-area relationships should eventually be explicit and reviewable. A simple table is:
+
+#### area_adjacencies
+
+| Field | Type | Rules / purpose |
+|---|---|---|
+| from_area_id | UUID | FK to areas |
+| to_area_id | UUID | FK to areas |
+| relationship | TEXT | adjacent, commonly_considered_nearby, same_district |
+| distance_km | NUMERIC, nullable | Approximate map distance if measured |
+| reviewed_at | TIMESTAMPTZ | Last review |
+
+Use a composite key (from_area_id, to_area_id), prohibit self-links and define whether edges are stored in both directions. This table informs discovery context; it is not a travel-time guarantee.
 
 #### restaurants
 
@@ -205,6 +217,18 @@ Nearby-area relationships should eventually be explicit and reviewable (for exam
 | created_at / updated_at | TIMESTAMPTZ | Audit timestamps |
 
 This table does not hold a user's visit, rating or recommendation score.
+
+#### restaurant_aliases
+
+| Field | Type | Rules / purpose |
+|---|---|---|
+| id | UUID | Primary key |
+| restaurant_id | UUID | FK to restaurants |
+| alias | TEXT | Alternate spelling or former name |
+| locale | TEXT, nullable | Language/locale where relevant |
+| source_id | UUID, nullable | FK to catalogue_sources |
+
+Aliases help resolve spelling differences and renamed businesses. They do not create new restaurant identities.
 
 #### restaurant_locations
 
@@ -258,6 +282,16 @@ Composite primary key: (restaurant_location_id, cuisine_id).
 
 Dish variants, transliterations and aliases should be represented separately when needed; don't create duplicate canonical dishes merely because spelling differs.
 
+#### dish_aliases
+
+| Field | Type | Rules / purpose |
+|---|---|---|
+| id | UUID | Primary key |
+| dish_id | UUID | FK to dishes |
+| alias | TEXT | Alternate spelling, transliteration or regional name |
+| locale | TEXT, nullable | Language/locale where relevant |
+| source_id | UUID, nullable | FK to catalogue_sources |
+
 #### location_dishes
 
 | Field | Type | Rules / purpose |
@@ -287,6 +321,24 @@ Unique constraint: (restaurant_location_id, dish_id, menu_name) where practical.
 
 Where a listing field is sourced from multiple places, keep field-level provenance in a separate catalogue_claims table in the implementation. Do not imply that one source validates every field on a listing.
 
+#### catalogue_claims
+
+One row represents one sourced claim about a venue or a dish offering. This allows ratings, review counts, price ranges, address details, menu availability and other facts to retain their own source and capture date.
+
+| Field | Type | Rules / purpose |
+|---|---|---|
+| id | UUID | Primary key |
+| restaurant_location_id | UUID, nullable | FK to restaurant_locations |
+| location_dish_id | UUID, nullable | FK to location_dishes |
+| field_key | TEXT | Controlled field such as rating, review_count, price_range, address or availability |
+| field_value | JSONB | Observed value, including units/currency where relevant |
+| source_id | UUID | FK to catalogue_sources |
+| observed_at | TIMESTAMPTZ | When the source was checked |
+| valid_until | TIMESTAMPTZ, nullable | Optional freshness boundary |
+| verification_state | TEXT | unreviewed, accepted, rejected, stale |
+
+Exactly one target (restaurant_location_id or location_dish_id) must be set. Keep the latest accepted claim as a convenience projection for the website, but retain claim history. Do not overwrite provenance when a value changes.
+
 ### 4.3 Personal preferences and taste interactions
 
 #### user_preferences
@@ -308,7 +360,7 @@ Stores explicit preference inputs and user corrections. It does not store inferr
 | created_at / updated_at | TIMESTAMPTZ | Audit timestamps |
 | is_active | BOOLEAN | Retain history; deactivate rather than silently overwrite |
 
-Validation must ensure the referenced entity matches the dimension. Budget and constraints should use structured values with currency and range boundaries, not free-form strings.
+Validation must ensure the referenced entity matches the dimension. At most one of cuisine_id, dish_id or area_id may be set, and it must match dimension. Dimensions such as budget, dietary, occasion and ambience use structured value fields without an entity FK. Budget and constraints should use structured values with currency and range boundaries, not free-form strings.
 
 #### taste_interactions
 
@@ -321,7 +373,7 @@ Stores individual taste actions on a restaurant location, dish or cuisine. One r
 | restaurant_location_id | UUID, nullable | Target venue |
 | dish_id | UUID, nullable | Target dish |
 | cuisine_id | UUID, nullable | Target cuisine |
-| interaction_type | TEXT | saved, unsaved, liked, disliked, skipped, tried, ranked |
+| interaction_type | TEXT | saved, unsaved, liked, disliked, skipped, ranked |
 | value | JSONB, nullable | Rank, optional reason tags or bounded action detail |
 | source | TEXT | prototype, diary, discovery, import_with_consent |
 | occurred_at | TIMESTAMPTZ | When the user action happened |
@@ -331,7 +383,7 @@ Stores individual taste actions on a restaurant location, dish or cuisine. One r
 
 Exactly one target column must be set. Use a check constraint for that rule and foreign keys for each target. A unique idempotency key should be scoped to the user.
 
-A saved place, a like and a reported visit are distinct. A like must not create a visit row.
+A saved place, a like and a reported visit are distinct. A like must not create a visit row. A reported visit belongs in restaurant_visits with visit_source set to self_report; do not use a taste_interactions row with a tried action as a substitute.
 
 #### restaurant_comparisons
 
@@ -415,7 +467,18 @@ Verification is a claim-specific assessment. A location signal can support prese
 | status | TEXT | pending, accepted, blocked where follow approval is required |
 | created_at | TIMESTAMPTZ | Request/follow time |
 
-Composite key: (follower_user_id, followed_user_id). Prevent self-follow. Blocks must override follows and sharing.
+Composite key: (follower_user_id, followed_user_id). Prevent self-follow. A block is a separate relationship and must override follows and sharing.
+
+#### user_blocks
+
+| Field | Type | Rules / purpose |
+|---|---|---|
+| blocker_user_id | UUID | FK to users |
+| blocked_user_id | UUID | FK to users |
+| created_at | TIMESTAMPTZ | Block time |
+| reason_code | TEXT, nullable | Optional internal moderation/support reason |
+
+Composite key: (blocker_user_id, blocked_user_id). Prevent self-block. A block immediately suppresses profile discovery, feed visibility, follow requests and direct sharing between the two accounts. Unblocking removes the active block but should not silently recreate old follows.
 
 #### taste_circles
 
@@ -571,11 +634,11 @@ Unique constraint: (recommendation_run_id, rank_position) and (recommendation_ru
 | id | UUID | Primary key |
 | recommendation_item_id | UUID | FK to recommendation_items |
 | user_id | UUID, nullable | Account user where available |
-| feedback_type | TEXT | useful, not_for_me, visited, saved, dismissed |
+| feedback_type | TEXT | useful, not_for_me, saved, dismissed |
 | reason_code | TEXT, nullable | Optional structured explanation |
 | created_at | TIMESTAMPTZ | Feedback time |
 
-A feedback record is tied to the exact recommendation item so the system can evaluate what was shown and why. visited in this table is a feedback claim and must not be treated as verified. A canonical visit record is created only through the visit-recording flow.
+A feedback record is tied to the exact recommendation item so the system can evaluate what was shown and why. A visit action must open the visit-recording flow and create a restaurant_visits record; it is not stored as recommendation feedback.
 
 ### 4.9 Product analytics and early-access signups
 
