@@ -26,9 +26,9 @@ The importer is dry-run by default. To write into a local or explicitly selected
 python scripts/import_restaurants.py --apply
 ```
 
-It uses deterministic UUIDv5 identities, parameterized SQL and a single database transaction. Re-running it upserts the same catalogue entities and import-ledger rows. It never creates external place IDs or invents missing addresses, coordinates, source URLs, verification dates or INR prices. The legacy price tier is retained as a claim labelled as a prototype tier, not interpreted as rupees. The complete original row is retained in `catalogue_import_rows.raw_row`.
+It uses deterministic UUIDv5 identities, parameterized SQL and a single database transaction. Re-running it upserts the same catalogue entities and import-ledger rows. Duplicate name-and-area candidates are counted and kept as separate deterministic records; they are not merged. It never creates external place IDs or invents missing addresses, coordinates, source URLs, verification dates or INR prices. Ratings and legacy price tiers are retained as field-level claims. Where the original row has no source URL/evidence label, the claim points to an explicitly unattributed legacy-dataset source and remains `unreviewed`; no publisher is guessed. The legacy price tier is labelled as a prototype tier, not interpreted as rupees. The complete original row is retained in `catalogue_import_rows.raw_row`.
 
-Current source audit: 162 rows; 28 areas; 105 six-column rows; 57 nine-column rows. The 57 extended rows include review count, source URL and evidence label. The 105 shorter rows have no source URL/evidence label. The importer preserves this difference. No duplicate name+area pair was found in the current file. Similar names across areas are not merged automatically.
+Current source audit: 162 rows; 28 areas; 105 six-column rows; 57 nine-column rows. The 57 extended rows include review count, source URL and evidence label. The 105 shorter rows have no source URL/evidence label. The importer records their attribution as unknown rather than fabricating a publisher. No duplicate normalized name+area pair was found in the current file. If duplicates appear in a future revision, occurrence-aware IDs keep them separate for review.
 
 ## Migration and testing
 
