@@ -55,12 +55,12 @@ class CatalogueImportTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             module.parse_catalogue("const RESTAURANTS_V6 = [[\"Name\",\"Area\",\"Cuisine\",\"Vibe\",6,2]];")
 
-    def test_duplicate_report_does_not_merge_records(self):
+    def test_duplicate_report_keeps_candidates_separate(self):
         duplicated = [self.rows[0], self.rows[0]]
         report = module.build_report(duplicated)
         self.assertEqual(report["rows"], 2)
         self.assertEqual(report["duplicate_name_area_keys"], 1)
-        self.assertEqual(report["records"][0]["location_id"], report["records"][1]["location_id"])
+        self.assertNotEqual(report["records"][0]["location_id"], report["records"][1]["location_id"])
 
 
 if __name__ == "__main__":
