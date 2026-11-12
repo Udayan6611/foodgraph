@@ -1,5 +1,5 @@
 begin;
-select plan(24);
+select plan(28);
 
 select has_table('cities');
 select has_table('restaurants');
@@ -93,17 +93,26 @@ select ok(
    )),
   'canonical model fields are present'
 );
-select ok(
-  has_table_privilege('authenticated','public.user_preferences','INSERT')
-  and not has_table_privilege('anon','public.user_preferences','SELECT')
-  and not has_table_privilege('authenticated','public.taste_profile_snapshots','INSERT'),
-  'client grants follow ownership and computed-data boundaries'
-);
-select ok(
-  has_table_privilege('anon','public.editorial_collections','SELECT')
-  and has_table_privilege('service_role','public.catalogue_import_rows','INSERT')
-  and not has_table_privilege('anon','public.product_analytics_events','INSERT'),
-  'published editorial reads and trusted service-only grants are correct'
-);
+select diag(format(
+  'privilege diagnostics: auth_user_preferences_insert=%s; anon_user_preferences_select=%s; auth_taste_profile_insert=%s; anon_editorial_select=%s; service_import_insert=%s; anon_analytics_insert=%s',
+  has_table_privilege('authenticated','public.user_preferences','INSERT'),
+  has_table_privilege('anon','public.user_preferences','SELECT'),
+  has_table_privilege('authenticated','public.taste_profile_snapshots','INSERT'),
+  has_table_privilege('anon','public.editorial_collections','SELECT'),
+  has_table_privilege('service_role','public.catalogue_import_rows','INSERT'),
+  has_table_privilege('anon','public.product_analytics_events','INSERT')
+));
+select ok(has_table_privilege('authenticated','public.user_preferences','INSERT'),
+  'authenticated may insert its own preferences (RLS still enforces ownership)');
+select ok(not has_table_privilege('anon','public.user_preferences','SELECT'),
+  'anonymous clients cannot read private user preferences');
+select ok(not has_table_privilege('authenticated','public.taste_profile_snapshots','INSERT'),
+  'clients cannot write computed taste profiles');
+select ok(has_table_privilege('anon','public.editorial_collections','SELECT'),
+  'anonymous clients may read published editorial collections');
+select ok(has_table_privilege('service_role','public.catalogue_import_rows','INSERT'),
+  'trusted backend service may insert catalogue import ledger rows');
+select ok(not has_table_privilege('anon','public.product_analytics_events','INSERT'),
+  'anonymous clients cannot insert restricted analytics events');
 select * from finish();
 rollback;
