@@ -65,10 +65,10 @@ def parse_catalogue(source: str) -> list[list]:
     return rows
 
 
-def row_record(row: list, row_number: int) -> dict:
+def row_record(row: list, row_number: int, occurrence: int = 1) -> dict:
     name, area, cuisine_text, vibe_text, rating, tier = row[:6]
     reviews, source_url, evidence = (row[6:] if len(row) == 9 else (None, None, None))
-    key = f"{slugify(name)}|{slugify(area)}"
+    key = f"{slugify(name)}|{slugify(area)}" + (f"|duplicate-occurrence:{occurrence}" if occurrence > 1 else "")
     location_id = stable_id("location", key)
     restaurant_id = stable_id("restaurant", key)
     city_id = stable_id("city", "pune|mh|in")
@@ -89,7 +89,12 @@ def row_record(row: list, row_number: int) -> dict:
 
 
 def build_report(rows: list[list]) -> dict:
-    records = [row_record(row, i) for i, row in enumerate(rows, 1)]
+    records = []
+    occurrences = Counter()
+    for i, row in enumerate(rows, 1):
+        identity = f"{slugify(row[0])}|{slugify(row[1])}"
+        occurrences[identity] += 1
+        records.append(row_record(row, i, occurrences[identity]))
     names_areas = [f"{slugify(r['name'])}|{slugify(r['area'])}" for r in records]
     return {
         "source_file": SOURCE_FILE,
