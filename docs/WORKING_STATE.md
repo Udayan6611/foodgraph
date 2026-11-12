@@ -67,7 +67,7 @@ Beli is a reference for taste identity, FavHiker for connecting people through o
 - Sharing to connections/circles, block-aware visibility, public profile visibility, moderation, account deletion orchestration and storage buckets remain disabled/deferred pending policy review.
 - Importer: `scripts/import_restaurants.py`, dry-run by default, deterministic UUIDv5 keys, parameterized inserts and one transaction. It retains each raw JS row and hash in `catalogue_import_rows`; no external IDs, missing source dates, prices or addresses are invented.
 - Audited dataset: 162 rows, 28 areas; 105 rows have six columns and 57 have nine; 57 have source URL/evidence label; no duplicate normalized name+area key was found. Existing dataset is unchanged.
-- Tests: Python importer and migration contract tests, pgTAP schema/RLS checks, and CI integration tests for repeated import, field-claim idempotency and transaction rollback. CI failures during initial iterations exposed test assertion and cleanup issues; latest workflow run must be checked before claiming green.
+- Tests: Python importer and migration contract tests; pgTAP schema/RLS and real database constraint/duplicate checks (signup email, import-row key, geographic bounds, external place ID); CI integration tests for repeated import, field-claim idempotency and transaction rollback. Latest branch-head CI run is in progress; Python unit/contract tests have passed, full database/import suite remains unverified.
 - The migration and importer have not been executed against the hosted database. No hosted schema, migration history or data has been read or changed.
 
 ## Architecture
