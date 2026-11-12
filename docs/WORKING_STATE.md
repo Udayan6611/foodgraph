@@ -3,14 +3,15 @@
 **Last verified:** 12 November 2026 (UTC)  
 **Repository:** https://github.com/Udayan6611/foodgraph  
 **Production branch:** `main`  
-**Documentation branch:** `docs/project-continuity-2026-11-12`  
-**Audited main HEAD:** `bdccf8bf6147ffe22a20974fd9b86af2b0432e93`
+**Documentation baseline:** `docs/project-continuity-2026-11-12` at `a36083851923fcbb91e0d512dfaf88e9cd5e14fa`  
+**Backend branch:** `backend/supabase-foundation` (isolated; not merged)  
+**Audited main HEAD:** `bdccf8bf6147ffe22a20974fd9b86af2b0432e93` (unchanged at backend branch creation)
 
 ## Executive status
 
 FoodGraph is a Pune-first behavioural food discovery network in the building and validation stage. The public GitHub Pages website, early-access signup and browser-based discovery prototype exist. The four-pillar vision is documented. The canonical logical data model exists in `docs/data-model.md`.
 
-The repository does **not** contain implementation of that future model: no SQL migrations, database seed/import tooling, authenticated user system, server-side taste graph or behavioural recommendation service were found. Do not describe these as shipped.
+The repository now has an isolated first backend foundation on `backend/supabase-foundation`: one versioned PostgreSQL migration, Supabase CLI config, deterministic catalogue importer, unit/pgTAP/integration tests and a CI workflow. These files are committed but are not merged to `main` and have not been applied to the hosted Supabase project. No frontend integration, production auth flow, server-side taste graph or behavioural recommendation service is shipped.
 
 The current app is a static HTML/CSS/vanilla-JavaScript website with browser-side rules-based restaurant ranking. It uses a Pune catalogue, browser storage and a Google Apps Script web app connected to Google Sheets for product events and early-access signups.
 
@@ -56,6 +57,19 @@ FoodGraph is a behavioural food discovery network, not a restaurant directory, r
 
 Beli is a reference for taste identity, FavHiker for connecting people through overlapping diaries, and BLR Cuts for editorial discovery. Borrow principles, not copy products. The current prototype is an entry point, not the product definition.
 
+## Backend foundation (isolated branch; not deployed)
+
+- Branch: `backend/supabase-foundation`, created from documentation branch HEAD `a36083851923fcbb91e0d512dfaf88e9cd5e14fa`; `main` remains untouched.
+- Latest verified branch commit at this documentation update is recorded in the GitHub branch ref; do not infer hosted deployment from a Git commit.
+- Added `supabase/config.toml` and migration `20261112090000_initial_foodgraph_schema.sql`. The migration creates 39 domain/ledger tables spanning identity, geography/catalogue/provenance, preferences/interactions, visits/evidence, social, lists/editorial, taste snapshots, recommendations, analytics/signup and import ledger.
+- Supabase Auth remains the credential provider; a trigger creates the product-side `users` row. No password is stored in FoodGraph tables.
+- RLS is enabled on all application tables. Public read policies are limited to selected catalogue entities and published editorial collections. User records are owner-only/private by default. Consent history is append-only for client access. Analytics, signup, evidence and import-ledger tables have no client policies and are reserved for trusted service-role operations.
+- Sharing to connections/circles, block-aware visibility, public profile visibility, moderation, account deletion orchestration and storage buckets remain disabled/deferred pending policy review.
+- Importer: `scripts/import_restaurants.py`, dry-run by default, deterministic UUIDv5 keys, parameterized inserts and one transaction. It retains each raw JS row and hash in `catalogue_import_rows`; no external IDs, missing source dates, prices or addresses are invented.
+- Audited dataset: 162 rows, 28 areas; 105 rows have six columns and 57 have nine; 57 have source URL/evidence label; no duplicate normalized name+area key was found. Existing dataset is unchanged.
+- Tests: Python importer and migration contract tests, pgTAP schema/RLS checks, and CI integration tests for repeated import and transaction rollback. CI failures during initial iterations exposed test assertion and cleanup issues; latest workflow run must be checked before claiming green.
+- The migration and importer have not been executed against the hosted database. No hosted schema, migration history or data has been read or changed.
+
 ## Architecture
 
 **Current:** static HTML/CSS/vanilla JS on GitHub Pages; JavaScript restaurant catalogue; LocalStorage/SessionStorage; Google Apps Script and Google Sheets for events/signup; Google Maps links; static legal pages. No deployed PostgreSQL database or backend API was found in the repository.
@@ -80,8 +94,9 @@ The PDF's statement that FoodGraph had not publicly launched as a full product a
 
 ## Blockers and unresolved questions
 
-- No backend provider selected/provisioned; no SQL migrations.
-- No deterministic catalogue import, stable ID mapping or verified provenance pipeline.
+- Supabase Free project was user-reported as created and healthy (project ref `nylpnvdnbqxhwlxjmboz`, Mumbai). This is not independently verified from an account connection.
+- Remote schema and migration history have not been inspected; hosted project remains untouched.
+- No Supabase CLI login/link or account-level GitHub integration has been verified from this session.
 - No account/authentication, RLS policy implementation, server-side taste profile, shared social graph or behavioural recommendation service.
 - Catalogue duplicate resolution, branch-vs-brand mapping, freshness and quality checks need specification.
 - Exact-HEAD CI and current custom-domain health were not independently verified.
@@ -113,3 +128,12 @@ The PDF's statement that FoodGraph had not publicly launched as a full product a
 ## Resume protocol
 
 At each new session: read this file, then relevant sections of `README.md`, `docs/data-model.md` and `docs/DECISIONS.md`; inspect current GitHub branch/HEAD/tree and CI/deployment again. This is a timestamped checkpoint, not a substitute for live verification.
+
+
+## Supabase project access and deployment boundary
+
+- User supplied project ref `nylpnvdnbqxhwlxjmboz`, URL `https://nylpnvdnbqxhwlxjmboz.supabase.co`, region Mumbai, Free plan and Healthy dashboard status.
+- No Supabase connector/CLI execution environment is available in this ChatGPT session. No project secrets have been requested or stored.
+- Repository does not rely on Supabase GitHub integration. Its connection status could not be inspected; do not assume it is connected.
+- Preferred path is local Supabase CLI: `supabase login`, `supabase link --project-ref nylpnvdnbqxhwlxjmboz`, `supabase migration list --remote`, then `supabase db push --dry-run --remote`. Only a separately approved `supabase db push --remote` applies changes.
+- Never run remote reset, seed or destructive rollback commands against this project. See `docs/SUPABASE_BACKEND.md`.
