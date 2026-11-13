@@ -99,7 +99,7 @@ test("listAreas requires a city UUID and returns only active areas", async () =>
   assert.equal(query.get("status"), "eq.active");
   assert.equal(query.get("limit"), "25");
   assert.equal(query.get("offset"), "10");
-  assert.throws(() => fake.client.listAreas({ cityId: "pune" }), /UUID/i);
+  await assert.rejects(() => fake.client.listAreas({ cityId: "pune" }), /UUID/i);
 });
 
 test("listCuisines is paginated and ordered deterministically", async () => {

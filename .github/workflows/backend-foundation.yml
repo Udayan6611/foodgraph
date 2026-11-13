@@ -61,5 +61,5 @@ jobs:
           python scripts/import_restaurants.py --apply
           python -m unittest discover -s tests -p 'test_database_integration.py' -v
       - name: Stop local stack
-        if: always()
+        if: always() && steps.local-supabase.outcome == 'success'
         run: supabase stop
