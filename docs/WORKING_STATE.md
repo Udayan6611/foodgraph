@@ -16,7 +16,7 @@
 - The public preview client uses the project's `sb_publishable_` key only. No secret/service-role key is used in browser code.
 - A separate `/discover-preview/` route is being added as a read-only integration preview. It requests active city/areas/cuisines/locations only. The live Discover route and its dataset/ranking code are kept intact.
 - The preview does not create accounts, write data, or alter the optional early-access signup.
-- CI run [#43475351185](https://github.com/Udayan6611/foodgraph/actions/runs/43475351185) passed on the backend code commit `57a9ec504da6d4c285c33215e03cc97af4b60d14`. The enhancement branch will have its own CI run after its commit.
+- Enhancement branch CI [run #43486922759](https://github.com/Udayan6611/foodgraph/actions/runs/43486922759) passed on code commit `7a040520440e2fd6b535934635d9c245257f33de`: 20 fast Python tests (3 DB tests appropriately deferred until the disposable database exists), 12/12 Node tests, disposable local Supabase startup, all four migration applications, pgTAP, and all three database importer tests for repeatability, provenance retention and transaction rollback. Cleanup also passed.
 - Live REST HTTP verification is still blocked: the execution environment cannot resolve the Supabase hostname (HTTP 000 before request). This does not show that the hosted API is disabled.
 
 ## Current delivery guardrails
@@ -137,7 +137,7 @@ The PDF's statement that FoodGraph had not publicly launched as a full product a
 
 ## Immediate next engineering task
 
-Complete browser-to-hosted-REST connectivity verification for the separate `/discover-preview/` route from a network with working DNS, then review the preview against the existing live flow. Keep account creation, social sharing and write workflows deferred. The current optional early-access signup is not an account flow.
+Complete browser-to-hosted-REST connectivity verification for the separate `/discover-preview/` route from a network with working DNS, then review the preview against the existing live flow. The current CI validates the adapter with mocked fetch and the database locally; it is not a live hosted HTTP integration test. Keep account creation, social sharing and write workflows deferred. The current optional early-access signup is not an account flow.
 
 ## Must not change without explicit approval
 

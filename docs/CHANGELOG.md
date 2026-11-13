@@ -92,3 +92,11 @@ The PDF also records prior manual signup tests and a founder-reported Apps Scrip
 - Updated the Node test workflow to exercise both catalogue-client and preview-page tests on the enhancement branch.
 - Hosted Supabase schema/data were not changed. The current 162 locations remain unverified and are not exposed by the public preview.
 - Live REST HTTP smoke test remains unverified because DNS resolution failed from the execution environment before any request reached Supabase. The branch's CI and actual preview route need their own verification before merging.
+
+
+## 14 November 2026 — Enhancement branch CI verification
+
+- CI run [#43486922759](https://github.com/Udayan6611/foodgraph/actions/runs/43486922759) passed on enhancement code commit `7a040520440e2fd6b535934635d9c245257f33de`.
+- Verification completed: Python importer/migration contract suite; all 12 Node tests (9 adapter + 3 preview); disposable local Supabase startup; all four migrations; pgTAP schema/RLS tests; repeatable catalogue import; all three importer database integration checks (idempotency, unattributed-provenance/legacy-tier retention, and transaction rollback); stack cleanup.
+- The first branch CI attempt exposed a test assertion that incorrectly rejected safety-comment text rather than inspecting the configured key value. The assertion was narrowed to the actual configured key and secret-key fields; the corrected run passed.
+- Hosted Supabase was not modified. The live browser-to-hosted-REST HTTP request remains an open check because DNS resolution from the execution environment failed before the request reached the project.

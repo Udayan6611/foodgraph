@@ -151,3 +151,10 @@ The publishable key is intentionally public; Supabase documents publishable keys
 The existing `/discover/`, early-access signup, Apps Script endpoint, Sheets, CNAME, privacy and terms pages are not modified by the preview route. The route is present only on the enhancement branch until its PR is reviewed and approved. Merging the additive route to the current Pages source would publish the new path alongside existing paths; it would not require changing the Pages publishing source or taking the current website offline.
 
 **Live HTTP limitation:** a direct HTTPS smoke test from the execution environment failed at DNS resolution for the Supabase hostname (HTTP 000). The hosted project itself is ACTIVE_HEALTHY and the SQL migration ledger is readable through the Supabase connector, but browser-to-REST connectivity remains unverified until tested from a network with DNS access.
+
+
+## Enhancement branch CI result — 14 November 2026
+
+[Run #43486922759](https://github.com/Udayan6611/foodgraph/actions/runs/43486922759) passed on code commit `7a040520440e2fd6b535934635d9c245257f33de`. It completed Python and Node tests, started a disposable local Supabase stack, applied the four migrations, passed pgTAP, passed importer idempotency/provenance/rollback checks, and stopped the local stack. The hosted project was not used by this workflow.
+
+The live browser-to-hosted-REST request has not yet been verified. The container's DNS lookup failed before the HTTP request reached the hosted project. Do not treat the CI mocked-fetch tests or SQL grant inspection as a substitute for the real HTTP check.
