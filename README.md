@@ -366,11 +366,11 @@ The canonical entities, relationships, fields, provenance rules, privacy boundar
 | Browser state | LocalStorage and SessionStorage |
 | Event and signup endpoint | Google Apps Script |
 | Early operational storage | Private Google Sheets |
-| Backend database | Supabase Free, hosted schema and Pune catalogue loaded; no frontend integration |
+| Backend database | Supabase Free, hosted schema and Pune catalogue loaded; read-only browser adapter built but not yet wired to Discover |
 | Map hand-off | Google Maps search links |
 | Build tooling | No package installation or build step |
 
-There is still no application server, live account flow, social graph service or server-side recommendation service connected to the website. Supabase PostgreSQL now contains the canonical schema and imported catalogue, but no existing frontend route calls it; the `users` table remains empty.
+There is still no application server, live account flow, social graph service or server-side recommendation service connected to the website. Supabase PostgreSQL now contains the canonical schema and imported catalogue, and a standalone read-only browser adapter is available for preview work, but no existing frontend route calls it; the `users` table remains empty.
 
 The existing visitor ID is a persistent anonymous browser identifier; the visit/session ID is stored per tab. They are useful for basic product analytics but are not verified identity. Do not use them as a substitute for a user account or as proof of dining behaviour.
 
@@ -504,6 +504,12 @@ The isolated `backend/supabase-foundation` branch now contains the four-migratio
 ## Live backend boundary
 
 Supabase PostgreSQL is provisioned and seeded, but the current static website does not call it. The schema is not a shipped account or recommendation experience. All imported restaurant candidates remain unverified until reviewed and explicitly activated.
+
+## Read-only catalogue API and authentication design
+
+- `assets/js/foodgraph-catalogue-api.js` is a standalone GET-only Supabase Data API adapter. It requires a runtime `sb_publishable_...` key and exposes no write operations. It is not loaded by the current Discover page.
+- `docs/READ_ONLY_CATALOGUE_API.md` explains its contract, runtime configuration and release gate.
+- `docs/AUTHENTICATION_DESIGN.md` describes a possible first email/password flow, defaults, consent boundaries, session handling and test plan. No signup UI or Auth provider was enabled.
 
 ## Permanent project documentation
 

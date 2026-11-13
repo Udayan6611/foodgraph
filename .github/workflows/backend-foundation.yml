@@ -5,6 +5,7 @@ on:
     branches: [backend/supabase-foundation]
     paths:
       - "supabase/**"
+      - "assets/js/**"
       - "scripts/import_restaurants.py"
       - "tests/**"
       - "requirements-dev.txt"
@@ -32,9 +33,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run fast unit and migration contract tests
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run fast unit, migration contract and browser API tests
         run: |
           python -m unittest discover -s tests -v
+          node --test tests/catalogue-api.test.cjs
           python scripts/import_restaurants.py
       - uses: supabase/setup-cli@v1
         with:

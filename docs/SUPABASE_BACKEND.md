@@ -106,3 +106,10 @@ Never place database passwords, access tokens, anon keys or service-role keys in
 - Imported restaurant/branch candidates need editorial and operational review before their statuses are promoted to `active`.
 - Brand/branch resolution, data freshness workflow, storage buckets, moderation, deletion orchestration, block-aware sharing and actual recommendation computation remain future work.
 - No paid service or upgrade was introduced.
+
+
+## Next client stage
+
+A standalone GET-only browser adapter now lives at `assets/js/foodgraph-catalogue-api.js`. It accepts a runtime project URL and a modern `sb_publishable_` key, exposes city/area/cuisine/active-location reads, and rejects secret or legacy key formats. It contains no write operations and is not loaded into the current Discover page.
+
+See `docs/READ_ONLY_CATALOGUE_API.md` for the query contract and `docs/AUTHENTICATION_DESIGN.md` for the account/session design. No hosted schema changes were required for this code. The Data API's project-level exposure setting and a live HTTP read smoke test remain release gates before wiring a page.

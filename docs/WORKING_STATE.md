@@ -140,3 +140,20 @@ At each new session: read this file, then relevant sections of `README.md`, `doc
 - Repository does not depend on Supabase GitHub integration. It was not assumed to be connected; migrations were applied directly and CI remains isolated/local-only.
 - Do not rerun/reapply the four current migration files manually. Use additive migrations for future changes, verify locally/CI first, and get explicit approval before later production schema changes or data imports.
 - Never run remote reset, remote seed or destructive rollback commands against this project. See `docs/SUPABASE_BACKEND.md`.
+
+
+## Read-only catalogue client and Auth design checkpoint (13 Nov 2026)
+
+- Current backend branch head before this checkpoint: `bacd6df0bd8cc407c98078024ed237e4c7467c49`. Production `main` remains at `bdccf8bf6147ffe22a20974fd9b86af2b0432e93`.
+- Verified Supabase project still healthy, PostgreSQL 17.11, 39 public tables, all RLS-enabled, and the same four migrations remain recorded.
+- Supabase Auth trigger `auth.users -> public.handle_new_auth_user()` exists and is registered. Auth users, product users, profiles and privacy settings all remain empty. No test user or production Auth setting was changed.
+- Added a standalone read-only Data API adapter at `assets/js/foodgraph-catalogue-api.js`. It requires a runtime `sb_publishable_` key and URL, exposes five GET-only reads, uses only active catalogue filters and has no write methods.
+- Added mocked-fetch Node tests at `tests/catalogue-api.test.cjs` and added them to isolated backend CI using Node 22. The API adapter is not yet loaded by the current Discover page.
+- Added `docs/READ_ONLY_CATALOGUE_API.md` and `docs/AUTHENTICATION_DESIGN.md`. No signup UI, Auth provider, SMTP provider, frontend wiring or hosted database change was made in this step.
+- Important current-data behavior: all 162 locations remain unverified and their parent restaurants remain `needs_review`. The active-only Data API adapter therefore returns zero restaurant candidates until a separate review/activation process is completed. It must not bypass RLS or fall back to service-role queries.
+- Supabase's current Data API docs distinguish SQL grants from RLS and document an October 2026 change to public-schema exposure defaults. Our explicit grants are present, but the actual project-level Data API exposure setting and a live HTTP REST smoke test still need confirmation before the adapter is wired into a page.
+- CI for this new adapter will validate browser-safe configuration, URL construction, GET-only behavior, active filters, pagination and error handling with mocked fetch. The earlier four-migration/29-pgTAP run remains green on code commit `17a4c7aa3f6151005b786f2f253914865f3f42c7`.
+
+## Immediate next step
+
+Verify the hosted Data API REST round trip with the publishable key supplied securely at runtime, then build a separate catalogue-preview page that consumes only active rows. Do not replace the Discover page until curation/activation provides public rows and the preview is accepted. Keep Auth UI separate until email delivery, confirmation/recovery, consent and private-default RLS flows are tested.

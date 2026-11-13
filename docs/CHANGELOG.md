@@ -62,3 +62,13 @@ The PDF also records prior manual signup tests and a founder-reported Apps Scrip
 - **CI:** [run #43273068820](https://github.com/Udayan6611/foodgraph/actions/runs/43273068820) passed all 14 steps on exact branch HEAD `17a4c7aa3f6151005b786f2f253914865f3f42c7`, including Python tests, all four migrations, 29 pgTAP assertions, importer idempotency and rollback.
 - **Advisors:** 10 informational RLS-enabled/no-policy findings for intentionally service-only tables; no warning-level security findings. Performance advisor reports 45 unindexed foreign keys and 13 unused indexes (informational/follow-up); health advisor has no findings.
 - **Production preservation:** `main` remains at `bdccf8bf6147ffe22a20974fd9b86af2b0432e93`; backend work is not merged. No website, Pages, CNAME, Apps Script or Google Sheets files were modified.
+
+
+## 13 November 2026 — Read-only catalogue API and Auth design
+
+- Added a standalone GET-only Supabase Data API adapter at `assets/js/foodgraph-catalogue-api.js`. It requires runtime URL + modern `sb_publishable_` key, validates inputs, filters active restaurants/locations, paginates deterministically and has no mutation methods.
+- Added Node tests with mocked fetch for publishable-key validation, HTTPS, read-only requests, query filters, paging and PostgREST errors.
+- CI now runs browser adapter tests using Node 22 on the isolated backend branch.
+- Added `docs/READ_ONLY_CATALOGUE_API.md` and `docs/AUTHENTICATION_DESIGN.md`.
+- No hosted schema/migration/data change, no Auth user/provider/SMTP configuration, no website integration, no Pages/CNAME/Apps Script change and no merge to `main`.
+- The adapter is not loaded by Discover: active-only RLS correctly hides all 162 unverified locations until curation promotes them. Project-level Data API exposure and a live HTTP smoke test remain open release gates.
