@@ -157,3 +157,13 @@ At each new session: read this file, then relevant sections of `README.md`, `doc
 ## Immediate next step
 
 Verify the hosted Data API REST round trip with the publishable key supplied securely at runtime, then build a separate catalogue-preview page that consumes only active rows. Do not replace the Discover page until curation/activation provides public rows and the preview is accepted. Keep Auth UI separate until email delivery, confirmation/recovery, consent and private-default RLS flows are tested.
+
+
+## Read-only client CI verification update (13 Nov 2026)
+
+- Latest code/test commit: `57a9ec504da6d4c285c33215e03cc97af4b60d14`.
+- CI run [#43475351185](https://github.com/Udayan6611/foodgraph/actions/runs/43475351185) completed **successfully** on that exact commit. Python unit/contract checks, Node 22 adapter tests, disposable Supabase startup, all four migrations, 29 pgTAP assertions, importer idempotency/rollback and stack cleanup all passed.
+- The browser adapter sends modern `sb_publishable_` keys only in the `apikey` header for anonymous reads. It deliberately does not send `Authorization: Bearer <publishable-key>`; a signed-in client must use the actual user Auth JWT in that header.
+- The live Data API HTTP smoke test remains **unverified**. An external HTTPS request from this execution environment failed at DNS resolution (`Could not resolve host: nylpnvdnbqxhwlxjmboz.supabase.co`) before reaching Supabase. This is an environment connectivity limitation, not evidence that the project's REST endpoint is disabled or broken.
+- No Supabase database migration, seed, Auth configuration, user creation, preview deployment or static site change was made during the read-only client work.
+- Current branch remains isolated from production `main`. The adapter is not imported by `discover/index.html`.

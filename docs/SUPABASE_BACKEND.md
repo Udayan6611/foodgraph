@@ -113,3 +113,12 @@ Never place database passwords, access tokens, anon keys or service-role keys in
 A standalone GET-only browser adapter now lives at `assets/js/foodgraph-catalogue-api.js`. It accepts a runtime project URL and a modern `sb_publishable_` key, exposes city/area/cuisine/active-location reads, and rejects secret or legacy key formats. It contains no write operations and is not loaded into the current Discover page.
 
 See `docs/READ_ONLY_CATALOGUE_API.md` for the query contract and `docs/AUTHENTICATION_DESIGN.md` for the account/session design. No hosted schema changes were required for this code. The Data API's project-level exposure setting and a live HTTP read smoke test remain release gates before wiring a page.
+
+
+## Read-only client verification status
+
+The standalone client and mocked-fetch tests pass. On commit `57a9ec504da6d4c285c33215e03cc97af4b60d14`, [CI run #43475351185](https://github.com/Udayan6611/foodgraph/actions/runs/43475351185) passed all steps, including Node 22 tests and the full disposable Supabase migration/import suite.
+
+A live HTTPS request to `https://nylpnvdnbqxhwlxjmboz.supabase.co/rest/v1/...` could not be completed from the execution environment because DNS resolution failed before the request reached Supabase. This does not establish whether Data API is enabled or disabled. Check the project's Data API enabled/exposed-schema settings and complete a live GET smoke test from a network with DNS access before loading the adapter in a page.
+
+The adapter remains separate from `discover/index.html`. The hosted catalogue has zero active restaurant locations because every imported location remains unverified; a successful public GET is therefore expected to return zero restaurant rows until curated candidates are activated.

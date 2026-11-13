@@ -72,3 +72,12 @@ The PDF also records prior manual signup tests and a founder-reported Apps Scrip
 - Added `docs/READ_ONLY_CATALOGUE_API.md` and `docs/AUTHENTICATION_DESIGN.md`.
 - No hosted schema/migration/data change, no Auth user/provider/SMTP configuration, no website integration, no Pages/CNAME/Apps Script change and no merge to `main`.
 - The adapter is not loaded by Discover: active-only RLS correctly hides all 162 unverified locations until curation promotes them. Project-level Data API exposure and a live HTTP smoke test remain open release gates.
+
+
+## 13 November 2026 — Read-only catalogue client CI verification
+
+- The initial Node test run caught an incorrect synchronous assertion for an async validation path; changed the test to `assert.rejects`. Workflow cleanup is now guarded on successful local Supabase startup so a skipped CLI setup does not create a secondary cleanup failure.
+- Updated the anonymous Data API adapter to send the modern publishable key only in the `apikey` header. It no longer puts a publishable key in `Authorization: Bearer`; that header is reserved for the user's Auth JWT when signed in.
+- CI run [#43475351185](https://github.com/Udayan6611/foodgraph/actions/runs/43475351185) passed all steps on commit `57a9ec504da6d4c285c33215e03cc97af4b60d14`: Python tests, Node 22 client tests, four migration chain, pgTAP, importer idempotency/rollback and local stack cleanup.
+- Live REST smoke test was attempted but could not resolve the Supabase hostname from this execution environment; no HTTP request reached the project. Project-level Data API enablement/exposed schema and real HTTP response remain unverified.
+- No hosted schema/data/Auth setting was changed; no user account was created; current Discover page and production `main` were left unchanged.
