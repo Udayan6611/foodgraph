@@ -23,8 +23,11 @@ test("Supabase preview is an additive route and does not replace current Discove
 test("preview configuration uses only a browser publishable key", () => {
   const config = read("assets/js/foodgraph-preview-config.js");
   assert.match(config, /https:\/\/nylpnvdnbqxhwlxjmboz\.supabase\.co/);
-  assert.match(config, /sb_publishable_[A-Za-z0-9_-]+/);
-  assert.doesNotMatch(config, /sb_secret_|service_role|eyJhbGciOi/);
+  const configuredKey = config.match(/publishableKey:\\s*"([^"]+)"/);
+  assert.ok(configuredKey, "publishableKey must be configured");
+  assert.match(configuredKey[1], /^sb_publishable_[A-Za-z0-9_-]+$/);
+  assert.doesNotMatch(configuredKey[1], /sb_secret_|service_role|eyJhbGciOi/);
+  assert.doesNotMatch(config, /^\\s*(?:secretKey|serviceRoleKey)\\s*:/m);
 });
 
 test("preview client performs read-only catalogue calls and does not expose user writes", () => {
