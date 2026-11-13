@@ -84,7 +84,7 @@ test("getCityBySlug uses a bounded GET request and publishable key headers", asy
   assert.equal(fake.calls[0].url.searchParams.get("status"), "eq.active");
   assert.equal(fake.calls[0].options.method, "GET");
   assert.equal(fake.calls[0].options.headers.apikey, PUBLISHABLE_KEY);
-  assert.equal(fake.calls[0].options.headers.Authorization, "Bearer " + PUBLISHABLE_KEY);
+  assert.equal(fake.calls[0].options.headers.Authorization, undefined);
   assert.equal(fake.calls[0].options.credentials, "omit");
   assert.equal(fake.calls[0].options.body, undefined);
 });

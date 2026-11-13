@@ -14,7 +14,7 @@ The adapter exposes only these read methods:
 | `listActiveLocations({cityId, areaId?, limit, offset})` | `restaurant_locations` | Returns active locations with active parent restaurant, area and cuisine links |
 | `getActiveLocationById(id)` | `restaurant_locations` | Returns one active location with its relations or `null` |
 
-The adapter performs GET requests only. It has no insert, update or delete method. It accepts only a modern `sb_publishable_` key; service/secret keys and legacy anon JWT keys are rejected. The URL and key are supplied at runtime and are not embedded in tracked source files.
+The adapter performs GET requests only. It has no insert, update or delete method. It accepts only a modern `sb_publishable_` key; service/secret keys and legacy anon JWT keys are rejected. Anonymous requests send the publishable key only in the `apikey` header. They deliberately omit `Authorization`; when Auth is introduced, that header must carry the user's actual Auth JWT, never the publishable key. The URL and key are supplied at runtime and are not embedded in tracked source files.
 
 ## Runtime configuration for a preview
 

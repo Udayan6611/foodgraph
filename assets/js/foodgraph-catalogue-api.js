@@ -115,7 +115,6 @@
         method: "GET",
         headers: {
           apikey: publishableKey,
-          Authorization: "Bearer " + publishableKey,
           Accept: "application/json",
           "Accept-Profile": "public"
         },
