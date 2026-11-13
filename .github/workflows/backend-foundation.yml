@@ -1,0 +1,65 @@
+name: Backend foundation checks
+
+on:
+  push:
+    branches: [enhancement/supabase-discover-preview]
+    paths:
+      - "supabase/**"
+      - "assets/js/**"
+      - "scripts/import_restaurants.py"
+      - "tests/**"
+      - "requirements-dev.txt"
+      - ".github/workflows/backend-foundation.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "supabase/**"
+      - "scripts/import_restaurants.py"
+      - "tests/**"
+      - ".github/workflows/backend-foundation.yml"
+
+concurrency:
+  group: backend-foundation-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run fast unit, migration contract and browser API tests
+        run: |
+          python -m unittest discover -s tests -v
+          node --test tests/*.test.cjs
+          python scripts/import_restaurants.py
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Start local Supabase stack
+        id: local-supabase
+        run: supabase start -x realtime,storage-api,imgproxy,kong,mailpit,postgrest,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
+      - name: Apply migrations to disposable local database
+        run: supabase db reset
+      - name: Run PostgreSQL schema and RLS tests
+        run: supabase test db
+      - name: Install importer database driver
+        run: pip install -r requirements-dev.txt
+      - name: Verify repeatable catalogue import
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+        run: |
+          python scripts/import_restaurants.py --apply
+          python scripts/import_restaurants.py --apply
+          python -m unittest discover -s tests -p 'test_database_integration.py' -v
+      - name: Stop local stack
+        if: always() && steps.local-supabase.outcome == 'success'
+        run: supabase stop

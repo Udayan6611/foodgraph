@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="An isolated, read-only preview of FoodGraph's Supabase-backed Pune catalogue.">
+  <title>Discover Preview | FoodGraph</title>
+  <link rel="icon" href="../assets/foodgraph-mark.svg">
+  <link rel="stylesheet" href="../styles.css?v=20261114a">
+  <style>
+    .fg-preview{max-width:1080px;margin:0 auto;padding:54px 22px 88px}
+    .fg-preview-hero{display:grid;grid-template-columns:1fr auto;gap:26px;align-items:center;margin-bottom:30px}
+    .fg-preview-hero h1{font-size:clamp(36px,5vw,58px);line-height:1.02;letter-spacing:-.045em;margin:10px 0 14px;max-width:760px}
+    .fg-preview-hero p{max-width:690px;color:#667085;line-height:1.7;margin:0}
+    .fg-preview-mark{width:112px;height:112px;border-radius:28px;display:grid;place-items:center;background:#13294b;color:#fff;font-size:36px;font-weight:900}
+    .fg-preview-banner{padding:14px 16px;border:1px solid #f1d3c7;border-radius:14px;background:#fff8f4;color:#704534;font-size:13px;line-height:1.6;margin-bottom:22px}
+    .fg-preview-panel{background:#fff;border:1px solid #e7eaf0;border-radius:20px;padding:22px;box-shadow:0 14px 40px rgba(19,41,75,.06)}
+    .fg-preview-panel h2{margin:0 0 7px;font-size:20px;letter-spacing:-.025em}
+    .fg-preview-muted{color:#667085;font-size:13px;line-height:1.6}
+    .fg-preview-status{display:flex;align-items:center;gap:10px;margin:18px 0;padding:12px 14px;border-radius:12px;background:#f4f6f8;color:#344054;font-size:13px}
+    .fg-preview-dot{width:9px;height:9px;flex:0 0 9px;border-radius:50%;background:#98a2b3}
+    .fg-preview-status[data-state="success"] .fg-preview-dot{background:#16845f}
+    .fg-preview-status[data-state="error"] .fg-preview-dot{background:#b54735}
+    .fg-preview-status[data-state="loading"] .fg-preview-dot{background:#d97706}
+    .fg-preview-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 24px}
+    .fg-preview-stat{padding:15px;border-radius:13px;background:#f7f8fa}
+    .fg-preview-stat strong{display:block;font-size:25px;letter-spacing:-.04em;color:#13294b}
+    .fg-preview-stat span{display:block;color:#667085;font-size:11px;margin-top:3px}
+    .fg-preview-filters{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-top:20px}
+    .fg-preview-field{display:grid;gap:7px;min-width:min(100%,260px)}
+    .fg-preview-field label{font-size:12px;font-weight:800;color:#344054}
+    .fg-preview-field select{height:44px;border:1px solid #d0d5dd;border-radius:10px;padding:0 12px;background:#fff;color:#13294b;min-width:260px}
+    .fg-preview-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
+    .fg-preview-place{border:1px solid #e7eaf0;border-radius:14px;padding:17px}
+    .fg-preview-place h3{font-size:17px;margin:0 0 6px;color:#13294b}
+    .fg-preview-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+    .fg-preview-tag{font-size:10px;background:#f1f3f6;color:#475467;padding:5px 8px;border-radius:20px}
+    .fg-preview-empty{margin-top:18px;padding:22px;border-radius:14px;background:#f7f8fa;color:#344054}
+    .fg-preview-empty h3{font-size:17px;margin:0 0 8px}
+    .fg-preview-empty p{font-size:13px;line-height:1.65;color:#667085;margin:0}
+    .fg-preview-error{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:#8f3325;margin-top:10px}
+    .fg-preview-footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:25px;font-size:12px;color:#667085}
+    .fg-preview-footer a{color:#ff6845;font-weight:800;text-decoration:none}
+    @media(max-width:700px){.fg-preview{padding:38px 16px 60px}.fg-preview-hero{grid-template-columns:1fr}.fg-preview-mark{display:none}.fg-preview-stats{grid-template-columns:1fr 1fr}.fg-preview-results{grid-template-columns:1fr}.fg-preview-field,.fg-preview-field select{width:100%;min-width:0}}
+  </style>
+</head>
+<body class="discover-page">
+  <nav class="nav app-nav">
+    <a class="brand" href="../"><img src="../assets/foodgraph-mark.svg" alt=""><span><b>Food</b><strong>Graph</strong></span></a>
+    <div class="app-nav-center"><span class="live-dot"></span>Supabase preview</div>
+    <a class="navback" href="../discover/">Current Discover</a>
+  </nav>
+  <main class="fg-preview">
+    <section class="fg-preview-hero">
+      <div>
+        <p class="eyebrow">FOODGRAPH · PUNE · INTEGRATION PREVIEW</p>
+        <h1>Discover, connected to the food graph.</h1>
+        <p>This separate route reads the curated public catalogue from Supabase. It does not replace the current Discover experience, create an account, or write to the database.</p>
+      </div>
+      <div class="fg-preview-mark" aria-hidden="true">FG</div>
+    </section>
+    <div class="fg-preview-banner">
+      <strong>Preview only.</strong> The existing <a href="../discover/">Discover page</a>, optional early-access signup, analytics and Google Sheets integrations remain unchanged. This page is deliberately read-only.
+    </div>
+    <section class="fg-preview-panel" aria-labelledby="connectionTitle">
+      <h2 id="connectionTitle">Catalogue connection</h2>
+      <p class="fg-preview-muted">The browser uses a public Supabase publishable key. Database grants and Row Level Security determine which records can be returned.</p>
+      <div id="connectionStatus" class="fg-preview-status" data-state="loading" role="status" aria-live="polite">
+        <span class="fg-preview-dot" aria-hidden="true"></span>
+        <span id="connectionMessage">Connecting to FoodGraph's catalogue…</span>
+      </div>
+      <div class="fg-preview-stats" aria-live="polite">
+        <div class="fg-preview-stat"><strong id="areaCount">—</strong><span>Active Pune areas</span></div>
+        <div class="fg-preview-stat"><strong id="cuisineCount">—</strong><span>Cuisine categories</span></div>
+        <div class="fg-preview-stat"><strong id="placeCount">—</strong><span>Public locations in view</span></div>
+      </div>
+      <div class="fg-preview-filters">
+        <div class="fg-preview-field">
+          <label for="areaFilter">Neighbourhood</label>
+          <select id="areaFilter" disabled><option value="">All Pune areas</option></select>
+        </div>
+      </div>
+      <div id="catalogueResults" aria-live="polite">
+        <div class="fg-preview-empty"><h3>Loading the catalogue</h3><p>Fetching the public city, area, cuisine and active-location records.</p></div>
+      </div>
+      <div id="connectionError" class="fg-preview-error" hidden></div>
+    </section>
+    <div class="fg-preview-footer">
+      <span>No account required. No data is written by this page.</span>
+      <span><a href="../discover/">Return to current Discover →</a></span>
+    </div>
+  </main>
+  <footer>
+    <a class="brand" href="../"><img src="../assets/foodgraph-mark.svg" alt=""><span><b>Food</b><strong>Graph</strong></span></a>
+    <span>FoodGraph · Pune</span>
+    <a href="../">Home →</a>
+    <div class="legal-footer-links"><a href="../privacy/">Privacy</a><a href="../terms/">Terms</a></div>
+  </footer>
+  <script src="../assets/js/foodgraph-preview-config.js?v=20261114a"></script>
+  <script src="../assets/js/foodgraph-catalogue-api.js?v=20261114a"></script>
+  <script src="../assets/js/foodgraph-discover-preview.js?v=20261114a"></script>
+</body>
+</html>
