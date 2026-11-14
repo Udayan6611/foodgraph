@@ -150,7 +150,7 @@ The publishable key is intentionally public; Supabase documents publishable keys
 
 The existing `/discover/`, early-access signup, Apps Script endpoint, Sheets, CNAME, privacy and terms pages are not modified by the preview route. The route is present only on the enhancement branch until its PR is reviewed and approved. Merging the additive route to the current Pages source would publish the new path alongside existing paths; it would not require changing the Pages publishing source or taking the current website offline.
 
-**Live HTTP limitation:** a direct HTTPS smoke test from the execution environment failed at DNS resolution for the Supabase hostname (HTTP 000). The hosted project itself is ACTIVE_HEALTHY and the SQL migration ledger is readable through the Supabase connector, but browser-to-REST connectivity remains unverified until tested from a network with DNS access.
+**Live REST/CORS status — passed 14 November 2026:** GitHub Actions from an independent Ubuntu network successfully queried the hosted Supabase Data API with the actual publishable key and adapter. The CORS OPTIONS preflight accepted `https://foodgraph.dpdns.org` and the `apikey` + `accept-profile` headers. Live queries returned 1 Pune city, 28 active areas, 47 cuisines and 0 public active locations. Zero locations is expected because the 162 imported candidates remain unverified. The earlier assistant-container DNS failure was an environment limitation, not a project API failure.
 
 
 ## Enhancement branch CI result — 14 November 2026
@@ -167,3 +167,19 @@ The enhancement workflow now has a separate `live-api-smoke` job on GitHub Actio
 The job is strictly read-only (OPTIONS + GET). It verifies active Pune city, non-empty area/cuisine taxonomies and the active-location query. A zero-location result is expected while all imported candidates remain unverified. This CI job exists because the assistant execution environment cannot resolve the Supabase hostname; the runner provides an independent network path.
 
 A passing live smoke job is required before promoting the preview PR out of draft. It does not itself validate every browser/device combination, but the CORS preflight checks the exact production site origin and the headers the browser adapter sends.
+
+
+## Live API verification result — 14 November 2026
+
+Both live smoke jobs passed:
+- [Push run #43579061660](https://github.com/Udayan6611/foodgraph/actions/runs/43579061660)
+- [Pull request run #43579065426](https://github.com/Udayan6611/foodgraph/actions/runs/43579065426)
+
+Verified from the GitHub Actions runner:
+- production Pages origin CORS preflight accepted;
+- active Pune city returned;
+- 28 active areas and 47 cuisines returned;
+- active-location relation query parsed and returned 0 active public locations as expected;
+- no database writes were performed.
+
+The full local validation job passed in both runs as well: Python/Node tests, disposable local Supabase stack, four migrations, pgTAP, importer repeatability/rollback and cleanup. The hosted project was not modified by CI.

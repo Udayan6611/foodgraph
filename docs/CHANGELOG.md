@@ -109,3 +109,13 @@ The PDF also records prior manual signup tests and a founder-reported Apps Scrip
 - Added an independent `live-api-smoke` CI job. It performs no writes (OPTIONS + GET only), does not require GitHub secrets and does not change hosted database settings.
 - Extended workflow path filters so future adapter/script changes trigger validation.
 - Result of the new live job is pending; do not treat REST/CORS as verified until that job succeeds.
+
+
+## 14 November 2026 — Live Supabase REST and CORS verification passed
+
+- [Push CI run #43579061660](https://github.com/Udayan6611/foodgraph/actions/runs/43579061660) and [PR CI run #43579065426](https://github.com/Udayan6611/foodgraph/actions/runs/43579065426) both passed all jobs.
+- Live read-only checks from GitHub Actions confirmed the production GitHub Pages origin `https://foodgraph.dpdns.org` passes CORS preflight with the adapter's `apikey` and `accept-profile` headers.
+- Hosted API returned Pune, 28 active areas and 47 cuisines. The active restaurant-location query returned 0 public rows, consistent with all 162 imported locations remaining unverified.
+- The live query exercised the exact adapter and its PostgREST relationship select. No hosted data or schema was changed.
+- The local validation job also passed Python/Node tests, all four migrations on a disposable Supabase stack, pgTAP, importer idempotency and rollback, and cleanup.
+- Preview remains isolated and the PR remains draft. No production merge or Pages deployment occurred.

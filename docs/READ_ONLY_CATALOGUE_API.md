@@ -77,9 +77,11 @@ Official references:
 
 `tests/catalogue-api.test.cjs` runs with `node --test` and uses a mocked fetch implementation. It verifies URL construction, RLS filters, paging, publishable-key handling, error propagation and that the exposed client surface contains no write methods.
 
-A dedicated read-only live smoke test now runs from GitHub Actions on the Ubuntu runner. `scripts/supabase-live-smoke.cjs` uses the same adapter and public preview configuration to:
-- send an OPTIONS preflight for the exact GitHub Pages origin (`https://foodgraph.dpdns.org`) and verify CORS allows GET with the `apikey` and `accept-profile` headers;
-- GET the active Pune city, its areas and the cuisine taxonomy;
-- GET active restaurant locations and verify every returned location has an active parent restaurant.
+**Live REST and CORS verification passed on 14 November 2026** from GitHub Actions. The read-only smoke test used the exact browser adapter and public preview configuration:
+- CORS OPTIONS preflight accepted the GitHub Pages origin `https://foodgraph.dpdns.org` and the `apikey` + `accept-profile` headers for GET;
+- active Pune city query returned Pune;
+- active area query returned 28 areas;
+- cuisine taxonomy query returned 47 cuisines;
+- active restaurant-location query returned 0 public rows, as expected while imported candidates remain unverified.
 
-This is separate from mocked-fetch and disposable-local-database CI. It uses only OPTIONS and GET; it does not write to the hosted project. The smoke job must pass before the preview is considered browser-connectivity verified. The current execution environment still cannot resolve the hosted Supabase hostname, so the GitHub Actions runner is being used for this network check.
+Both push run [#43579061660](https://github.com/Udayan6611/foodgraph/actions/runs/43579061660) and pull-request run [#43579065426](https://github.com/Udayan6611/foodgraph/actions/runs/43579065426) passed this live job. The requests were OPTIONS + GET only; no hosted data was written. This verifies hosted REST reachability, the adapter's PostgREST relation query, anonymous grants/RLS path, and the CORS preflight for the production site origin. It is not a full visual browser/device acceptance test.
