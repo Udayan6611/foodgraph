@@ -100,3 +100,12 @@ The PDF also records prior manual signup tests and a founder-reported Apps Scrip
 - Verification completed: Python importer/migration contract suite; all 12 Node tests (9 adapter + 3 preview); disposable local Supabase startup; all four migrations; pgTAP schema/RLS tests; repeatable catalogue import; all three importer database integration checks (idempotency, unattributed-provenance/legacy-tier retention, and transaction rollback); stack cleanup.
 - The first branch CI attempt exposed a test assertion that incorrectly rejected safety-comment text rather than inspecting the configured key value. The assertion was narrowed to the actual configured key and secret-key fields; the corrected run passed.
 - Hosted Supabase was not modified. The live browser-to-hosted-REST HTTP request remains an open check because DNS resolution from the execution environment failed before the request reached the project.
+
+
+## 14 November 2026 — Live hosted API smoke test added
+
+- Added `scripts/supabase-live-smoke.cjs`, which uses the real read-only adapter and public preview config to query the hosted Supabase Data API from GitHub Actions.
+- Added an OPTIONS CORS preflight check for the production GitHub Pages origin `https://foodgraph.dpdns.org`, including the exact `apikey` and `accept-profile` request headers.
+- Added an independent `live-api-smoke` CI job. It performs no writes (OPTIONS + GET only), does not require GitHub secrets and does not change hosted database settings.
+- Extended workflow path filters so future adapter/script changes trigger validation.
+- Result of the new live job is pending; do not treat REST/CORS as verified until that job succeeds.

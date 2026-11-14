@@ -77,4 +77,9 @@ Official references:
 
 `tests/catalogue-api.test.cjs` runs with `node --test` and uses a mocked fetch implementation. It verifies URL construction, RLS filters, paging, publishable-key handling, error propagation and that the exposed client surface contains no write methods.
 
-The adapter's mocked-fetch tests verify request construction and error handling. The separate page is committed as an integration preview, but the live HTTPS request could not be completed from this execution environment because DNS resolution failed before an HTTP request reached the project. Do not claim the browser-to-hosted-API round trip has passed until a real browser/network test succeeds.
+A dedicated read-only live smoke test now runs from GitHub Actions on the Ubuntu runner. `scripts/supabase-live-smoke.cjs` uses the same adapter and public preview configuration to:
+- send an OPTIONS preflight for the exact GitHub Pages origin (`https://foodgraph.dpdns.org`) and verify CORS allows GET with the `apikey` and `accept-profile` headers;
+- GET the active Pune city, its areas and the cuisine taxonomy;
+- GET active restaurant locations and verify every returned location has an active parent restaurant.
+
+This is separate from mocked-fetch and disposable-local-database CI. It uses only OPTIONS and GET; it does not write to the hosted project. The smoke job must pass before the preview is considered browser-connectivity verified. The current execution environment still cannot resolve the hosted Supabase hostname, so the GitHub Actions runner is being used for this network check.

@@ -158,3 +158,12 @@ The existing `/discover/`, early-access signup, Apps Script endpoint, Sheets, CN
 [Run #43486922759](https://github.com/Udayan6611/foodgraph/actions/runs/43486922759) passed on code commit `7a040520440e2fd6b535934635d9c245257f33de`. It completed Python and Node tests, started a disposable local Supabase stack, applied the four migrations, passed pgTAP, passed importer idempotency/provenance/rollback checks, and stopped the local stack. The hosted project was not used by this workflow.
 
 The live browser-to-hosted-REST request has not yet been verified. The container's DNS lookup failed before the HTTP request reached the hosted project. Do not treat the CI mocked-fetch tests or SQL grant inspection as a substitute for the real HTTP check.
+
+
+## Live Data API and browser CORS verification
+
+The enhancement workflow now has a separate `live-api-smoke` job on GitHub Actions. It uses the actual tracked preview configuration and the same GET-only adapter, from the Ubuntu runner, to test the hosted project. It also sends a CORS OPTIONS preflight with the production GitHub Pages origin `https://foodgraph.dpdns.org` and verifies that GET, `apikey` and `accept-profile` are allowed.
+
+The job is strictly read-only (OPTIONS + GET). It verifies active Pune city, non-empty area/cuisine taxonomies and the active-location query. A zero-location result is expected while all imported candidates remain unverified. This CI job exists because the assistant execution environment cannot resolve the Supabase hostname; the runner provides an independent network path.
+
+A passing live smoke job is required before promoting the preview PR out of draft. It does not itself validate every browser/device combination, but the CORS preflight checks the exact production site origin and the headers the browser adapter sends.

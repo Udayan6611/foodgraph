@@ -17,7 +17,7 @@
 - A separate `/discover-preview/` route is being added as a read-only integration preview. It requests active city/areas/cuisines/locations only. The live Discover route and its dataset/ranking code are kept intact.
 - The preview does not create accounts, write data, or alter the optional early-access signup.
 - Enhancement branch CI [run #43486922759](https://github.com/Udayan6611/foodgraph/actions/runs/43486922759) passed on code commit `7a040520440e2fd6b535934635d9c245257f33de`: 20 fast Python tests (3 DB tests appropriately deferred until the disposable database exists), 12/12 Node tests, disposable local Supabase startup, all four migration applications, pgTAP, and all three database importer tests for repeatability, provenance retention and transaction rollback. Cleanup also passed.
-- Live REST HTTP verification is still blocked: the execution environment cannot resolve the Supabase hostname (HTTP 000 before request). This does not show that the hosted API is disabled.
+- The assistant execution environment still cannot resolve the Supabase hostname (HTTP 000 before request). A separate GitHub Actions `live-api-smoke` job has now been added to verify the hosted REST endpoint and CORS from the runner, using the exact GET-only adapter and production Pages origin. Its result is pending this commit's CI run.
 
 ## Current delivery guardrails
 
