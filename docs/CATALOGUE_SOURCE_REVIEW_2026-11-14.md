@@ -94,3 +94,25 @@ Other claims still need direct source checks or a canonical place identity: **Pu
 5. Treat unavailable URLs, third-party aggregators and Maps search pointers as unresolved evidence, not as verified facts.
 
 **No hosted Supabase rows, claims, source links, statuses or schema were changed during this review.**
+
+## Source-attribution recheck and correction proposal — later on 14 November 2026
+
+The first source-review pass correctly identified inconsistencies but overgeneralized the likely provider for all five rows. A second, exact-identity pass used structured business lookups with exact Google Maps place IDs where available and the direct Tripadvisor page for George Restaurant. This section supersedes the earlier “all five look like Google” interpretation.
+
+| Candidate | Exact current evidence returned | Updated disposition |
+|---|---|---|
+| Cafe Vanah — Aundh | Structured Google business lookup returned the exact Aundh place ID/address and 4.7 / 1,657, exactly matching the stored claim. District currently shows 4.5 / 86. A September third-party list had a lower Google review count and is not used to override the exact current lookup. | Propose moving only the rating claim's source to Google Maps. Keep the legacy price-tier claim on its existing source. |
+| Maratha Samrat — Baner | Structured Google business lookup returned the exact Modi Square, Baner place ID/address and 4.3 / 8,240, exactly matching the stored claim. District currently shows 4.4 / 1,863. | Propose moving only the rating claim's source to Google Maps. Keep legacy price tier separate. |
+| Yakii — Deccan Gymkhana | Structured Google business lookup returned the exact 1251/1/2, Shivaji Nagar / Deccan Gymkhana place ID/address and 4.6 / 2,474, exactly matching the stored claim. District currently shows 4.5 / 2,442; other current directories show different provider-specific counts. | Propose moving only the rating claim's source to Google Maps. Keep District and other providers distinct. |
+| George Restaurant — Camp | Tripadvisor's direct page shows 4.1 / 316, exactly matching the stored claim. District currently shows 4.1 / 3,528 and a Google-linked summary shows a much larger review count. | Propose moving only the rating claim's source to Tripadvisor, not Google. The review count is the distinguishing evidence. |
+| Malaka Spice — Koregaon Park | A structured business lookup returned 4.3 / 1,690 for the Koregaon Park address, but current Google Hotels aggregation shows about 4.3 / 9.4K, Swiggy Dineout shows 4.3 / 9K, Swiggy delivery shows 4.4 / 2.8K and District shows 4.7 / 7,089. | Hold. The exact historic provider/count snapshot is not securely attributed to a canonical current Google place record. Do not reassign its source in this batch. |
+
+The resulting review package is:
+- `docs/CATALOGUE_SOURCE_CORRECTION_PROPOSAL_2026-11-14.md` — rationale and source-by-source decision.
+- `docs/data/catalogue-source-correction-proposal-2026-11-14.csv` — exact claim/source IDs and proposed mappings.
+- `supabase/proposals/20261114_claim_source_corrections.sql` — exact source inserts and four guarded claim-source reassignments. It intentionally ends in `ROLLBACK`; it has not been executed against hosted Supabase.
+- `docs/CATALOGUE_IDENTITY_REVIEW_QUEUE_2026-11-14.md` — separate unresolved branch/identity queue.
+
+Only the four rating claim `source_id` values are proposed to move. Each current District source row is shared by a rating claim and a legacy price-tier claim, so the price-tier claim remains attached to the existing source row. No rating/count value, verification state, observation date, validity date, restaurant status or location status is changed by the proposal.
+
+**No hosted row or source was modified.** This is a reviewed change proposal, not an applied correction or publication approval.
