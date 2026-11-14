@@ -183,3 +183,31 @@ Verified from the GitHub Actions runner:
 - no database writes were performed.
 
 The full local validation job passed in both runs as well: Python/Node tests, disposable local Supabase stack, four migrations, pgTAP, importer repeatability/rollback and cleanup. The hosted project was not modified by CI.
+
+
+## Catalogue completeness audit — 14 November 2026 (read-only)
+
+A read-only query of the hosted rows confirms that the import established candidate identities and taxonomy relationships, but it did not create complete, publication-ready physical location records:
+
+| Field/check | Current result |
+|---|---:|
+| Restaurant candidates | 162 |
+| Location candidates | 162 |
+| Location rows linked to an area | 162 |
+| Location–cuisine links | 443 |
+| Distinct linked cuisines | 47 |
+| Location rows with street address | 0 |
+| Location rows with latitude + longitude | 0 |
+| Location rows with external Maps place ID | 0 |
+| Location rows with numeric price range | 0 |
+| Parent restaurants with brand name | 0 |
+| Parent restaurants with description | 0 |
+| Active restaurants / locations | 0 / 0 |
+| Rating claims | 155 unreviewed |
+| Legacy prototype price-tier claims | 131 unreviewed |
+| Claims with observation timestamp | 0 / 286 |
+| Claims with validity/expiry timestamp | 0 / 286 |
+
+All 286 claims reference a catalogue source record, but source linkage does not itself prove that the claim is current or accurate. The source catalogue contains 57 rows (56 URL-bearing source records and one explicitly unattributed legacy source). The original prototype's legacy price tier must not be treated as an INR amount.
+
+**Implication:** the 162 rows are candidate restaurant/location identities connected to area and cuisine taxonomy. They are not complete physical-location listings. Do not mass-activate them. The next data task is an automated, source-aware enrichment and QA pass: deduplicate/resolve restaurant vs branch identity, locate current addresses and map place IDs/coordinates from reliable sources, track evidence and observation time, and leave unsupported fields unknown. No manual founder-by-founder review should be required for the mechanical checks; unresolved or ambiguous records remain private until evidence is available.

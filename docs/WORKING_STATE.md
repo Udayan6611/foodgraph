@@ -18,6 +18,7 @@
 - The preview does not create accounts, write data, or alter the optional early-access signup.
 - Enhancement branch CI [run #43486922759](https://github.com/Udayan6611/foodgraph/actions/runs/43486922759) passed on code commit `7a040520440e2fd6b535934635d9c245257f33de`: 20 fast Python tests (3 DB tests appropriately deferred until the disposable database exists), 12/12 Node tests, disposable local Supabase startup, all four migration applications, pgTAP, and all three database importer tests for repeatability, provenance retention and transaction rollback. Cleanup also passed.
 - The assistant execution environment's DNS still cannot resolve Supabase, but this is now superseded for release verification by successful live requests from GitHub Actions. The live API/CORS job and complete local database validation both passed on the latest tested code.
+- Read-only hosted catalogue completeness audit: all 162 location rows have an area link and 443 cuisine links span 47 cuisines. However, 0 / 162 have an address, latitude/longitude pair, external Maps place ID or numeric price. 0 / 162 parent restaurants have a brand name or description. All 286 claims remain unreviewed (155 ratings, 131 legacy price tiers); none has `observed_at` or `valid_until`. There are 0 active restaurant/location records. These remain candidate records, not publication-ready location profiles.
 
 ## Current delivery guardrails
 

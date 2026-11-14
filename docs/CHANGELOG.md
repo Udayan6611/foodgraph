@@ -119,3 +119,12 @@ The PDF also records prior manual signup tests and a founder-reported Apps Scrip
 - The live query exercised the exact adapter and its PostgREST relationship select. No hosted data or schema was changed.
 - The local validation job also passed Python/Node tests, all four migrations on a disposable Supabase stack, pgTAP, importer idempotency and rollback, and cleanup.
 - Preview remains isolated and the PR remains draft. No production merge or Pages deployment occurred.
+
+
+## 14 November 2026 — Hosted catalogue completeness audit (read-only)
+
+- Verified all 162 location candidates have an area link and 443 cuisine links span 47 cuisines.
+- Found 0 / 162 locations with address text, coordinate pair, external Maps place ID or numeric price range; 0 / 162 parent restaurants have brand name or description.
+- Confirmed 286 claims remain unreviewed (155 rating, 131 legacy price tier); none has observation or validity/expiry timestamp.
+- Confirmed 0 active restaurant/location records. The API's empty public location result is therefore the correct RLS behavior, not a connectivity issue.
+- No hosted rows, claims, sources, statuses or schema were changed. Next step is source-aware catalogue enrichment/QA, not bulk activation.
