@@ -138,3 +138,11 @@ The PDF also records prior manual signup tests and a founder-reported Apps Scrip
 - External sampling found provider/source discrepancies and unresolved branch identity cases for Cafe Vanah, Hotel Chul Mutton, Malaka Spice and Le Plaisir. These remain research notes; they were not written to the hosted database.
 - No hosted data/schema/Auth/Pages or production website change. The QA utility is a report generator only; it cannot activate candidates.
 - CI run [#43584157165](https://github.com/Udayan6611/foodgraph/actions/runs/43584157165) passed on QA code head `02ea6aa24be2a725351eec10a93e60b524362330`: all Python/Node fast tests, local Supabase startup, all four migrations, pgTAP schema/RLS tests, repeat-import/idempotency/rollback checks and cleanup; live REST/CORS smoke also passed. An earlier run caught a defaultdict side effect that counted a candidate with no claims as having a claim; switched to non-mutating `.get()` lookups and added a regression assertion.
+
+## 14 November 2026 — Source-linked catalogue evidence review
+
+- Added `docs/CATALOGUE_SOURCE_REVIEW_2026-11-14.md`, reviewing 55 locations with source-linked claims (54 distinct URLs; 81 claim-to-source links).
+- Found provider attribution mismatches: several stored values labelled District align to Google while the linked District page has a different value/count (Cafe Vanah, Maratha Samrat - Baner, George Restaurant, Yakii and Malaka Spice). Documented provider-specific observations rather than replacing or averaging ratings.
+- Recorded current provider spread and review-count refreshes, plus identity holds such as the two Shree Kala records sharing a displayed Rasta Peth address, Hotel Chul Mutton's status/address conflict and Shrimant Misal branch ambiguity.
+- No hosted data, claims, source records, statuses or schema were changed. All 162 imported candidates remain private/unverified; no activation or publication decision was made.
+- The read-only audit utility and QA tests passed in [CI run #43584157165](https://github.com/Udayan6611/foodgraph/actions/runs/43584157165) on code commit `02ea6aa24be2a725351eec10a93e60b524362330`. Later changes in this source-review checkpoint are documentation-only.
