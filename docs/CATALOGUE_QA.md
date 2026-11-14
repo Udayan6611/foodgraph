@@ -34,7 +34,7 @@ The connected Supabase project was inspected through read-only SQL on 14 Novembe
 
 All locations remain unverified, and all parent restaurant rows remain needs_review. The active-only public API returning zero locations is the intended privacy/publication behaviour.
 
-The catalogue source table has 57 source records. Its URL count is not a per-location verified-coverage count: one source may be linked to multiple claims, and the same source metadata is not equivalent to a completed source review. Google Maps search URLs are query pointers, not canonical place IDs.
+The catalogue source table has 57 source records: 28 directory, 25 Maps and 4 other; 56 have URLs. At the location level, 160 candidates have at least one claim and 2 have none. Of the 160 claim-bearing locations, only 55 have a URL attached to a claim; 105 have claims but no URL. URL presence is not verification: one source may be linked to multiple claims, and the same source metadata is not equivalent to a completed source review. Google Maps search URLs are query pointers, not canonical place IDs.
 
 ## Read-only audit utility
 
