@@ -17,7 +17,7 @@ VALUES
     'maps',
     'Google reviews',
     'https://www.google.com/maps/search/?api=1&query=Cafe+Vanah+Aundh+Pune&query_place_id=ChIJqdU46b-_wjsRvRrrcpxcmq0',
-    TIMESTAMPTZ '2026-11-14 22:01:00+05:30',
+    NULL,
     'Exact Google Maps place ID and Aundh address returned by structured business lookup on 2026-11-14. Returned rating/count 4.7 / 1,657 exactly match the imported rating claim. Source reassignment only; claim remains unreviewed.'
   ),
   (
@@ -25,7 +25,7 @@ VALUES
     'maps',
     'Google reviews',
     'https://www.google.com/maps/search/?api=1&query=Maratha+Samrat+Baner+Pune&query_place_id=ChIJyxac7RW_wjsRe7tLMZomjmY',
-    TIMESTAMPTZ '2026-11-14 22:01:00+05:30',
+    NULL,
     'Exact Google Maps place ID and Modi Square, Baner address returned by structured business lookup on 2026-11-14. Returned rating/count 4.3 / 8,240 exactly match the imported rating claim. District currently shows a different rating/count. Source reassignment only; claim remains unreviewed.'
   ),
   (
@@ -33,7 +33,7 @@ VALUES
     'maps',
     'Google reviews',
     'https://www.google.com/maps/search/?api=1&query=Yakii+Deccan+Gymkhana+Pune&query_place_id=ChIJB1gASCXBwjsR6ml0fauXNhs',
-    TIMESTAMPTZ '2026-11-14 22:01:00+05:30',
+    NULL,
     'Exact Google Maps place ID and Ground Floor, next to R-Deccan Mall, Deccan Gymkhana address returned by structured business lookup on 2026-11-14. Returned rating/count 4.6 / 2,474 exactly match the imported rating claim. District currently shows 4.5 / 2,442. Source reassignment only; claim remains unreviewed.'
   ),
   (
@@ -41,7 +41,7 @@ VALUES
     'other',
     'Tripadvisor ratings and reviews',
     'https://www.tripadvisor.in/Restaurant_Review-g297654-d1075345-Reviews-George_Restaurant-Pune_Pune_District_Maharashtra.html',
-    TIMESTAMPTZ '2026-11-14 22:01:00+05:30',
+    NULL,
     'Direct Tripadvisor George Restaurant page returned 4.1 / 316 reviews on 2026-11-14, exactly matching the imported rating claim. District currently shows 4.1 / 3,528 ratings; Google has a much larger count. Source reassignment only; claim remains unreviewed.'
   )
 ON CONFLICT (source_url) DO UPDATE
