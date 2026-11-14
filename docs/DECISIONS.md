@@ -217,5 +217,12 @@ Explicit founder approval is required before changing: product identity/four pil
 - **Date:** 14 Nov 2026
 - **Status:** Preserve
 - **Decision:** Treat each platform's rating and review count as a distinct source claim with its own provider, exact outlet identity, source URL and observation time. If an imported value matches one provider but is attached to another provider's URL, correct the provenance relationship without overwriting the other provider's observation.
-- **Reason:** Current source review found several imported values labelled as District ratings that instead match Google, while the linked District pages show different values/counts. Ratings are not universal properties of a restaurant and must not be averaged across platforms.
+- **Reason:** Exact second-pass evidence shows three rating claims (Cafe Vanah, Maratha Samrat - Baner and Yakii) match exact Google Maps place IDs and their stored rating/counts, while George Restaurant's 4.1 / 316 matches Tripadvisor. Malaka Spice remains ambiguous. Ratings are not universal properties of a restaurant and must not be averaged across platforms.
 - **Consequence:** Never infer a source from a close numeric match alone. Resolve the exact outlet/place first, record `observed_at`, and keep contradictory or stale claims separately reviewable. Source review does not itself activate a restaurant.
+
+### D-030 — Apply source corrections only to exact claim IDs and under a reviewed transaction
+- **Date:** 14 Nov 2026
+- **Status:** Preserve
+- **Decision:** Correct platform attribution at the individual rating-claim level only when exact outlet identity and provider evidence match. Keep shared source records available for other fields; do not move unrelated legacy-tier claims. Prepare a rollback-only SQL proposal first and require a separate explicit approval before any hosted commit.
+- **Reason:** Each old District source row in this proposal is shared by both a rating and a legacy price-tier claim. A source-row-wide edit would silently misattribute the price-tier claim. Malaka Spice also demonstrates why a matching rating alone is insufficient when review counts conflict.
+- **Consequence:** The proposed SQL inserts provider-specific source rows and reassigns four named rating claims only. It leaves values and verification states untouched, and ends with `ROLLBACK` during review. No mass update, status activation or publication follows from a source correction.
