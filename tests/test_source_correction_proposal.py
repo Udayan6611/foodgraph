@@ -31,10 +31,10 @@ class SourceCorrectionProposalTests(unittest.TestCase):
 
     def test_sql_is_rollback_only_and_changes_only_rating_source_links(self):
         self.assertTrue(self.sql.rstrip().endswith("ROLLBACK;"))
-        self.assertIsNone(re.search(r"(?im)^\\s*COMMIT\\s*;", self.sql))
+        self.assertIsNone(re.search(r"(?im)^\s*COMMIT\s*;", self.sql))
         self.assertEqual(self.sql.count("UPDATE public.catalogue_claims AS claim"), 1)
         self.assertIn("SET source_id = proposal.proposed_source_id", self.sql)
-        self.assertNotRegex(self.sql, r"(?i)SET\\s+(status|field_value|verification_state|observed_at|valid_until)\\s*=")
+        self.assertNotRegex(self.sql, r"(?i)SET\s+(status|field_value|verification_state|observed_at|valid_until)\s*=")
         for row in self.rows:
             if row["decision"] == "proposed_reassign_rating_source":
                 self.assertIn(row["rating_claim_id"], self.sql)
