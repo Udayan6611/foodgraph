@@ -146,3 +146,11 @@ The PDF also records prior manual signup tests and a founder-reported Apps Scrip
 - Recorded current provider spread and review-count refreshes, plus identity holds such as the two Shree Kala records sharing a displayed Rasta Peth address, Hotel Chul Mutton's status/address conflict and Shrimant Misal branch ambiguity.
 - No hosted data, claims, source records, statuses or schema were changed. All 162 imported candidates remain private/unverified; no activation or publication decision was made.
 - The read-only audit utility and QA tests passed in [CI run #43584157165](https://github.com/Udayan6611/foodgraph/actions/runs/43584157165) on code commit `02ea6aa24be2a725351eec10a93e60b524362330`. Later changes in this source-review checkpoint are documentation-only.
+
+## 14 November 2026 — Claim-source correction proposal
+
+- Added an exact-ID proposal to reassign four rating claims: Google Maps for Cafe Vanah, Maratha Samrat - Baner and Yakii; Tripadvisor for George Restaurant. All four stored rating/count values remain unchanged.
+- Malaka Spice is explicitly held because the stored 4.3 / 1,690 observation conflicts with much larger current Google/Swiggy counts and a different District rating.
+- Added `supabase/proposals/20261114_claim_source_corrections.sql`, which inserts four provider source rows and reassigns only the four named rating claims. It ends with `ROLLBACK` and has not been executed against hosted Supabase.
+- Added a CSV review matrix with exact old/new source IDs, a source-correction proposal guide, a separate identity-review queue and unit tests for proposal safety/deterministic IDs.
+- Existing source rows remain intact; their legacy-price-tier claims are not moved. No rating values, review counts, verification states, timestamps, statuses, schema, production frontend or hosted data were changed.
