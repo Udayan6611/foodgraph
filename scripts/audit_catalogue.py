@@ -195,9 +195,9 @@ def build_report(snapshot: dict) -> dict:
     candidate_reports = []
     for row in candidates:
         location_id = row["location_id"]
-        location_claims = claims_by_location[location_id]
-        location_cuisines = cuisines_by_location[location_id]
-        location_imports = imports_by_location[location_id]
+        location_claims = claims_by_location.get(location_id, [])
+        location_cuisines = cuisines_by_location.get(location_id, [])
+        location_imports = imports_by_location.get(location_id, [])
         claim_urls = sorted({
             claim["source_url"] for claim in location_claims if claim["source_url"]
         })
