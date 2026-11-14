@@ -128,3 +128,13 @@ The PDF also records prior manual signup tests and a founder-reported Apps Scrip
 - Confirmed 286 claims remain unreviewed (155 rating, 131 legacy price tier); none has observation or validity/expiry timestamp.
 - Confirmed 0 active restaurant/location records. The API's empty public location result is therefore the correct RLS behavior, not a connectivity issue.
 - No hosted rows, claims, sources, statuses or schema were changed. Next step is source-aware catalogue enrichment/QA, not bulk activation.
+
+## 14 November 2026 — Automated catalogue QA foundation
+
+- Added `scripts/audit_catalogue.py`: explicit PostgreSQL READ ONLY transaction; snapshots restaurant/location identity, physical fields, cuisines, sources, claims and import ledger; computes Unicode-aware duplicate candidates and field-completeness flags; exports JSON and CSV for batch review.
+- Added `tests/test_catalogue_qa.py` for Unicode-normalized identity keys, Google Maps search-pointer classification, and review-state prioritisation.
+- Added `docs/CATALOGUE_QA.md` with the verified hosted snapshot, execution instructions, evidence rules and initial external source checks.
+- Read-only SQL reconfirmed 162 location candidates, zero physical address/coordinate/Maps-ID/price coverage, zero parent brand/description coverage, 443 cuisine links across 47 cuisines, 57 sources (56 URL-bearing), 286 unreviewed claims, no observation/validity timestamps, and zero active locations.
+- External sampling found provider/source discrepancies and unresolved branch identity cases for Cafe Vanah, Hotel Chul Mutton, Malaka Spice and Le Plaisir. These remain research notes; they were not written to the hosted database.
+- No hosted data/schema/Auth/Pages or production website change. The QA utility is a report generator only; it cannot activate candidates.
+- CI on the pre-QA head passed. Validation of the newly added script and tests on the updated branch head remains pending until the new workflow completes.
