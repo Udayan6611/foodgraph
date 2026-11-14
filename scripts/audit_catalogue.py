@@ -234,6 +234,8 @@ def build_report(snapshot: dict) -> dict:
             flags.append("missing_description")
         if unreviewed:
             flags.append("unreviewed_claims_present")
+        if not location_claims:
+            flags.append("no_catalogue_claims")
         if any(claim["observed_at"] is None for claim in location_claims):
             flags.append("claims_missing_observation_date")
         if any(claim["valid_until"] is None for claim in location_claims):
@@ -293,6 +295,10 @@ def build_report(snapshot: dict) -> dict:
         "sources": len(sources),
         "sources_with_url": sum(bool(source["source_url"]) for source in sources),
         "source_types": dict(sorted(source_types.items())),
+        "locations_with_claims": len(claims_by_location),
+        "locations_without_claims": max(0, len(candidates) - len(claims_by_location)),
+        "locations_with_source_url": sum(bool(item["source_urls"]) for item in candidate_reports),
+        "locations_without_source_url": sum(not item["source_urls"] for item in candidate_reports),
         "claims": len(claims),
         "claim_fields": dict(sorted(claim_fields.items())),
         "claim_states": dict(sorted(claim_states.items())),
