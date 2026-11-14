@@ -203,3 +203,12 @@ Verify the hosted Data API REST round trip with the publishable key supplied sec
 - Sampled current public evidence: Cafe Vanah's imported rating is attached to a District URL whose current rating/review count differs from the stored pair, while a separate Google listing matches the stored pair; Hotel Chul Mutton has a current District closure notice and a competing Baner outlet address; Malaka Spice's official site confirms three Pune branches; Le Plaisir has provider-specific rating differences. See `docs/CATALOGUE_QA.md`.
 - These are evidence-review findings only. No hosted data, claims, source rows, statuses, schema, Auth, Pages settings, production route or `main` commit was changed.
 - Next gate: re-run CI on the audit utility, inspect its exact-head results, and continue branch/field evidence checks. Do not bulk-activate or publish any candidate.
+
+## Source-linked catalogue verification — 14 November 2026
+
+- Read-only query isolated 55 location records with at least one non-empty claim source URL, 54 distinct source URLs and 81 claim-to-source links. No candidate row, source, claim, status or schema was changed.
+- Added `docs/CATALOGUE_SOURCE_REVIEW_2026-11-14.md` with the source-by-source review, provider-specific rating comparisons, identity holds and recommended next actions.
+- Material provenance finding: several imported claims labelled `District ratings` have values/counts matching Google instead, including Cafe Vanah (4.7 / 1,657), Maratha Samrat - Baner (4.3 / 8,240), George Restaurant (4.1 / 316), Yakii (4.6 / 2,474) and Malaka Spice (4.3 / 1,690). Their current linked District pages show different ratings/counts. Keep platform-specific claims separate; do not average or overwrite.
+- Confirmed separate provider spread on locations such as Gatti Chutney, Fish on Dish, Runway 47 and The Great Kabab Factory. Treat each provider rating/review count as its own dated observation.
+- Identity holds include the two Shree Kala records resolving to the same displayed Rasta Peth address, Hotel Chul Mutton's conflicting status/address evidence, and branch ambiguity for Shrimant Misal and similarly named Surve/Survase listings.
+- Current rating observations are a point-in-time external evidence snapshot, not an endorsement or publication approval. All 162 imported locations remain private/unverified. No production route, Supabase row or claim was changed.
