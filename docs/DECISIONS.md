@@ -212,3 +212,10 @@ Explicit founder approval is required before changing: product identity/four pil
 - **Decision:** Candidate enrichment starts with an automated read-only audit. Resolve brand/outlet identity before writing physical-location fields; review each claim against its own source and observation date. Keep uncertain candidates private.
 - **Reason:** A URL attached to an imported row does not prove that every imported field came from that source. Ratings vary by provider; maps search URLs are not canonical place IDs; legacy price tiers are not INR prices.
 - **Consequence:** Audit tools use a READ ONLY database transaction and export review queues only. No automatic claim approval, mass activation, or conversion of legacy tiers. Public activation remains a separate, explicitly reviewed operation.
+
+### D-029 — Ratings and claims are provider-specific evidence
+- **Date:** 14 Nov 2026
+- **Status:** Preserve
+- **Decision:** Treat each platform's rating and review count as a distinct source claim with its own provider, exact outlet identity, source URL and observation time. If an imported value matches one provider but is attached to another provider's URL, correct the provenance relationship without overwriting the other provider's observation.
+- **Reason:** Current source review found several imported values labelled as District ratings that instead match Google, while the linked District pages show different values/counts. Ratings are not universal properties of a restaurant and must not be averaged across platforms.
+- **Consequence:** Never infer a source from a close numeric match alone. Resolve the exact outlet/place first, record `observed_at`, and keep contradictory or stale claims separately reviewable. Source review does not itself activate a restaurant.
