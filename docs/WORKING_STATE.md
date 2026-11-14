@@ -208,7 +208,16 @@ Verify the hosted Data API REST round trip with the publishable key supplied sec
 
 - Read-only query isolated 55 location records with at least one non-empty claim source URL, 54 distinct source URLs and 81 claim-to-source links. No candidate row, source, claim, status or schema was changed.
 - Added `docs/CATALOGUE_SOURCE_REVIEW_2026-11-14.md` with the source-by-source review, provider-specific rating comparisons, identity holds and recommended next actions.
-- Material provenance finding: several imported claims labelled `District ratings` have values/counts matching Google instead, including Cafe Vanah (4.7 / 1,657), Maratha Samrat - Baner (4.3 / 8,240), George Restaurant (4.1 / 316), Yakii (4.6 / 2,474) and Malaka Spice (4.3 / 1,690). Their current linked District pages show different ratings/counts. Keep platform-specific claims separate; do not average or overwrite.
+- Exact second-pass evidence supports four rating-source proposals: Cafe Vanah, Maratha Samrat - Baner and Yakii match exact Google Maps place IDs and stored rating/counts; George Restaurant's 4.1 / 316 matches Tripadvisor, not Google. Malaka Spice remains held because its 4.3 rating is seen across providers but its stored 1,690 review count does not align with current Google/Swiggy totals.
 - Confirmed separate provider spread on locations such as Gatti Chutney, Fish on Dish, Runway 47 and The Great Kabab Factory. Treat each provider rating/review count as its own dated observation.
 - Identity holds include the two Shree Kala records resolving to the same displayed Rasta Peth address, Hotel Chul Mutton's conflicting status/address evidence, and branch ambiguity for Shrimant Misal and similarly named Surve/Survase listings.
 - Current rating observations are a point-in-time external evidence snapshot, not an endorsement or publication approval. All 162 imported locations remain private/unverified. No production route, Supabase row or claim was changed.
+
+## Claim-source correction proposal — 14 November 2026
+
+- Added `docs/CATALOGUE_SOURCE_CORRECTION_PROPOSAL_2026-11-14.md`, exact-ID CSV, rollback-only SQL proposal and a separate identity-review queue.
+- Exact rating claims identified: Cafe Vanah `5d285879-fe5c-5ec0-8bdf-bd5ff5e4087b`; Maratha Samrat - Baner `e30e3efe-c9a6-5c70-b2aa-f270c56197e3`; Yakii `2baf13b1-8e4c-515b-b9b9-3478602d64d1`; George Restaurant `dcbd3f4b-62b9-5ff0-8619-d5992fcb5a32`.
+- Proposed source changes are limited to these four rating claims: Google Maps for Cafe Vanah, Maratha Samrat and Yakii; Tripadvisor for George Restaurant. Their rating/count JSON values remain unchanged.
+- Malaka Spice remains on hold pending exact historical source resolution. No source reassignment is proposed for it in this batch.
+- Each pre-existing District source row is shared by the rating and a legacy-price-tier claim. The proposal moves only the rating claim's `source_id`; it deliberately leaves the legacy tier attached and unchanged.
+- SQL proposal `supabase/proposals/20261114_claim_source_corrections.sql` ends with `ROLLBACK`. It has not been executed on hosted Supabase. No hosted data or schema changed; all candidates remain private/unverified.
