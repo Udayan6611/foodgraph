@@ -192,3 +192,14 @@ Verify the hosted Data API REST round trip with the publishable key supplied sec
 - The live Data API HTTP smoke test remains **unverified**. An external HTTPS request from this execution environment failed at DNS resolution (`Could not resolve host: nylpnvdnbqxhwlxjmboz.supabase.co`) before reaching Supabase. This is an environment connectivity limitation, not evidence that the project's REST endpoint is disabled or broken.
 - No Supabase database migration, seed, Auth configuration, user creation, preview deployment or static site change was made during the read-only client work.
 - Current branch remains isolated from production `main`. The adapter is not imported by `discover/index.html`.
+
+## Catalogue QA checkpoint — 14 November 2026
+
+- The enhancement PR remains open and draft. Production `main` remains at `bdccf8bf6147ffe22a20974fd9b86af2b0432e93`; the isolated preview branch is ahead and has not been merged or deployed.
+- The current PR-head workflow run `43579806282` passed on the pre-QA head `3f7256a96376d464a379619286a1d064272be5c0`. CI for the new audit utility and QA tests must be rechecked on the updated branch head before claiming they pass.
+- Added `scripts/audit_catalogue.py`, which reads candidates, claims, sources, cuisine links and import provenance inside an explicit PostgreSQL READ ONLY transaction. It can export a full JSON evidence snapshot and a one-row-per-location CSV.
+- Added unit tests for Unicode-aware identity matching, Google Maps search-pointer detection and review-state prioritisation. The script does not create claims, change statuses, activate rows or scrape websites.
+- Rechecked hosted data on 14 Nov: 162 locations; 0 addresses, coordinate pairs, Maps place IDs or numeric price ranges; 0 parent brand names/descriptions; 443 cuisine links across 47 cuisines; 57 source records (56 URLs); 286 unreviewed claims (155 ratings, 131 legacy price tiers); no claim observation or validity timestamps; 0 active locations.
+- Sampled current public evidence: Cafe Vanah's imported rating is attached to a District URL whose current rating/review count differs from the stored pair, while a separate Google listing matches the stored pair; Hotel Chul Mutton has a current District closure notice and a competing Baner outlet address; Malaka Spice's official site confirms three Pune branches; Le Plaisir has provider-specific rating differences. See `docs/CATALOGUE_QA.md`.
+- These are evidence-review findings only. No hosted data, claims, source rows, statuses, schema, Auth, Pages settings, production route or `main` commit was changed.
+- Next gate: re-run CI on the audit utility, inspect its exact-head results, and continue branch/field evidence checks. Do not bulk-activate or publish any candidate.
