@@ -22,6 +22,9 @@ The connected Supabase project was inspected through read-only SQL on 14 Novembe
 | Cuisine links / distinct cuisine names | 443 / 47 |
 | Catalogue source rows | 57 |
 | Source rows with a URL | 56 |
+| Source types (directory / maps / other) | 28 / 25 / 4 (3 of 4 other rows have URLs) |
+| Locations with claims / without claims | 160 / 2 |
+| Claim-bearing locations with at least one URL / without a URL | 55 / 105 |
 | Catalogue claims | 286 |
 | Unreviewed rating claims | 155 |
 | Unreviewed legacy price-tier claims | 131 |
