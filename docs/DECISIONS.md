@@ -205,3 +205,10 @@ Explicit founder approval is required before changing: product identity/four pil
 - **Decision:** The live early-access form remains optional and separate from any future authenticated FoodGraph account. No email/password signup UI is part of the current catalogue integration.
 - **Reason:** The current site intentionally supports use without an account.
 - **Consequence:** Do not conflate early-access email capture with Supabase Auth or make authentication a dependency for public catalogue discovery.
+
+### D-028 — Catalogue QA must be read-only and field-evidence based
+- **Date:** 14 Nov 2026
+- **Status:** Preserve
+- **Decision:** Candidate enrichment starts with an automated read-only audit. Resolve brand/outlet identity before writing physical-location fields; review each claim against its own source and observation date. Keep uncertain candidates private.
+- **Reason:** A URL attached to an imported row does not prove that every imported field came from that source. Ratings vary by provider; maps search URLs are not canonical place IDs; legacy price tiers are not INR prices.
+- **Consequence:** Audit tools use a READ ONLY database transaction and export review queues only. No automatic claim approval, mass activation, or conversion of legacy tiers. Public activation remains a separate, explicitly reviewed operation.
